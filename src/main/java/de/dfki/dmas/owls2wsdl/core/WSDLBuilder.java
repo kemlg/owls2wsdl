@@ -371,6 +371,9 @@ public class WSDLBuilder {
             		element.removeAttributeNode((Attr) n);
             	}
             }
+            
+            element.setAttribute("targetNamespace", targetNS);
+            element.setAttribute("xmlns", targetNS);
         }
         catch(org.jdom.JDOMException jdome) {
             jdome.printStackTrace();
@@ -468,7 +471,7 @@ public class WSDLBuilder {
                 part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema", param.getTypeLocal()));
             }
             else {
-                part.setTypeName(new QName(targetNS, param.getTypeLocal()));
+                part.setTypeName(new QName(targetNS, param.getTypeRemote()));
             }
             request.addPart(part);
 
@@ -492,7 +495,7 @@ public class WSDLBuilder {
                 part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema", param.getTypeLocal()));
             }
             else {
-                part.setTypeName(new QName(targetNS, param.getTypeLocal()));
+                part.setTypeName(new QName(targetNS, param.getTypeRemote()));
             }
             response.addPart(part);
         }
@@ -530,7 +533,7 @@ public class WSDLBuilder {
         soapBinding.setStyle("rpc");
         
         SOAPBody body = (SOAPBody) extensionRegistry.createExtension(BindingInput.class, new QName("http://schemas.xmlsoap.org/wsdl/soap/", "body"));
-        body.setUse("encoded");
+        body.setUse("literal");
         ArrayList listOfStyles = new ArrayList();
         listOfStyles.add("http://schemas.xmlsoap.org/soap/encoding/");
         body.setEncodingStyles(listOfStyles);

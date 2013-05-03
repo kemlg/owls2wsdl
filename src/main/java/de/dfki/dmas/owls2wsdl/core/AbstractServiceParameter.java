@@ -55,7 +55,13 @@ public class AbstractServiceParameter implements java.io.Serializable {
     public String getTypeLocal() 
     {
         int index = this._uri.lastIndexOf("#");   
-        return this._uri.substring(index+1)+"Type";
+        return this._uri.substring(index+1);
+    }
+    
+    public String getTypeRemote() 
+    {
+        int index = this._uri.lastIndexOf("#");   
+        return this._uri.substring(index+1) +"Type";
     }
     
     public String getTypeNamespace()
