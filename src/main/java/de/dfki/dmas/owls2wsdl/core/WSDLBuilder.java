@@ -361,6 +361,16 @@ public class WSDLBuilder {
             DOMOutputter w3cOutputter = new DOMOutputter();
             Document doc = w3cOutputter.output(jdoc);
             element = doc.getDocumentElement();
+            
+            NamedNodeMap attList = element.getAttributes();
+            for(int i=0;i<attList.getLength();i++)
+            {
+            	Node n = element.getAttributes().item(i);
+            	if(n.getTextContent().equals("http://www.w3.org/2001/XMLSchema"))
+            	{
+            		element.removeAttributeNode((Attr) n);
+            	}
+            }
         }
         catch(org.jdom.JDOMException jdome) {
             jdome.printStackTrace();

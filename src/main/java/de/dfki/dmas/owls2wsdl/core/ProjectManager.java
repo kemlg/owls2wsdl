@@ -57,7 +57,7 @@ public class ProjectManager {
         try {
             Mapping mapping = new Mapping();
             String mapping_file = "castor-mapping.xml";
-            mapping.loadMapping(this.getClass().getResource(mapping_file).toString());
+            mapping.loadMapping(this.getClass().getClassLoader().getResource(mapping_file).toString());
             if(prettyprint) {
                 LocalConfiguration.getInstance().getProperties().setProperty("org.exolab.castor.indent", "true");
             }
@@ -78,8 +78,8 @@ public class ProjectManager {
             Mapping mapping = new Mapping();
             String mapping_file = "castor-mapping.xml";
             
-            System.out.println("LOAD Mapping File: "+this.getClass().getResource(mapping_file).toString());            
-            mapping.loadMapping(this.getClass().getResource(mapping_file).toString());            
+            System.out.println("LOAD Mapping File: "+this.getClass().getClassLoader().getResource(mapping_file).toString());            
+            mapping.loadMapping(this.getClass().getClassLoader().getResource(mapping_file).toString());            
             
             FileReader reader = new FileReader(file);            
             
