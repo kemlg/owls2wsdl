@@ -1,7 +1,7 @@
 /*
  * CastorCodeGen.java
  *
- * Created on 8. März 2007, 15:30
+ * Created on 8. Mï¿½rz 2007, 15:30
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.

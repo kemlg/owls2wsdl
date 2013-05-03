@@ -1,7 +1,7 @@
 /*
  * AbstractDatatypeElementComparer.java
  *
- * Created on 16. März 2007, 18:33
+ * Created on 16. Mï¿½rz 2007, 18:33
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

@@ -38,7 +38,7 @@ public final class ResourceManager
                                         String country)
     {
         System.out.println("[.] Trying to load Property-File:" + baseName + "_" + language + "_" + country + ".properties");
-        resourceBundle = (PropertyResourceBundle)ResourceBundle.getBundle(baseName, new Locale(language, country), ClassLoader.getSystemClassLoader());
+        resourceBundle = (PropertyResourceBundle)ResourceBundle.getBundle(baseName, new Locale(language, country), ResourceManager.class.getClassLoader());
         System.out.println("[.] resourceBundle: "+resourceBundle.toString());
     }
     
@@ -47,10 +47,10 @@ public final class ResourceManager
                                         String country)                  
     {
         System.out.println("[.] Trying to load default Property-File:" + baseName + "_" + language + "_" + country + ".properties");
-        defaultBundle = (PropertyResourceBundle)ResourceBundle.getBundle(baseName, new Locale(language, country), ClassLoader.getSystemClassLoader());    
+        defaultBundle = (PropertyResourceBundle)ResourceBundle.getBundle(baseName, new Locale(language, country), ResourceManager.class.getClassLoader());    
     }
     
-    /** Gibt das Bundle zurück 
+    /** Gibt das Bundle zurï¿½ck 
      *  @return das Bundle-Objekt
      */
     public final static PropertyResourceBundle getBundle() {

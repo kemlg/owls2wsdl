@@ -48,7 +48,7 @@ public class AbstractDatatypeElement implements java.io.Serializable {
     private Vector  _complementRange;
     
     // Resulting Range !!! of individuals AND classes: check with OWL Model!
-    // wird zusätzlich gepflegt. aus restrictions und direkt definierten wertebereich bzw. konstanten
+    // wird zusï¿½tzlich gepflegt. aus restrictions und direkt definierten wertebereich bzw. konstanten
     private Vector  _restrictedRange;
     
     /** Creates a new instance of AbstractDatatypeElement */

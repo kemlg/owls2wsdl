@@ -69,7 +69,7 @@ public class AbstractDatatypeTableModel extends AbstractTableModel  {
                             return elem.getLocalTypeName();
                         }
                         else if(elem.getType().equals("null")) {
-// In Eigenschaften Defaultwert für Thing (future work)
+// In Eigenschaften Defaultwert fï¿½r Thing (future work)
 //                            String xsdtypeString = "anyType";
 //                            if(defaultXsdType.contains("#")) {
 //                                xsdtypeString = defaultXsdType.substring(defaultXsdType.indexOf("#")+1);

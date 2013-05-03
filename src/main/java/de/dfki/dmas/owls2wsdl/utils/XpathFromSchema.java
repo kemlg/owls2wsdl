@@ -1,7 +1,7 @@
 /*
  * XpathFromSchema.java
  *
- * Created on 1. März 2007, 19:31
+ * Created on 1. Mï¿½rz 2007, 19:31
  *
  * http://affy.blogspot.com/2004/01/using-castor-and-java-to-list-xpaths.html
  */

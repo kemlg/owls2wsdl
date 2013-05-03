@@ -1,7 +1,7 @@
 /*
  * ProjectDetailPanel.java
  *
- * Created on 19. März 2007, 20:18
+ * Created on 19. Mï¿½rz 2007, 20:18
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

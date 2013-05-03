@@ -1,7 +1,7 @@
 /*
  * CastorAnnotationTest.java
  *
- * Created on 5. März 2007, 11:36
+ * Created on 5. Mï¿½rz 2007, 11:36
  */
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

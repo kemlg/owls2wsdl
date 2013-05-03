@@ -611,7 +611,7 @@ public class XsdSchemaGenerator {
         
         SimpleType simpleThingType = this.schema.createSimpleType("ThingType", anyURIType);
 
-// In Eigenschaften Defaultwert für Thing einführen (future work)
+// In Eigenschaften Defaultwert fï¿½r Thing einfï¿½hren (future work)
 //        SimpleType defaultType = stf.getBuiltInType(this.extractLocalName(this.DEFAULT_XSD));
 //        SimpleType simpleThingType = this.schema.createSimpleType("Thing", defaultType);        
         
@@ -714,8 +714,8 @@ public class XsdSchemaGenerator {
             else if(elem.getOwlSource().equals("DATATYPE") || elem.getOwlSource().equals("RESTRICTION-ON-DATATYPE") || elem.getOwlSource().equals("RESTRICTION")) 
             {
 
-                // TESTE, OB XSDTYPE GESETZT, ODER ÜBER HIERARCHY GEERBT WERDEN KANN. -> SIMPLE TYPE
-                // WENN KEIN XSDTYPE GESETZT UND PROPERTIES ÜBER DEPTH ANGEZOGEN WERDEN -> COMPLEX TYPE
+                // TESTE, OB XSDTYPE GESETZT, ODER ï¿½BER HIERARCHY GEERBT WERDEN KANN. -> SIMPLE TYPE
+                // WENN KEIN XSDTYPE GESETZT UND PROPERTIES ï¿½BER DEPTH ANGEZOGEN WERDEN -> COMPLEX TYPE
 
                 System.out.println("[i] [simple] subEl.setName: "+elem.getLocalName()+" and SIMPLE-Type: "+elem.getType());                    
 
@@ -823,14 +823,14 @@ public class XsdSchemaGenerator {
                         // set base type
                         if(elem.getOwlSource().equals("UNION")) {
                             subMetaType.setComplexContent(true);
-                            subMetaType.setDerivationMethod(SchemaNames.EXTENSION); // hier werden ja Elemente hinzugefügt.
+                            subMetaType.setDerivationMethod(SchemaNames.EXTENSION); // hier werden ja Elemente hinzugefï¿½gt.
                             subMetaType.setRestriction(false);
                             subMetaType.setBase("Union");
                             subMetaType.setBaseType(this.schema.getComplexType("Union"));
                         }
                         else if(elem.getOwlSource().equals("INTERSECTION")) {
                             subMetaType.setComplexContent(true);
-                            subMetaType.setDerivationMethod(SchemaNames.EXTENSION); // hier werden ja Elemente hinzugefügt.
+                            subMetaType.setDerivationMethod(SchemaNames.EXTENSION); // hier werden ja Elemente hinzugefï¿½gt.
                             subMetaType.setRestriction(false);
                             subMetaType.setBase("Intersection");
                             subMetaType.setBaseType(this.schema.getComplexType("Intersection"));
@@ -871,7 +871,7 @@ public class XsdSchemaGenerator {
                 restrictionGroup.setOrder(Order.all);
 
 // 1.3.2007: No specialization pattern possible at this time, use additional element.
-// 11.4.: Relöst :) base type möglich.
+// 11.4.: Relï¿½st :) base type mï¿½glich.
 //                    ElementDecl isRestrictionElement = new ElementDecl(this.schema, "isRestriction");
 //                    isRestrictionElement.setType(this.schema.getComplexType("Restriction"));
 //                    restrictionGroup.addElementDecl(isRestrictionElement);
@@ -1000,7 +1000,7 @@ public class XsdSchemaGenerator {
 // Pattern: baseType direkt von der restriktierten Klasse ableiten
                             AbstractDatatype abstractBaseType = AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().get(elem.getType());
                             SimpleType baseType = this.addSimpleType(abstractBaseType, null);                                
-// Zweiter Ansatz: baseType der zu restriktierenden Klasse übernehmen                                                                
+// Zweiter Ansatz: baseType der zu restriktierenden Klasse ï¿½bernehmen                                                                
                             if(baseType == null) {
                                 String primitiveBaseTypeString = AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().get(elem.getType()).determineXsdType(this.xsdInheritance, this.DEFAULT_XSD);
                                 baseType = stf.getBuiltInType(this.extractLocalName(primitiveBaseTypeString));
@@ -1036,7 +1036,7 @@ public class XsdSchemaGenerator {
                         else {
                             // element has no specific value(s) and no more subproperties
                             // ~> do not run recursion! build SimpleType with possible type range values
-                            // *) Bemerkung: vorher war ein Rekursionslauf nötig, jetzt Abfrage über KB.                            
+                            // *) Bemerkung: vorher war ein Rekursionslauf nï¿½tig, jetzt Abfrage ï¿½ber KB.                            
                             AbstractDatatype curelemtype = AbstractDatatypeKB.getInstance().data.get(elem.getType());
                             System.out.println("[xsdgen] SimpleType "+curelemtype.getUrl());
                             simpleType = this.addSimpleType(curelemtype, subEl.getName());
@@ -1618,7 +1618,7 @@ public class XsdSchemaGenerator {
             }
                     
             // Rekursion am Ende, um die angepassten Range Restrictions korrekt zu setzen.
-            // Abfrage: wenn schon ein Element im Schema, kann es nicht hinzugefügt werden.
+            // Abfrage: wenn schon ein Element im Schema, kann es nicht hinzugefï¿½gt werden.
             // 
             for(int i=0; i<dependencies.size(); i++) {
                 System.out.println("=======================================================================");

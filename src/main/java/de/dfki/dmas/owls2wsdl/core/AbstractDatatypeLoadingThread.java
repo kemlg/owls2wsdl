@@ -1,7 +1,7 @@
 /*
  * AbstractDatatypeLoadingThread.java
  *
- * Created on 13. März 2007, 11:25
+ * Created on 13. Mï¿½rz 2007, 11:25
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

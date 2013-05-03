@@ -24,8 +24,8 @@ import java.util.Date;
 
 /**
  * Klasse kapselt den Daten und das Marshallen/Unmarshallen der Daten nach XML
- * Die Klasse wurde nötig, weil Castor beim Mappen einen öffentlichen -
- * Konstrukor benötigt und AbstractDatatypeKB als Singleton keinen anbietet.
+ * Die Klasse wurde nï¿½tig, weil Castor beim Mappen einen ï¿½ffentlichen -
+ * Konstrukor benï¿½tigt und AbstractDatatypeKB als Singleton keinen anbietet.
  * Alternativ: http://www.castor.org/tips-tricks.html
  * @author Oliver
  */

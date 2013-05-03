@@ -1,7 +1,7 @@
 /*
  * ProjectLoadedOntListModel.java
  *
- * Created on 20. März 2007, 09:57
+ * Created on 20. Mï¿½rz 2007, 09:57
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

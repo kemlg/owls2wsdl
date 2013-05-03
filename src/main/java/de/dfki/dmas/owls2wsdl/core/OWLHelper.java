@@ -102,7 +102,7 @@ public class OWLHelper {
             try{
                 OntClass avfrvalue = (OntClass) avfr.getAllValuesFrom().as( OntClass.class );
                 if(avfrvalue.isEnumeratedClass()) {
-                    // ähnlich: EnumeratedClass enumAvfrValue = avfrvalue.convertToEnumeratedClass(....)                   
+                    // ï¿½hnlich: EnumeratedClass enumAvfrValue = avfrvalue.convertToEnumeratedClass(....)                   
                     for(ExtendedIterator oneOfIt = avfrvalue.asEnumeratedClass().listOneOf(); oneOfIt.hasNext(); ) {
                         //Individual oneOf = (Individual) oneOfIt.next();
                         System.out.println("          [I,oneOf] "+oneOfIt.next().toString());

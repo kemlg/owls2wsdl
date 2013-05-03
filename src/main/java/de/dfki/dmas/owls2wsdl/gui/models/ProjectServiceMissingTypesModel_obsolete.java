@@ -1,7 +1,7 @@
 /*
  * ProjectServiceMissingTypesModel.java
  *
- * Created on 20. März 2007, 10:20
+ * Created on 20. Mï¿½rz 2007, 10:20
  */
 
 package de.dfki.dmas.owls2wsdl.gui.models;

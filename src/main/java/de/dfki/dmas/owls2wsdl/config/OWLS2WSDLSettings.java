@@ -81,7 +81,7 @@ public class OWLS2WSDLSettings {
         this.properties.setProperty("TNS_BASEPATH", "http://dmas.dfki.de/axis/services/");
         this.properties.setProperty("CHANGE_WSDLPATH","yes");
         this.properties.setProperty("WSDLPATH","http://127.0.0.1/grounding/");
-        // für GUI zusätzlich recent_service_dirs und recent_ontology_dirs
+        // fï¿½r GUI zusï¿½tzlich recent_service_dirs und recent_ontology_dirs
     }
     
     public void loadPropertyFile() {

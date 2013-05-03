@@ -115,7 +115,7 @@ public class OntClassContainer {
             
             if(VERBOSE) { System.out.println("[i] UNION found."); }
             
-            // Operanden können Restrictions oder Klassen sein
+            // Operanden kï¿½nnen Restrictions oder Klassen sein
             for(ExtendedIterator unionIt=this.ontclass.asUnionClass().listOperands(); unionIt.hasNext(); ) {
                 this.equivalentUnionSet.add( (OntClass) unionIt.next() );
             }
@@ -124,7 +124,7 @@ public class OntClassContainer {
             
             if(VERBOSE) { System.out.println("[i] INTERSECTION found."); }
             
-            // Operanden können Restrictions oder Klassen sein
+            // Operanden kï¿½nnen Restrictions oder Klassen sein
             for(ExtendedIterator intSectIt=this.ontclass.asIntersectionClass().listOperands(); intSectIt.hasNext(); ) {
                 OntClass curoc = (OntClass) intSectIt.next();                
                 if(curoc.isRestriction()) {
@@ -364,9 +364,9 @@ public class OntClassContainer {
             this.subclassPropertyRestrictions.add(curr);
         }
         
-// OF, 23.10.: Änderung. Properties werden ausschließlich über collect Methoden
-//        im DatatypeParser hinzugefügt. Hier wird nur der Wertebereich
-//        über Restrictions eingeschränkt. Bsp. locatedIn als TransitiveProperty
+// OF, 23.10.: ï¿½nderung. Properties werden ausschlieï¿½lich ï¿½ber collect Methoden
+//        im DatatypeParser hinzugefï¿½gt. Hier wird nur der Wertebereich
+//        ï¿½ber Restrictions eingeschrï¿½nkt. Bsp. locatedIn als TransitiveProperty
 //
 //        if(ontproperty.isDatatypeProperty()) {
 //            this.addProperty(ontproperty.asDatatypeProperty());

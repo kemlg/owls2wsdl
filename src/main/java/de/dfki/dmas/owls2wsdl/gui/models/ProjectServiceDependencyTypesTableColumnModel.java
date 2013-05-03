@@ -1,7 +1,7 @@
 /*
  * ProjectServiceDependencyTypesTableColumnModel.java
  *
- * Created on 21. März 2007, 16:38
+ * Created on 21. Mï¿½rz 2007, 16:38
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

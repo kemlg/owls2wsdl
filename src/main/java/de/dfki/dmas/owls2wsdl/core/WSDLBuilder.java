@@ -244,8 +244,8 @@ public class WSDLBuilder {
         String serviceName         = helper.reformatOWLSSupportedByString(abstractService.getID());
         String serviceDescription  = abstractService.getDescription();
         
-        // später für jedem OutputParameter ein get oder bei mehreren Outputs 
-        // entweder zusätzlicher Container oder mehrere Operationen.        
+        // spï¿½ter fï¿½r jedem OutputParameter ein get oder bei mehreren Outputs 
+        // entweder zusï¿½tzlicher Container oder mehrere Operationen.        
         Vector inputParameter      = abstractService.getInputParameter();
         Vector outputParameter     = abstractService.getOutputParameter();
         

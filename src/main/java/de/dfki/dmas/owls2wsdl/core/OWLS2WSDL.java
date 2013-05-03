@@ -1,7 +1,7 @@
 /*
  * OWLS2WSDL.java
  *
- * Created on 27. März 2007, 15:50
+ * Created on 27. Mï¿½rz 2007, 15:50
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

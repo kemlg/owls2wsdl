@@ -1,7 +1,7 @@
 /*
  * WsdlGroundingBuilder.java
  *
- * Created on 5. März 2007, 15:25
+ * Created on 5. Mï¿½rz 2007, 15:25
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

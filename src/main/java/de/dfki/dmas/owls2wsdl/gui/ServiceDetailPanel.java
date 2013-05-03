@@ -334,7 +334,7 @@ public class ServiceDetailPanel extends JComponent implements ListSelectionListe
             serviceImportedFilesList.revalidate(); 
         }
  
-        //DYN SUBPANEL FÜR NS
+        //DYN SUBPANEL Fï¿½R NS
         counter++;
         System.out.println("PANEL UPDATE "+counter);
     }

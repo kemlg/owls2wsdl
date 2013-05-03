@@ -1,7 +1,7 @@
 /*
  * WSDLOWLSExport.java
  *
- * Created on 12. März 2007, 11:58
+ * Created on 12. Mï¿½rz 2007, 11:58
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken

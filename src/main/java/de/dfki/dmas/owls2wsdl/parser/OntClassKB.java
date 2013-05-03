@@ -289,7 +289,7 @@ public class OntClassKB {
     
     /**
      * Obsolete seit addAbstractDatatypeElementsBySuperClass
-     * direktes Einpflegen der Elemente anstatt sie über einen Vector zwischenzuspeichern
+     * direktes Einpflegen der Elemente anstatt sie ï¿½ber einen Vector zwischenzuspeichern
      * @obsolete
      */
     private Vector buildSuperClassList(String containerUri) {
