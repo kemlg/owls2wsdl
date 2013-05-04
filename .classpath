@@ -7,8 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry kind="lib" path="lib/owl-s.jar"/>
-	<classpathentry kind="lib" path="lib/zeus-jscl-1.70.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>

@@ -4,7 +4,25 @@
 	<groupId>de.dfki.dmas</groupId>
 	<artifactId>owls2wsdl</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>owlsutils</id>
+			<name>bintray</name>
+			<url>http://dl.bintray.com/content/kemlg/owlsutils</url>
+		</repository>
+	</repositories>
 	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>owlsutils</id>
+			<name>bintray-plugins</name>
+			<url>http://dl.bintray.com/content/kemlg/owlsutils</url>
+		</pluginRepository>
 		<pluginRepository>
 			<id>onejar-maven-plugin.googlecode.com</id>
 			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
@@ -55,18 +73,16 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.mindswap</groupId>
-			<artifactId>owls</artifactId>
-			<version>0.9.2</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/owl-s.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>gr.zeus</groupId>
 			<artifactId>jscl</artifactId>
 			<version>1.70</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/zeus-jscl-1.70.jar</systemPath>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.mindswap</groupId>
+			<artifactId>owls</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>castor</groupId>
