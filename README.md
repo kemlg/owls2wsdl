@@ -8,10 +8,10 @@ Copyright 2007, Oliver Fourman
 Joint work at 
 
   German Research Center for Artificial Intelligence (DFKI GmbH)
-  Saarbrücken, Germany
+  Saarbrï¿½cken, Germany
 
-  Hochschule für Technik und Wirtschaft (HTW) des Saarlandes
-  Saarbrücken, Germany
+  Hochschule fï¿½r Technik und Wirtschaft (HTW) des Saarlandes
+  Saarbrï¿½cken, Germany
 
 
 Under project grants:
