@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.dfki.dmas</groupId>
 	<artifactId>owls2wsdl</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.1.1</version>
 	<repositories>
 		<repository>
 			<snapshots>
@@ -160,4 +160,11 @@
 			<version>4.0</version>
 		</dependency>
 	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>bintray-kemlg-owlsutils-de.dfki.dmas.owls2wsdl</id>
+			<name>kemlg-owlsutils-de.dfki.dmas.owls2wsdl</name>
+			<url>https://api.bintray.com/maven/kemlg/owlsutils/de.dfki.dmas.owls2wsdl</url>
+		</repository>
+	</distributionManagement>
 </project>

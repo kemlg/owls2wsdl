@@ -1064,7 +1064,13 @@ public class OntClassKB {
         }
         else if(r.isHasValueRestriction()) {
             metaRestrictionType.setLocalName(restrictionTypeName+"HasValueRestriction");
-            AbstractDatatypeElement restriction = new AbstractDatatypeElement("RESTRICTION-COMPONENT", "hasValue", ontproperty.getRange().getURI());
+            AbstractDatatypeElement restriction = null;
+            try {
+            	restriction = new AbstractDatatypeElement("RESTRICTION-COMPONENT", "hasValue", ontproperty.getRange().getURI());
+            }
+            catch(NullPointerException npe) {
+            	restriction = new AbstractDatatypeElement("RESTRICTION-COMPONENT", "hasValue", ontproperty.getURI());
+            }
             
             HasValueRestriction hvr = r.asHasValueRestriction();
             if(hvr.getHasValue().isLiteral()) {
