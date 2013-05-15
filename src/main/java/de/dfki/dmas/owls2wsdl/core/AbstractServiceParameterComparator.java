@@ -16,22 +16,24 @@
  */
 
 package de.dfki.dmas.owls2wsdl.core;
+
 import java.util.Comparator;
 
 /**
- *
+ * 
  * @author Oliver Fourman
  */
-public class AbstractServiceParameterComparator implements Comparator {
-    
-    /** Creates a new instance of AbstractServiceParameterComparator */
-    public AbstractServiceParameterComparator() {
-    }
-    
-    public int compare(Object obj1, Object obj2)
-    {
-            String s1 = ((AbstractServiceParameter)obj1).getID();
-            String s2 = ((AbstractServiceParameter)obj2).getID();
-            return s1.compareTo(s2);
-    }
+public class AbstractServiceParameterComparator implements
+		Comparator<AbstractServiceParameter> {
+
+	/** Creates a new instance of AbstractServiceParameterComparator */
+	public AbstractServiceParameterComparator() {
+	}
+
+	public int compare(AbstractServiceParameter obj1,
+			AbstractServiceParameter obj2) {
+		String s1 = obj1.getID();
+		String s2 = obj2.getID();
+		return s1.compareTo(s2);
+	}
 }

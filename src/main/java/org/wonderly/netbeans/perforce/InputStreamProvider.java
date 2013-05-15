@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
+ * 
  * @author gregg
  */
 public interface InputStreamProvider {
-	public void writeTo( OutputStream os ) throws IOException;
+	public void writeTo(OutputStream os) throws IOException;
 }

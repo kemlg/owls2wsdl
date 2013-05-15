@@ -15,47 +15,52 @@
 
 package de.dfki.dmas.owls2wsdl.gui.models;
 
-import de.dfki.dmas.owls2wsdl.gui.RuntimeModel;
-import de.dfki.dmas.owls2wsdl.core.Project;
 import javax.swing.table.AbstractTableModel;
 
+import de.dfki.dmas.owls2wsdl.gui.RuntimeModel;
+
 /**
- *
+ * 
  * @author Oliver
  */
-public class ProjectServiceDependencyTypesTableModel extends AbstractTableModel
-{   
-    public Object getValueAt(int rowIndex, int columnIndex) 
-    {
-        String uri = RuntimeModel.getInstance().getProject().getServiceDependencyTypes().get(rowIndex).toString();
-        
-        switch(columnIndex) {
-            case 0:
-                return Integer.toString(rowIndex);
-            case 1:
-                return uri;
-            case 2:
-                if(RuntimeModel.getInstance().getProject().getServiceMissingTypes().contains(uri))
-                    return "yes";
-                else
-                    return "no";                
-            default:
-                break;
-        }
-        return "blub";
-    }
+public class ProjectServiceDependencyTypesTableModel extends AbstractTableModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1290368673126924799L;
 
-    public int getRowCount() {
-        if(RuntimeModel.getInstance().getProject() != null) {
-            return RuntimeModel.getInstance().getProject().getServiceDependencyTypes().size();
-        }
-        else {
-            return 0;
-        }
-    }
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		String uri = RuntimeModel.getInstance().getProject()
+				.getServiceDependencyTypes().get(rowIndex).toString();
 
-    public int getColumnCount() {
-        return 3;
-    }
-    
+		switch (columnIndex) {
+		case 0:
+			return Integer.toString(rowIndex);
+		case 1:
+			return uri;
+		case 2:
+			if (RuntimeModel.getInstance().getProject()
+					.getServiceMissingTypes().contains(uri))
+				return "yes";
+			else
+				return "no";
+		default:
+			break;
+		}
+		return "blub";
+	}
+
+	public int getRowCount() {
+		if (RuntimeModel.getInstance().getProject() != null) {
+			return RuntimeModel.getInstance().getProject()
+					.getServiceDependencyTypes().size();
+		} else {
+			return 0;
+		}
+	}
+
+	public int getColumnCount() {
+		return 3;
+	}
+
 }

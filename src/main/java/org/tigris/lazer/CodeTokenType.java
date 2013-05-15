@@ -7,7 +7,7 @@
 package org.tigris.lazer;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
 public abstract class CodeTokenType extends TokenType {

@@ -39,84 +39,79 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
- * Demonstrates a frequent pitfall when specifying a growing row. 
- * In this layout a row grows, but the text area in that row is centered 
- * and doesn't 'grow'. In other words, the area doesn't fill 
- * the available vertical space. 
- *
- * @author  Karsten Lentzsch
+ * Demonstrates a frequent pitfall when specifying a growing row. In this layout
+ * a row grows, but the text area in that row is centered and doesn't 'grow'. In
+ * other words, the area doesn't fill the available vertical space.
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.6 $
  */
 
 public final class VerticalGrowthExample {
 
-    // UI Components **********************************************************
-    
-    private JTextComponent notesArea;
-    
+	// UI Components **********************************************************
 
-    // Self Launch ************************************************************
+	private JTextComponent notesArea;
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: Vertical Growth");
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        JComponent panel = new VerticalGrowthExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.setSize(500, 400);
-        frame.setVisible(true);
-    }
-    
-    
-    // Component Initialization ***********************************************
-    
-    /**
-     * Creates and configures the UI components.
-     */
-    private void initComponents() {
-        notesArea  = new JTextArea(
-                "This text area doesn't consume the available vertical space.\n\n"
-                + "The row is specified as 'pref:grow', and so the row grows.\n"
-                + "It's just that the text area doesn't fill the row's vertical space.\n\n"
-                + "Since the row's alignment is not explicitly defined,\n"
-                + "it uses the 'center' alignment as default. But in this case\n"
-                + "we want to 'fill'. The row spec should read: 'fill:pref:grow'."
-                );
-    }
+	// Self Launch ************************************************************
 
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: Vertical Growth");
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		JComponent panel = new VerticalGrowthExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.setSize(500, 400);
+		frame.setVisible(true);
+	}
 
-    // Building ***************************************************************
+	// Component Initialization ***********************************************
 
-    /**
-     * Builds and returns a panel with a title and scrollable text area.<p>
-     * 
-     * The FormDebugUtils dumps
-     * 
-     * @return the built panel
-     */
-    public JComponent buildPanel() {
-        initComponents(); 
-        
-        FormLayout layout = new FormLayout(
-                "pref:grow",
-                "pref, 3dlu, pref:grow" // Correct: "pref, 3dlu, fill:pref:grow"  
-                );
-        
-        PanelBuilder builder = new PanelBuilder(layout);
-        builder.setDefaultDialogBorder();
-        CellConstraints cc = new CellConstraints();
-        builder.addTitle("An Example for FAQ #3.3", cc.xy(1, 1));
-        builder.add(new JScrollPane(notesArea),     cc.xy(1, 3));
-        
-        FormDebugUtils.dumpRowSpecs(layout);
-        FormDebugUtils.dumpConstraints(builder.getPanel());
-        return builder.getPanel();
-    }
-    
-    
- }
+	/**
+	 * Creates and configures the UI components.
+	 */
+	private void initComponents() {
+		notesArea = new JTextArea(
+				"This text area doesn't consume the available vertical space.\n\n"
+						+ "The row is specified as 'pref:grow', and so the row grows.\n"
+						+ "It's just that the text area doesn't fill the row's vertical space.\n\n"
+						+ "Since the row's alignment is not explicitly defined,\n"
+						+ "it uses the 'center' alignment as default. But in this case\n"
+						+ "we want to 'fill'. The row spec should read: 'fill:pref:grow'.");
+	}
+
+	// Building ***************************************************************
+
+	/**
+	 * Builds and returns a panel with a title and scrollable text area.
+	 * <p>
+	 * 
+	 * The FormDebugUtils dumps
+	 * 
+	 * @return the built panel
+	 */
+	public JComponent buildPanel() {
+		initComponents();
+
+		FormLayout layout = new FormLayout("pref:grow", "pref, 3dlu, pref:grow" // Correct:
+																				// "pref, 3dlu, fill:pref:grow"
+		);
+
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();
+		builder.addTitle("An Example for FAQ #3.3", cc.xy(1, 1));
+		builder.add(new JScrollPane(notesArea), cc.xy(1, 3));
+
+		FormDebugUtils.dumpRowSpecs(layout);
+		FormDebugUtils.dumpConstraints(builder.getPanel());
+		return builder.getPanel();
+	}
+
+}

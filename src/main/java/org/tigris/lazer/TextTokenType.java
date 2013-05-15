@@ -7,22 +7,22 @@
 package org.tigris.lazer;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
 public class TextTokenType extends CodeTokenType {
-    
-    static private TextTokenType INSTANCE = new TextTokenType();
-    
-    /** Creates a new instance of CommentToken */
-    private TextTokenType() {
-    }
-    
-    static public TextTokenType getInstance() {
-        return INSTANCE;
-    }
 
-    public String toString() {
-        return "TX";
-    }
+	static private TextTokenType INSTANCE = new TextTokenType();
+
+	/** Creates a new instance of CommentToken */
+	private TextTokenType() {
+	}
+
+	static public TextTokenType getInstance() {
+		return INSTANCE;
+	}
+
+	public String toString() {
+		return "TX";
+	}
 }

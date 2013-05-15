@@ -17,24 +17,30 @@
 
 package de.dfki.dmas.owls2wsdl.gui.models;
 
-import de.dfki.dmas.owls2wsdl.gui.RuntimeModel;
-import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeKB;
-import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeKBData;
-
 import javax.swing.AbstractListModel;
+
+import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeKB;
+
 //import java.util.Vector;
 
 /**
- *
+ * 
  * @author Oliver
  */
-public class ProjectLoadedOntListModel extends AbstractListModel {
+public class ProjectLoadedOntListModel extends AbstractListModel<String> {
 
-    public Object getElementAt(int index) {
-        return AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().getOntologyURIs().get(index);
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3056053586434968886L;
 
-    public int getSize() {
-        return AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().getOntologyURIs().size();
-    }          
+	public String getElementAt(int index) {
+		return AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData()
+				.getOntologyURIs().get(index);
+	}
+
+	public int getSize() {
+		return AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData()
+				.getOntologyURIs().size();
+	}
 }

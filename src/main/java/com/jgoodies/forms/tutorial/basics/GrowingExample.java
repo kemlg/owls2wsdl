@@ -38,168 +38,156 @@ import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Demonstrates the FormLayout growing options: none, default, weighted.
- *
- * @author	Karsten Lentzsch
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.12 $
  */
 public final class GrowingExample {
 
-    
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: Growing");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new GrowingExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: Growing");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		JComponent panel = new GrowingExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
+	public JComponent buildPanel() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
 
-    public JComponent buildPanel() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
+		tabbedPane.add("All", buildHorizontalAllExtraSpacePanel());
+		tabbedPane.add("Half", buildHorizontalHalfAndHalfPanel());
+		tabbedPane.add("Percent", buildHorizontalPercentMixedPanel());
+		tabbedPane.add("Percent 2", buildHorizontalPercentPanel());
+		tabbedPane.add("Vertical 1", buildVerticalGrowing1Panel());
+		tabbedPane.add("Vertical 2", buildVerticalGrowing2Panel());
+		return tabbedPane;
+	}
 
-        tabbedPane.add("All",        buildHorizontalAllExtraSpacePanel());
-        tabbedPane.add("Half",       buildHorizontalHalfAndHalfPanel());
-        tabbedPane.add("Percent",    buildHorizontalPercentMixedPanel());
-        tabbedPane.add("Percent 2",  buildHorizontalPercentPanel());
-        tabbedPane.add("Vertical 1", buildVerticalGrowing1Panel());
-        tabbedPane.add("Vertical 2", buildVerticalGrowing2Panel());
-        return tabbedPane;
-    }
-    
-    
-    private JComponent buildHorizontalAllExtraSpacePanel() {
-        FormLayout layout = new FormLayout(
-            "pref, 6px, pref:grow",   
-            "pref, 12px, pref"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+	private JComponent buildHorizontalAllExtraSpacePanel() {
+		FormLayout layout = new FormLayout("pref, 6px, pref:grow",
+				"pref, 12px, pref");
 
-        panel.add(new JLabel("Fixed"),  cc.xy(1, 1));
-        panel.add(new JLabel("Gets all extra space"),  cc.xy(3, 1));
-        
-        panel.add(new JTextField(5),   cc.xy(1, 3));
-        panel.add(new JTextField(5),   cc.xy(3, 3));
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
 
-        return panel;
-    }
-    
-    
-    private JComponent buildHorizontalHalfAndHalfPanel() {
-        FormLayout layout = new FormLayout(
-            "pref, 6px, 0:grow, 6px, 0:grow",   
-            "pref, 12px, pref"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+		panel.add(new JLabel("Fixed"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets all extra space"), cc.xy(3, 1));
 
-        panel.add(new JLabel("Fixed"),  cc.xy(1, 1));
-        panel.add(new JLabel("Gets half of extra space"),  cc.xy(3, 1));
-        panel.add(new JLabel("gets half of extra space"),  cc.xy(5, 1));
-        
-        panel.add(new JTextField(5),   cc.xy(1, 3));
-        panel.add(new JTextField(5),   cc.xy(3, 3));
-        panel.add(new JTextField(5),   cc.xy(5, 3));
+		panel.add(new JTextField(5), cc.xy(1, 3));
+		panel.add(new JTextField(5), cc.xy(3, 3));
 
-        return panel;
-    }
-    
-    
-    private JComponent buildHorizontalPercentMixedPanel() {
-        FormLayout layout = new FormLayout(
-            "pref, 6px, 0:grow(0.25), 6px, 0:grow(0.75)",   
-            "pref, 12px, pref"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+		return panel;
+	}
 
-        panel.add(new JLabel("Fixed"),       cc.xy(1, 1));
-        panel.add(new JLabel("Gets 25% of extra space"),  cc.xy(3, 1));
-        panel.add(new JLabel("Gets 75% of extra space"),  cc.xy(5, 1));
-        
-        panel.add(new JTextField(5),        cc.xy(1, 3));
-        panel.add(new JTextField(5),        cc.xy(3, 3));
-        panel.add(new JTextField(5),        cc.xy(5, 3));
+	private JComponent buildHorizontalHalfAndHalfPanel() {
+		FormLayout layout = new FormLayout("pref, 6px, 0:grow, 6px, 0:grow",
+				"pref, 12px, pref");
 
-        return panel;
-    }
-    
-    
-    private JComponent buildHorizontalPercentPanel() {
-        FormLayout layout = new FormLayout(
-            "pref:grow(0.33), 6px, pref:grow(0.67)",   
-            "pref, 12px, pref"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
 
-        panel.add(new JLabel("Gets 33% of the space"),    cc.xy(1, 1));
-        panel.add(new JLabel("Gets 67% of the space"),    cc.xy(3, 1));
-        
-        panel.add(new JTextField(5),   cc.xy(1, 3));
-        panel.add(new JTextField(5),   cc.xy(3, 3));
+		panel.add(new JLabel("Fixed"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets half of extra space"), cc.xy(3, 1));
+		panel.add(new JLabel("gets half of extra space"), cc.xy(5, 1));
 
-        return panel;
-    }
-    
-    private JComponent buildVerticalGrowing1Panel() {
-        FormLayout layout = new FormLayout(
-            "pref, 12px, pref",   
-            "pref, 6px, fill:0:grow(0.25), 6px, fill:0:grow(0.75)"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+		panel.add(new JTextField(5), cc.xy(1, 3));
+		panel.add(new JTextField(5), cc.xy(3, 3));
+		panel.add(new JTextField(5), cc.xy(5, 3));
 
-        panel.add(new JLabel("Fixed"),                   cc.xy(1, 1));
-        panel.add(new JLabel("Gets 25% of extra space"), cc.xy(1, 3));
-        panel.add(new JLabel("Gets 75% of extra space"), cc.xy(1, 5));
-        
-        panel.add(createTextArea(4, 30), cc.xy(3, 1));
-        panel.add(createTextArea(4, 30), cc.xy(3, 3));
-        panel.add(createTextArea(4, 30), cc.xy(3, 5));
+		return panel;
+	}
 
-        return panel;
-    }
-    
-    private JComponent buildVerticalGrowing2Panel() {
-        FormLayout layout = new FormLayout(
-            "pref, 12px, pref",   
-            "fill:0:grow(0.25), 6px, fill:0:grow(0.75)"); 
-            
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        CellConstraints cc = new CellConstraints();
+	private JComponent buildHorizontalPercentMixedPanel() {
+		FormLayout layout = new FormLayout(
+				"pref, 6px, 0:grow(0.25), 6px, 0:grow(0.75)",
+				"pref, 12px, pref");
 
-        panel.add(new JLabel("Gets 25% of extra space"), cc.xy(1, 1));
-        panel.add(new JLabel("Gets 75% of extra space"), cc.xy(1, 3));
-        
-        panel.add(createTextArea(4, 30), cc.xy(3, 1));
-        panel.add(createTextArea(4, 30), cc.xy(3, 3));
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
 
-        return panel;
-    }
-    
-    
-    // Component Creation *****************************************************
-    
-    private JComponent createTextArea(int rows, int cols) {
-        return new JScrollPane(new JTextArea(rows, cols),
-                    ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
-                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    }
-    
-    
+		panel.add(new JLabel("Fixed"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets 25% of extra space"), cc.xy(3, 1));
+		panel.add(new JLabel("Gets 75% of extra space"), cc.xy(5, 1));
+
+		panel.add(new JTextField(5), cc.xy(1, 3));
+		panel.add(new JTextField(5), cc.xy(3, 3));
+		panel.add(new JTextField(5), cc.xy(5, 3));
+
+		return panel;
+	}
+
+	private JComponent buildHorizontalPercentPanel() {
+		FormLayout layout = new FormLayout(
+				"pref:grow(0.33), 6px, pref:grow(0.67)", "pref, 12px, pref");
+
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
+
+		panel.add(new JLabel("Gets 33% of the space"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets 67% of the space"), cc.xy(3, 1));
+
+		panel.add(new JTextField(5), cc.xy(1, 3));
+		panel.add(new JTextField(5), cc.xy(3, 3));
+
+		return panel;
+	}
+
+	private JComponent buildVerticalGrowing1Panel() {
+		FormLayout layout = new FormLayout("pref, 12px, pref",
+				"pref, 6px, fill:0:grow(0.25), 6px, fill:0:grow(0.75)");
+
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
+
+		panel.add(new JLabel("Fixed"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets 25% of extra space"), cc.xy(1, 3));
+		panel.add(new JLabel("Gets 75% of extra space"), cc.xy(1, 5));
+
+		panel.add(createTextArea(4, 30), cc.xy(3, 1));
+		panel.add(createTextArea(4, 30), cc.xy(3, 3));
+		panel.add(createTextArea(4, 30), cc.xy(3, 5));
+
+		return panel;
+	}
+
+	private JComponent buildVerticalGrowing2Panel() {
+		FormLayout layout = new FormLayout("pref, 12px, pref",
+				"fill:0:grow(0.25), 6px, fill:0:grow(0.75)");
+
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
+		CellConstraints cc = new CellConstraints();
+
+		panel.add(new JLabel("Gets 25% of extra space"), cc.xy(1, 1));
+		panel.add(new JLabel("Gets 75% of extra space"), cc.xy(1, 3));
+
+		panel.add(createTextArea(4, 30), cc.xy(3, 1));
+		panel.add(createTextArea(4, 30), cc.xy(3, 3));
+
+		return panel;
+	}
+
+	// Component Creation *****************************************************
+
+	private JComponent createTextArea(int rows, int cols) {
+		return new JScrollPane(new JTextArea(rows, cols),
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	}
+
 }

@@ -36,15 +36,15 @@ import com.jgoodies.forms.layout.ConstantSize;
 import com.jgoodies.forms.layout.Size;
 
 /**
- * An abstract class that describes a layout and design style guide.
- * It provides constants used to lay out panels consistently.<p>
+ * An abstract class that describes a layout and design style guide. It provides
+ * constants used to lay out panels consistently.
+ * <p>
  * 
  * This class is work in progress and the API may change without notice.
- * Therefore it is recommended to not write custom subclasses 
- * for production code.
- * A future version of this class will likely collaborate with a class
+ * Therefore it is recommended to not write custom subclasses for production
+ * code. A future version of this class will likely collaborate with a class
  * <code>LogicalSize</code> or <code>StyledSize</code>.
- *
+ * 
  * @author Karsten Lentzsch
  * @version $Revision: 1.2 $
  * 
@@ -55,275 +55,257 @@ import com.jgoodies.forms.layout.Size;
  */
 
 public abstract class LayoutStyle {
-    
-    /**
-     * Holds the current layout style.
-     */
-    private static LayoutStyle current = initialLayoutStyle();
-    
-    
-    // Computing the initial layout style *************************************
-    
-    /**
-     * Computes and returns the initial <code>LayoutStyle</code>.
-     * Checks the OS name and returns <code>MacLayoutStyle</code> 
-     * on Mac OS X and <code>WindowLayoutStyle</code> on all other platforms.
-     * 
-     * @return MacLayoutStyle on Mac, WindowsLayoutStyle on all other platforms
-     */
-    private static LayoutStyle initialLayoutStyle() {
-        if (isOSMac())
-        	return MacLayoutStyle.INSTANCE;
-        return WindowsLayoutStyle.INSTANCE;
-    }
-    
-    
-    /**
-     * Checks and answers whether Java runs on a Mac by requesting
-     * the system property <em>os.name</em>.
-     * 
-     * @return true on Mac, false on all other Platforms
-     */
-    private static boolean isOSMac() {
-        return getSystemProperty("os.name").startsWith("Mac");
-    }
-    
-    
-    /**
-     * Tries to look up the System property for the given key.
-     * In untrusted environments this may throw a SecurityException.
-     * In this case we catch the exception and answer <code>null</code>. 
-     * 
-     * @param key   the name of the system property
-     * @return the system property's String value, or a blank string 
-     *     if there's no such value, or a SecurityException has been catched
-     */
-    private static String getSystemProperty(String key) {
-        try {
-            return System.getProperty(key);
-        } catch (SecurityException e) {
-            Logger.getLogger(LayoutStyle.class.getName()).warning(
-                    "Can't read the System property " + key + ".");
-            return "";
-        }
-    }
 
-    
-    // Accessing the current style ******************************************
-    
-    /**
-     * Returns the current <code>LayoutStyle</code>.
-     * 
-     * @return the current <code>LayoutStyle</code>
-     */
-    public static LayoutStyle getCurrent() {
-        return current;
-    }
-    
-    
-    /**
-     * Set a new <code>LayoutStyle</code>.
-     * 
-     * @param newLayoutStyle   the style to be set
-     */
-    public static void setCurrent(LayoutStyle newLayoutStyle) {
-        current = newLayoutStyle;
-    }
-    
-    
-    // Layout Sizes *********************************************************
+	/**
+	 * Holds the current layout style.
+	 */
+	private static LayoutStyle current = initialLayoutStyle();
 
-    /**
-     * Returns this style's default button width.
-     * 
-     * @return the default button width
-     * 
-     * @see #getDefaultButtonHeight()
-     */
-    public abstract Size getDefaultButtonWidth();
+	// Computing the initial layout style *************************************
 
-    
-    /**
-     * Returns this style's default button height.
-     * 
-     * @return the default button height
-     * 
-     * @see #getDefaultButtonWidth()
-     */
-    public abstract Size getDefaultButtonHeight();
+	/**
+	 * Computes and returns the initial <code>LayoutStyle</code>. Checks the OS
+	 * name and returns <code>MacLayoutStyle</code> on Mac OS X and
+	 * <code>WindowLayoutStyle</code> on all other platforms.
+	 * 
+	 * @return MacLayoutStyle on Mac, WindowsLayoutStyle on all other platforms
+	 */
+	private static LayoutStyle initialLayoutStyle() {
+		if (isOSMac())
+			return MacLayoutStyle.INSTANCE;
+		return WindowsLayoutStyle.INSTANCE;
+	}
 
-    
-    /**
-     * Returns this style's horizontal margin for general dialogs.
-     * 
-     * @return the horizontal margin for general dialogs
-     * 
-     * @see #getDialogMarginY()
-     * @see #getTabbedDialogMarginX()
-     */
-    public abstract ConstantSize getDialogMarginX();
+	/**
+	 * Checks and answers whether Java runs on a Mac by requesting the system
+	 * property <em>os.name</em>.
+	 * 
+	 * @return true on Mac, false on all other Platforms
+	 */
+	private static boolean isOSMac() {
+		return getSystemProperty("os.name").startsWith("Mac");
+	}
 
-    
-    /**
-     * Returns this style's vertical margin for general dialogs.
-     * 
-     * @return the vertical margin for general dialogs
-     * 
-     * @see #getDialogMarginX()
-     * @see #getTabbedDialogMarginY()
-     */
-    public abstract ConstantSize getDialogMarginY();
+	/**
+	 * Tries to look up the System property for the given key. In untrusted
+	 * environments this may throw a SecurityException. In this case we catch
+	 * the exception and answer <code>null</code>.
+	 * 
+	 * @param key
+	 *            the name of the system property
+	 * @return the system property's String value, or a blank string if there's
+	 *         no such value, or a SecurityException has been catched
+	 */
+	private static String getSystemProperty(String key) {
+		try {
+			return System.getProperty(key);
+		} catch (SecurityException e) {
+			Logger.getLogger(LayoutStyle.class.getName()).warning(
+					"Can't read the System property " + key + ".");
+			return "";
+		}
+	}
 
-    
-    /**
-     * Returns this style's horizontal margin for dialogs that consist of 
-     * a tabbed pane.
-     * 
-     * @return the horizontal margin for dialogs that consist of a tabbed pane
-     * @since 1.0.3
-     * 
-     * @see #getTabbedDialogMarginY()
-     * @see #getDialogMarginX()
-     */
-    public abstract ConstantSize getTabbedDialogMarginX();
+	// Accessing the current style ******************************************
 
-    
-    /**
-     * Returns this style's vertical margin for dialogs that consist of
-     * a tabbed pane.
-     * 
-     * @return the vertical margin for dialogs that consist of a tabbed pane
-     * @since 1.0.3
-     * 
-     * @see #getTabbedDialogMarginX()
-     * @see #getDialogMarginY()
-     */
-    public abstract ConstantSize getTabbedDialogMarginY();
+	/**
+	 * Returns the current <code>LayoutStyle</code>.
+	 * 
+	 * @return the current <code>LayoutStyle</code>
+	 */
+	public static LayoutStyle getCurrent() {
+		return current;
+	}
 
-    
-    /**
-     * Returns a gap used to separate a label and associated control.
-     * 
-     * @return a gap between label and associated control
-     * 
-     * @see #getRelatedComponentsPadX()
-     * @see #getUnrelatedComponentsPadX()
-     */
-    public abstract ConstantSize getLabelComponentPadX();
+	/**
+	 * Set a new <code>LayoutStyle</code>.
+	 * 
+	 * @param newLayoutStyle
+	 *            the style to be set
+	 */
+	public static void setCurrent(LayoutStyle newLayoutStyle) {
+		current = newLayoutStyle;
+	}
 
-    
-    /**
-     * Returns a horizontal gap used to separate related controls.
-     * 
-     * @return a horizontal gap between related controls
-     * 
-     * @see #getLabelComponentPadX()
-     * @see #getRelatedComponentsPadY()
-     * @see #getUnrelatedComponentsPadX()
-     */
-    public abstract ConstantSize getRelatedComponentsPadX();
+	// Layout Sizes *********************************************************
 
-    
-    /**
-     * Returns a vertical gap used to separate related controls.
-     * 
-     * @return a vertical gap between related controls
-     * 
-     * @see #getRelatedComponentsPadX()
-     * @see #getUnrelatedComponentsPadY()
-     */
-    public abstract ConstantSize getRelatedComponentsPadY();
+	/**
+	 * Returns this style's default button width.
+	 * 
+	 * @return the default button width
+	 * 
+	 * @see #getDefaultButtonHeight()
+	 */
+	public abstract Size getDefaultButtonWidth();
 
-    
-    /**
-     * Returns a horizontal gap used to separate unrelated controls.
-     * 
-     * @return a horizontal gap between unrelated controls
-     * 
-     * @see #getLabelComponentPadX()
-     * @see #getUnrelatedComponentsPadY()
-     * @see #getRelatedComponentsPadX()
-     */
-    public abstract ConstantSize getUnrelatedComponentsPadX();
+	/**
+	 * Returns this style's default button height.
+	 * 
+	 * @return the default button height
+	 * 
+	 * @see #getDefaultButtonWidth()
+	 */
+	public abstract Size getDefaultButtonHeight();
 
-    
-    /**
-     * Returns a vertical gap used to separate unrelated controls.
-     * 
-     * @return a vertical gap between unrelated controls
-     * 
-     * @see #getUnrelatedComponentsPadX()
-     * @see #getRelatedComponentsPadY()
-     */
-    public abstract ConstantSize getUnrelatedComponentsPadY();
+	/**
+	 * Returns this style's horizontal margin for general dialogs.
+	 * 
+	 * @return the horizontal margin for general dialogs
+	 * 
+	 * @see #getDialogMarginY()
+	 * @see #getTabbedDialogMarginX()
+	 */
+	public abstract ConstantSize getDialogMarginX();
 
-    
-    /**
-     * Returns a narrow vertical pad used to separate lines.
-     * 
-     * @return a narrow vertical pad used to separate lines
-     * 
-     * @see #getLinePad()
-     * @see #getParagraphPad()
-     */
-    public abstract ConstantSize getNarrowLinePad();
+	/**
+	 * Returns this style's vertical margin for general dialogs.
+	 * 
+	 * @return the vertical margin for general dialogs
+	 * 
+	 * @see #getDialogMarginX()
+	 * @see #getTabbedDialogMarginY()
+	 */
+	public abstract ConstantSize getDialogMarginY();
 
-    
-    /**
-     * Returns a narrow vertical pad used to separate lines.
-     * 
-     * @return a vertical pad used to separate lines
-     * 
-     * @see #getNarrowLinePad()
-     * @see #getParagraphPad()
-     */
-    public abstract ConstantSize getLinePad();
+	/**
+	 * Returns this style's horizontal margin for dialogs that consist of a
+	 * tabbed pane.
+	 * 
+	 * @return the horizontal margin for dialogs that consist of a tabbed pane
+	 * @since 1.0.3
+	 * 
+	 * @see #getTabbedDialogMarginY()
+	 * @see #getDialogMarginX()
+	 */
+	public abstract ConstantSize getTabbedDialogMarginX();
 
-    
-    /**
-     * Returns a pad used to separate paragraphs.
-     * 
-     * @return a vertical pad used to separate paragraphs
-     * 
-     * @see #getNarrowLinePad()
-     * @see #getLinePad()
-     */
-    public abstract ConstantSize getParagraphPad();
+	/**
+	 * Returns this style's vertical margin for dialogs that consist of a tabbed
+	 * pane.
+	 * 
+	 * @return the vertical margin for dialogs that consist of a tabbed pane
+	 * @since 1.0.3
+	 * 
+	 * @see #getTabbedDialogMarginX()
+	 * @see #getDialogMarginY()
+	 */
+	public abstract ConstantSize getTabbedDialogMarginY();
 
+	/**
+	 * Returns a gap used to separate a label and associated control.
+	 * 
+	 * @return a gap between label and associated control
+	 * 
+	 * @see #getRelatedComponentsPadX()
+	 * @see #getUnrelatedComponentsPadX()
+	 */
+	public abstract ConstantSize getLabelComponentPadX();
 
-    /**
-     * Returns a pad used to separate a button bar from a component.
-     * 
-     * @return a vertical pad used to separate paragraphs
-     * @since 1.0.3
-     * 
-     * @see #getRelatedComponentsPadY()
-     * @see #getUnrelatedComponentsPadY()
-     */
-    public abstract ConstantSize getButtonBarPad();
+	/**
+	 * Returns a horizontal gap used to separate related controls.
+	 * 
+	 * @return a horizontal gap between related controls
+	 * 
+	 * @see #getLabelComponentPadX()
+	 * @see #getRelatedComponentsPadY()
+	 * @see #getUnrelatedComponentsPadX()
+	 */
+	public abstract ConstantSize getRelatedComponentsPadX();
 
-    
-    /**
-     * Checks and answers whether buttons are typically ordered from 
-     * left to right or from right to left. Useful for building button bars 
-     * that shall comply with the platform's layout style guide.<p>
-     * 
-     * For example the Windows style guide recommends to layout out
-     * <em>OK, Cancel, Apply</em> from left to right, where the 
-     * Mac Aqua style guide recommends to layout out these buttons
-     * from right to left.<p>
-     * 
-     * Although most button sequences shall honor this order
-     * some buttons require a left to right order. For example
-     * <em>Back, Next</em> or <em>Move Left, Move Right</em>.<p>
-     * 
-     * @return true if buttons are typically ordered from left to right
-     * @since 1.0.3
-     * 
-     * @see com.jgoodies.forms.builder.ButtonBarBuilder
-     * @see com.jgoodies.forms.factories.ButtonBarFactory
-     */
-    public abstract boolean isLeftToRightButtonOrder();
+	/**
+	 * Returns a vertical gap used to separate related controls.
+	 * 
+	 * @return a vertical gap between related controls
+	 * 
+	 * @see #getRelatedComponentsPadX()
+	 * @see #getUnrelatedComponentsPadY()
+	 */
+	public abstract ConstantSize getRelatedComponentsPadY();
 
-    
+	/**
+	 * Returns a horizontal gap used to separate unrelated controls.
+	 * 
+	 * @return a horizontal gap between unrelated controls
+	 * 
+	 * @see #getLabelComponentPadX()
+	 * @see #getUnrelatedComponentsPadY()
+	 * @see #getRelatedComponentsPadX()
+	 */
+	public abstract ConstantSize getUnrelatedComponentsPadX();
+
+	/**
+	 * Returns a vertical gap used to separate unrelated controls.
+	 * 
+	 * @return a vertical gap between unrelated controls
+	 * 
+	 * @see #getUnrelatedComponentsPadX()
+	 * @see #getRelatedComponentsPadY()
+	 */
+	public abstract ConstantSize getUnrelatedComponentsPadY();
+
+	/**
+	 * Returns a narrow vertical pad used to separate lines.
+	 * 
+	 * @return a narrow vertical pad used to separate lines
+	 * 
+	 * @see #getLinePad()
+	 * @see #getParagraphPad()
+	 */
+	public abstract ConstantSize getNarrowLinePad();
+
+	/**
+	 * Returns a narrow vertical pad used to separate lines.
+	 * 
+	 * @return a vertical pad used to separate lines
+	 * 
+	 * @see #getNarrowLinePad()
+	 * @see #getParagraphPad()
+	 */
+	public abstract ConstantSize getLinePad();
+
+	/**
+	 * Returns a pad used to separate paragraphs.
+	 * 
+	 * @return a vertical pad used to separate paragraphs
+	 * 
+	 * @see #getNarrowLinePad()
+	 * @see #getLinePad()
+	 */
+	public abstract ConstantSize getParagraphPad();
+
+	/**
+	 * Returns a pad used to separate a button bar from a component.
+	 * 
+	 * @return a vertical pad used to separate paragraphs
+	 * @since 1.0.3
+	 * 
+	 * @see #getRelatedComponentsPadY()
+	 * @see #getUnrelatedComponentsPadY()
+	 */
+	public abstract ConstantSize getButtonBarPad();
+
+	/**
+	 * Checks and answers whether buttons are typically ordered from left to
+	 * right or from right to left. Useful for building button bars that shall
+	 * comply with the platform's layout style guide.
+	 * <p>
+	 * 
+	 * For example the Windows style guide recommends to layout out
+	 * <em>OK, Cancel, Apply</em> from left to right, where the Mac Aqua style
+	 * guide recommends to layout out these buttons from right to left.
+	 * <p>
+	 * 
+	 * Although most button sequences shall honor this order some buttons
+	 * require a left to right order. For example <em>Back, Next</em> or
+	 * <em>Move Left, Move Right</em>.
+	 * <p>
+	 * 
+	 * @return true if buttons are typically ordered from left to right
+	 * @since 1.0.3
+	 * 
+	 * @see com.jgoodies.forms.builder.ButtonBarBuilder
+	 * @see com.jgoodies.forms.factories.ButtonBarFactory
+	 */
+	public abstract boolean isLeftToRightButtonOrder();
+
 }

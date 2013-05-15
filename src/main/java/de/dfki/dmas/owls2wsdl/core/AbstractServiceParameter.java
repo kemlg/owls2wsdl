@@ -17,107 +17,122 @@
 
 package de.dfki.dmas.owls2wsdl.core;
 
-import java.net.URI;
-
 /**
- *
+ * 
  * @author Oliver
  */
 public class AbstractServiceParameter implements java.io.Serializable {
-    
-    private String  _id;
-    private String  _uri;
-    private int     _pos;
-    
-    
-    /** Creates a new instance of AbstractServiceParameter */
-    public AbstractServiceParameter() {
-    }
-    
-    public AbstractServiceParameter(String id, String uri, int pos) {
-        this();
-        this._id  = id;
-        this._uri = uri;
-        this._pos = pos;
-    }
-    
-    public void setID(String id)   { this._id = id; }
-    public void setUri(String uri) { this._uri = uri; }
-    public void setPos(int pos)    { this._pos = pos; }
-    
-    public String getID()  { return this._id; }
-    public String getUri() { return this._uri; }
-    public int    getPos() { return this._pos; }
-    
-    /**
-     * Used for Schema generation
-     */    
-    public String getTypeLocal() 
-    {
-        int index = this._uri.lastIndexOf("#");   
-        return this._uri.substring(index+1);
-    }
-    
-    public String getTypeRemote() 
-    {
-        int index = this._uri.lastIndexOf("#");   
-        return this._uri.substring(index+1) +"Type";
-    }
-    
-    public String getTypeNamespace()
-    {
-        return this._uri.split("#")[0].toString();
-    }
-    
-    /**
-     * Checks if type is primitive XSD datatype.
-     * http://www.edition-w3c.de/TR/2001/REC-xmlschema-2-20010502/
-     */
-    public boolean isPrimitiveXsdType() {
-        return this.getTypeNamespace().equals("http://www.w3.org/2001/XMLSchema");
-    }
-    
-    /**
-     * Checks AbstractDatabase Knowledgebase for type.
-     */
-    public boolean isInKB() {
-        return (AbstractDatatypeKB.getInstance().data.containsKey(this._uri));
-    }
-    
-    /**
-     * Checks if Name is a valid NCName.
-     * See comment for OntClassContainer.getOntClass(..)
-     */
-    public boolean isValidNCName() {
-        int idx = 0;
-        if(this._uri.contains("#")) {
-            idx=this._uri.indexOf("#")+1;
-        }
-        char first = this._uri.charAt(idx);
-        char[] checklist = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_' };        
-        
-        for(int i=0; i<checklist.length; i++) {
-            if(first == checklist[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    public boolean isValid() {        
-        try {       
-            if(this.isInKB()) {
-                return this.isValidNCName();
-            }
-        }
-        catch(Exception e) {
-            System.out.println("Param: "+this.getUri());
-            System.out.println("Exception testing for valid NCName");
-        }
-        return false;
-    }
-    
-    public String toString() {
-        return "("+this._pos+")"+this._id+"("+this._uri+")";
-    }    
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1699247355478024326L;
+	private String _id;
+	private String _uri;
+	private int _pos;
+
+	/** Creates a new instance of AbstractServiceParameter */
+	public AbstractServiceParameter() {
+	}
+
+	public AbstractServiceParameter(String id, String uri, int pos) {
+		this();
+		this._id = id;
+		this._uri = uri;
+		this._pos = pos;
+	}
+
+	public void setID(String id) {
+		this._id = id;
+	}
+
+	public void setUri(String uri) {
+		this._uri = uri;
+	}
+
+	public void setPos(int pos) {
+		this._pos = pos;
+	}
+
+	public String getID() {
+		return this._id;
+	}
+
+	public String getUri() {
+		return this._uri;
+	}
+
+	public int getPos() {
+		return this._pos;
+	}
+
+	/**
+	 * Used for Schema generation
+	 */
+	public String getTypeLocal() {
+		int index = this._uri.lastIndexOf("#");
+		return this._uri.substring(index + 1);
+	}
+
+	public String getTypeRemote() {
+		int index = this._uri.lastIndexOf("#");
+		return this._uri.substring(index + 1) + "Type";
+	}
+
+	public String getTypeNamespace() {
+		return this._uri.split("#")[0].toString();
+	}
+
+	/**
+	 * Checks if type is primitive XSD datatype.
+	 * http://www.edition-w3c.de/TR/2001/REC-xmlschema-2-20010502/
+	 */
+	public boolean isPrimitiveXsdType() {
+		return this.getTypeNamespace().equals(
+				"http://www.w3.org/2001/XMLSchema");
+	}
+
+	/**
+	 * Checks AbstractDatabase Knowledgebase for type.
+	 */
+	public boolean isInKB() {
+		return (AbstractDatatypeKB.getInstance().data.containsKey(this._uri));
+	}
+
+	/**
+	 * Checks if Name is a valid NCName. See comment for
+	 * OntClassContainer.getOntClass(..)
+	 */
+	public boolean isValidNCName() {
+		int idx = 0;
+		if (this._uri.contains("#")) {
+			idx = this._uri.indexOf("#") + 1;
+		}
+		char first = this._uri.charAt(idx);
+		char[] checklist = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'_' };
+
+		for (int i = 0; i < checklist.length; i++) {
+			if (first == checklist[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isValid() {
+		try {
+			if (this.isInKB()) {
+				return this.isValidNCName();
+			}
+		} catch (Exception e) {
+			System.out.println("Param: " + this.getUri());
+			System.out.println("Exception testing for valid NCName");
+		}
+		return false;
+	}
+
+	public String toString() {
+		return "(" + this._pos + ")" + this._id + "(" + this._uri + ")";
+	}
 }

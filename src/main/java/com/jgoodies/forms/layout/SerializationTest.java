@@ -39,9 +39,9 @@ import javax.swing.JPanel;
 import junit.framework.TestCase;
 
 /**
- * Tests the serialization and deserialization of instances of 
- * <code>FormLayout</code> and <code>JPanel</code>. 
- *
+ * Tests the serialization and deserialization of instances of
+ * <code>FormLayout</code> and <code>JPanel</code>.
+ * 
  * @author Karsten Lentzsch
  * @version $Revision: 1.4 $
  * 
@@ -49,230 +49,217 @@ import junit.framework.TestCase;
  */
 
 public final class SerializationTest extends TestCase {
-    
 
-    /**
-     * Tests the serialization of a FormLayout that has just been constructed.
-     * The layout contains no components and the layout algorithm has not
-     * been performed.
-     */
-    public void testSerializeConstructedLayout() {
-        FormLayout layout = createSampleLayout();
-        OutputStream out = new ByteArrayOutputStream();
-        serialize(out, layout);
-    }
+	/**
+	 * Tests the serialization of a FormLayout that has just been constructed.
+	 * The layout contains no components and the layout algorithm has not been
+	 * performed.
+	 */
+	public void testSerializeConstructedLayout() {
+		FormLayout layout = createSampleLayout();
+		OutputStream out = new ByteArrayOutputStream();
+		serialize(out, layout);
+	}
 
-    
-    /**
-     * Tests the serialization of an empty FormLayout that has computed 
-     * a layout immediately after its construction.
-     * The layout contains no components.
-     */
-    public void testSerializeEmptyLayout() {
-        FormLayout layout = createSampleLayout();
-        doLayout(layout);
-        OutputStream out = new ByteArrayOutputStream();
-        serialize(out, layout);
-    }
-    
-    
-    /**
-     * Tests the serialization of a panel that is layed out using
-     * a FormLayout. The panel consists some sample components that in turn
-     * uses some sample <code>CellConstraints</code>.
-     */
-    public void testSerializePanel() {
-        JPanel panel = createSamplePanel();
-        OutputStream out = new ByteArrayOutputStream();
-        serialize(out, panel);
-    }
-    
-    
-    /**
-     * Tests the deserialization of a FormLayout that has just been constructed.
-     * The layout contains no components and the layout algorithm has not
-     * been performed.
-     */
-    public void testDeserializeConstructedLayout() {
-        FormLayout layout = createSampleLayout();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        serialize(out, layout);
-        byte[] bytes = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(bytes);
-        deserialize(in);
-    }
-    
-    
-    /**
-     * Tests the deserialization of an empty FormLayout that has computed 
-     * a layout immediately after its construction.
-     * The layout contains no components.
-     */
-    public void testDeserializeEmptyLayout() {
-        FormLayout layout = createSampleLayout();
-        doLayout(layout);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        serialize(out, layout);
-        byte[] bytes = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(bytes);
-        deserialize(in);
-    }
-    
+	/**
+	 * Tests the serialization of an empty FormLayout that has computed a layout
+	 * immediately after its construction. The layout contains no components.
+	 */
+	public void testSerializeEmptyLayout() {
+		FormLayout layout = createSampleLayout();
+		doLayout(layout);
+		OutputStream out = new ByteArrayOutputStream();
+		serialize(out, layout);
+	}
 
-    /**
-     * Tests the deserialization of a panel that is layed out using
-     * a FormLayout. The panel consists some sample components that in turn
-     * uses some sample <code>CellConstraints</code>.
-     */
-    public void testDeserializePanel() {
-        JPanel panel = createSamplePanel();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        serialize(out, panel);
-        byte[] bytes = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(bytes);
-        deserialize(in);
-    }
-    
+	/**
+	 * Tests the serialization of a panel that is layed out using a FormLayout.
+	 * The panel consists some sample components that in turn uses some sample
+	 * <code>CellConstraints</code>.
+	 */
+	public void testSerializePanel() {
+		JPanel panel = createSamplePanel();
+		OutputStream out = new ByteArrayOutputStream();
+		serialize(out, panel);
+	}
 
-    /**
-     * Tests that the a layout can be computed with a deserialized 
-     * empty FormLayout.
-     */
-    public void testLayoutDeserializedEmptyLayout() {
-        FormLayout layout = createSampleLayout();
-        doLayout(layout);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        serialize(out, layout);
-        byte[] bytes = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(bytes);
-        FormLayout layout2 = (FormLayout) deserialize(in);
-        doLayout(layout2);
-    }
-    
+	/**
+	 * Tests the deserialization of a FormLayout that has just been constructed.
+	 * The layout contains no components and the layout algorithm has not been
+	 * performed.
+	 */
+	public void testDeserializeConstructedLayout() {
+		FormLayout layout = createSampleLayout();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		serialize(out, layout);
+		byte[] bytes = out.toByteArray();
+		InputStream in = new ByteArrayInputStream(bytes);
+		deserialize(in);
+	}
 
-    /**
-     * Tests that the a panel can be layed out with a deserialized 
-     * FormLayout.
-     */
-    public void testLayoutDeserializedPanel() {
-        JPanel panel = createSamplePanel();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        serialize(out, panel);
-        byte[] bytes = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(bytes);
-        JPanel panel2 = (JPanel) deserialize(in);
-        panel2.doLayout();
-    }
-    
+	/**
+	 * Tests the deserialization of an empty FormLayout that has computed a
+	 * layout immediately after its construction. The layout contains no
+	 * components.
+	 */
+	public void testDeserializeEmptyLayout() {
+		FormLayout layout = createSampleLayout();
+		doLayout(layout);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		serialize(out, layout);
+		byte[] bytes = out.toByteArray();
+		InputStream in = new ByteArrayInputStream(bytes);
+		deserialize(in);
+	}
 
-    // Helper Code *********************************************************
-    
-    /**
-     * Creates and returns a sample <code>FormLayout</code> instance
-     * that uses all prebuilt alignments and <code>Size</code> implementations
-     * so we can test their serialization and deserialization. 
-     * 
-     * @return a sample layout
-     */
-    private FormLayout createSampleLayout() {
-        return new FormLayout(
-                "l:1px, c:2dlu, r:3mm, f:m, p, d, max(p;3dlu), min(p;7px)",
-                "t:1px, c:2dlu, b:3mm, f:m, p, d, max(p;3dlu), min(p;7px)");
-    }
-    
-    
-    /**
-     * Creates and returns a sample panel that uses the sample layout
-     * created by <code>#createSampleLayout</code>. Useful to test the
-     * FormLayout serialization in combination with a layout container
-     * and some components managed by the FormLayout. Especially it tests
-     * the serialization of <code>CellConstraints</code> objects.
-     * 
-     * @return a sample panel
-     */
-    private JPanel createSamplePanel() {
-        JPanel panel = new JPanel(createSampleLayout());
-        CellConstraints cc = new CellConstraints();
-        panel.add(new JLabel("Test1"),  cc.xy(1, 1, "l, t"));
-        panel.add(new JButton("Test2"), cc.xy(2, 2, "c, c"));
-        panel.add(new JButton("Test3"), cc.xy(3, 3, "r, b"));
-        panel.add(new JButton("Test4"), cc.xy(4, 4, "f, f"));
-        panel.doLayout();
-        return panel;
-    }
+	/**
+	 * Tests the deserialization of a panel that is layed out using a
+	 * FormLayout. The panel consists some sample components that in turn uses
+	 * some sample <code>CellConstraints</code>.
+	 */
+	public void testDeserializePanel() {
+		JPanel panel = createSamplePanel();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		serialize(out, panel);
+		byte[] bytes = out.toByteArray();
+		InputStream in = new ByteArrayInputStream(bytes);
+		deserialize(in);
+	}
 
-    
-    /**
-     * Lays out a container using the given <code>FormLayout</code>
-     * and returns the layout info object.
-     * 
-     * @param layout    the FormLayout used to lay out
-     * @return the layout info after the container has been layed out
-     */
-    private FormLayout.LayoutInfo doLayout(FormLayout layout) {
-        JPanel panel = new JPanel(layout);
-        panel.doLayout();
-        FormLayout.LayoutInfo info = layout.getLayoutInfo(panel);
-        return info;
-    }
-    
-    
-    /**
-     * Serializes the given object and writes it to the given 
-     * output stream.
-     * 
-     * @param out      the stream to write the serialized object
-     * @param object   the object to be serialized
-     */
-    private void serialize(OutputStream out, Object object) {
-        ObjectOutputStream objectOut = null;
-        try {
-            objectOut = new ObjectOutputStream(out);
-            objectOut.writeObject(object);
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("IO Exception");
-        } finally {
-            if (objectOut != null) {
-                try {
-                    objectOut.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+	/**
+	 * Tests that the a layout can be computed with a deserialized empty
+	 * FormLayout.
+	 */
+	public void testLayoutDeserializedEmptyLayout() {
+		FormLayout layout = createSampleLayout();
+		doLayout(layout);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		serialize(out, layout);
+		byte[] bytes = out.toByteArray();
+		InputStream in = new ByteArrayInputStream(bytes);
+		FormLayout layout2 = (FormLayout) deserialize(in);
+		doLayout(layout2);
+	}
 
-    
-    /**
-     * Deserializes and returns an object that is contained in serialized form
-     * in the given input stream.
-     * 
-     * @param in   the stream to read from
-     * @return the deserialized object
-     */
-    private Object deserialize(InputStream in) {
-        ObjectInputStream objectIn = null;
-        try {
-            objectIn = new ObjectInputStream(in);
-            return objectIn.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("IO Exception");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            fail("Class not found");
-        } finally {
-            if (objectIn != null) {
-                try {
-                    objectIn.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
+	/**
+	 * Tests that the a panel can be layed out with a deserialized FormLayout.
+	 */
+	public void testLayoutDeserializedPanel() {
+		JPanel panel = createSamplePanel();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		serialize(out, panel);
+		byte[] bytes = out.toByteArray();
+		InputStream in = new ByteArrayInputStream(bytes);
+		JPanel panel2 = (JPanel) deserialize(in);
+		panel2.doLayout();
+	}
 
-    
+	// Helper Code *********************************************************
+
+	/**
+	 * Creates and returns a sample <code>FormLayout</code> instance that uses
+	 * all prebuilt alignments and <code>Size</code> implementations so we can
+	 * test their serialization and deserialization.
+	 * 
+	 * @return a sample layout
+	 */
+	private FormLayout createSampleLayout() {
+		return new FormLayout(
+				"l:1px, c:2dlu, r:3mm, f:m, p, d, max(p;3dlu), min(p;7px)",
+				"t:1px, c:2dlu, b:3mm, f:m, p, d, max(p;3dlu), min(p;7px)");
+	}
+
+	/**
+	 * Creates and returns a sample panel that uses the sample layout created by
+	 * <code>#createSampleLayout</code>. Useful to test the FormLayout
+	 * serialization in combination with a layout container and some components
+	 * managed by the FormLayout. Especially it tests the serialization of
+	 * <code>CellConstraints</code> objects.
+	 * 
+	 * @return a sample panel
+	 */
+	private JPanel createSamplePanel() {
+		JPanel panel = new JPanel(createSampleLayout());
+		CellConstraints cc = new CellConstraints();
+		panel.add(new JLabel("Test1"), cc.xy(1, 1, "l, t"));
+		panel.add(new JButton("Test2"), cc.xy(2, 2, "c, c"));
+		panel.add(new JButton("Test3"), cc.xy(3, 3, "r, b"));
+		panel.add(new JButton("Test4"), cc.xy(4, 4, "f, f"));
+		panel.doLayout();
+		return panel;
+	}
+
+	/**
+	 * Lays out a container using the given <code>FormLayout</code> and returns
+	 * the layout info object.
+	 * 
+	 * @param layout
+	 *            the FormLayout used to lay out
+	 * @return the layout info after the container has been layed out
+	 */
+	private FormLayout.LayoutInfo doLayout(FormLayout layout) {
+		JPanel panel = new JPanel(layout);
+		panel.doLayout();
+		FormLayout.LayoutInfo info = layout.getLayoutInfo(panel);
+		return info;
+	}
+
+	/**
+	 * Serializes the given object and writes it to the given output stream.
+	 * 
+	 * @param out
+	 *            the stream to write the serialized object
+	 * @param object
+	 *            the object to be serialized
+	 */
+	private void serialize(OutputStream out, Object object) {
+		ObjectOutputStream objectOut = null;
+		try {
+			objectOut = new ObjectOutputStream(out);
+			objectOut.writeObject(object);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IO Exception");
+		} finally {
+			if (objectOut != null) {
+				try {
+					objectOut.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Deserializes and returns an object that is contained in serialized form
+	 * in the given input stream.
+	 * 
+	 * @param in
+	 *            the stream to read from
+	 * @return the deserialized object
+	 */
+	private Object deserialize(InputStream in) {
+		ObjectInputStream objectIn = null;
+		try {
+			objectIn = new ObjectInputStream(in);
+			return objectIn.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IO Exception");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			fail("Class not found");
+		} finally {
+			if (objectIn != null) {
+				try {
+					objectIn.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
 }

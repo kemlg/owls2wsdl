@@ -16,59 +16,72 @@
 
 package de.dfki.dmas.owls2wsdl.gui.models;
 
-import de.dfki.dmas.owls2wsdl.core.*;
-import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeComparer;
-import javax.swing.AbstractListModel;
-import javax.swing.event.ListDataListener;
-import java.util.Vector;
 import java.util.Collections;
+import java.util.Vector;
+
+import javax.swing.AbstractListModel;
+
+import de.dfki.dmas.owls2wsdl.core.AbstractDatatype;
+import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeComparer;
+import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeKB;
 
 /**
- *
+ * 
  * @author Oliver Fourman
  */
-public class AbstractDatatypeListModel extends AbstractListModel {
-    
-    private Vector registeredDatatypeList;
-    
-    /** Creates a new instance of AbstractDatatypeListModel */
-    public AbstractDatatypeListModel() {
-        this.registeredDatatypeList = new Vector();        
-    }    
+public class AbstractDatatypeListModel extends
+		AbstractListModel<AbstractDatatype> {
 
-    public Object getElementAt(int i) {
-        return ((AbstractDatatype)registeredDatatypeList.get(i)).getLocalName();
-    }
-    
-    public AbstractDatatype getAbstractDatatypeAt(int i) {
-        return ((AbstractDatatype)registeredDatatypeList.get(i));
-    }
-    
-    public int getIndexOfAbstractDatatype(AbstractDatatype atype) {
-        return this.registeredDatatypeList.indexOf(atype);
-    }
-    
-    public int getSize() {
-        return this.registeredDatatypeList.size();
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4739179210188712951L;
+	private Vector<AbstractDatatype> registeredDatatypeList;
 
-//    public ListDataListener[] getListDataListeners() {
-//        ListDataListener[] retValue;
-//        
-//        retValue = super.getListDataListeners();
-//        return retValue;
-//    }
-    
-    public void updateModel() {
-        this.registeredDatatypeList.removeAllElements();
-        this.registeredDatatypeList.addAll( AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().getRegisteredDatatypes().values() );        
-        System.out.println("[AbstractDatatypeListModel] size "+this.registeredDatatypeList.size());
-        Collections.sort(this.registeredDatatypeList, new AbstractDatatypeComparer() );
-    }
-    
-//    public void updateModel(String path) {
-//        RuntimeModel.getInstance().project.importDatatypes(path);        
-//        this.registeredDatatypeList = new Vector( AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().getRegisteredDatatypes().values() );
-//        Collections.sort(this.registeredDatatypeList, new AbstractDatatypeComparer() );
-//    }     
+	/** Creates a new instance of AbstractDatatypeListModel */
+	public AbstractDatatypeListModel() {
+		this.registeredDatatypeList = new Vector<AbstractDatatype>();
+	}
+
+	public AbstractDatatype getElementAt(int i) {
+		return registeredDatatypeList.get(i);
+	}
+
+	// public AbstractDatatype getAbstractDatatypeAt(int i) {
+	// return ((AbstractDatatype)registeredDatatypeList.get(i));
+	// }
+
+	public int getIndexOfAbstractDatatype(AbstractDatatype atype) {
+		return this.registeredDatatypeList.indexOf(atype);
+	}
+
+	public int getSize() {
+		return this.registeredDatatypeList.size();
+	}
+
+	// public ListDataListener[] getListDataListeners() {
+	// ListDataListener[] retValue;
+	//
+	// retValue = super.getListDataListeners();
+	// return retValue;
+	// }
+
+	public void updateModel() {
+		this.registeredDatatypeList.removeAllElements();
+		this.registeredDatatypeList.addAll(AbstractDatatypeKB.getInstance()
+				.getAbstractDatatypeKBData().getRegisteredDatatypes().values());
+		System.out.println("[AbstractDatatypeListModel] size "
+				+ this.registeredDatatypeList.size());
+		Collections.sort(this.registeredDatatypeList,
+				new AbstractDatatypeComparer());
+	}
+
+	// public void updateModel(String path) {
+	// RuntimeModel.getInstance().project.importDatatypes(path);
+	// this.registeredDatatypeList = new Vector(
+	// AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData().getRegisteredDatatypes().values()
+	// );
+	// Collections.sort(this.registeredDatatypeList, new
+	// AbstractDatatypeComparer() );
+	// }
 }

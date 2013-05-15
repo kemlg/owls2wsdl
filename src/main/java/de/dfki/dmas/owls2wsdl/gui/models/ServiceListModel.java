@@ -24,67 +24,72 @@ import de.dfki.dmas.owls2wsdl.core.AbstractService;
 import de.dfki.dmas.owls2wsdl.core.Project;
 
 /**
- *
+ * 
  * @author Oliver Fourman
  */
 public class ServiceListModel extends AbstractListModel<AbstractService> {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6110952089503426926L;
-	
-    private Vector<AbstractService> services;
-    
-    /** Creates a new instance of ServiceListModel */
-    public ServiceListModel() {
-        System.out.println("[C] ServiceListModel");
-        this.services = new Vector<AbstractService>();
-    }
-    
-    public ServiceListModel(Project project) {
-        if(project != null) {
-            this.services = project.getAbstractServiceCollection().getServiceCollection();
-        }
-        else {
-            this.services = new Vector<AbstractService>();
-        }
-    }
-    
-//    public void addToModel(String path) throws java.lang.Exception {
-//        RuntimeModel.getInstance().getProject().importServices(path);
-//        this.serviceCollection = RuntimeModel.getInstance().getProject().getAbstractServiceCollection();
-//        this.serviceCollection.sortData();
-//    }
-    
-    public void syncWithProject(Project project) {
-        this.services = project.getAbstractServiceCollection().getServiceCollection();
-        
-        //this.serviceCollection = RuntimeModel.getInstance().getProject().getAbstractServiceCollection();
-        //this.serviceCollection.sortData();
-    }
-    
-    public void updateModel() {
-        this.services = RuntimeModel.getInstance().getProject().getAbstractServiceCollection().getServiceCollection();
-    }
-    
-//    public void setModel(AbstractServiceCollection curServiceCollection) {
-//        this.serviceCollection = curServiceCollection;
-//    }
-    
-    public void addAbstractService(AbstractService aService) {
-        this.services.addElement(aService);
-    }
-    
-    public AbstractService getElementAt(int i) {
-        //return RuntimeModel.getInstance().project.getAbstractServiceCollection().getAbstractService(i).getName();
-        return services.get(i);
-    }    
-        
-    public Vector<AbstractService> getServiceData() {
-        return this.services;
-    }
 
-    public int getSize() {
-        return this.services.size();
-    }
+	private Vector<AbstractService> services;
+
+	/** Creates a new instance of ServiceListModel */
+	public ServiceListModel() {
+		System.out.println("[C] ServiceListModel");
+		this.services = new Vector<AbstractService>();
+	}
+
+	public ServiceListModel(Project project) {
+		if (project != null) {
+			this.services = project.getAbstractServiceCollection()
+					.getServiceCollection();
+		} else {
+			this.services = new Vector<AbstractService>();
+		}
+	}
+
+	// public void addToModel(String path) throws java.lang.Exception {
+	// RuntimeModel.getInstance().getProject().importServices(path);
+	// this.serviceCollection =
+	// RuntimeModel.getInstance().getProject().getAbstractServiceCollection();
+	// this.serviceCollection.sortData();
+	// }
+
+	public void syncWithProject(Project project) {
+		this.services = project.getAbstractServiceCollection()
+				.getServiceCollection();
+
+		// this.serviceCollection =
+		// RuntimeModel.getInstance().getProject().getAbstractServiceCollection();
+		// this.serviceCollection.sortData();
+	}
+
+	public void updateModel() {
+		this.services = RuntimeModel.getInstance().getProject()
+				.getAbstractServiceCollection().getServiceCollection();
+	}
+
+	// public void setModel(AbstractServiceCollection curServiceCollection) {
+	// this.serviceCollection = curServiceCollection;
+	// }
+
+	public void addAbstractService(AbstractService aService) {
+		this.services.addElement(aService);
+	}
+
+	public AbstractService getElementAt(int i) {
+		// return
+		// RuntimeModel.getInstance().project.getAbstractServiceCollection().getAbstractService(i).getName();
+		return services.get(i);
+	}
+
+	public Vector<AbstractService> getServiceData() {
+		return this.services;
+	}
+
+	public int getSize() {
+		return this.services.size();
+	}
 }

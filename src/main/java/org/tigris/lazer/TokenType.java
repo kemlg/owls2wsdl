@@ -8,6 +8,7 @@ package org.tigris.lazer;
 
 /**
  * The base class of all token types.
+ * 
  * @author Bob Tarling
  */
 public abstract class TokenType {

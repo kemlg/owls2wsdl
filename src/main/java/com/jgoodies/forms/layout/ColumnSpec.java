@@ -32,152 +32,162 @@ package com.jgoodies.forms.layout;
 
 import java.util.StringTokenizer;
 
-
 /**
- * Specifies columns in FormLayout by their default orientation, 
- * start size and resizing behavior.<p>
+ * Specifies columns in FormLayout by their default orientation, start size and
+ * resizing behavior.
+ * <p>
  * 
  * <strong>Examples:</strong><br>
- * The following examples specify a column with FILL alignment, a size of 
+ * The following examples specify a column with FILL alignment, a size of
  * 10&nbsp;dlu that won't grow.
+ * 
  * <pre>
  * new ColumnSpec(Sizes.dluX(10));
  * new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(10), 0.0);
  * new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(10), ColumnSpec.NO_GROW);
- * new ColumnSpec("10dlu");
- * new ColumnSpec("10dlu:0");
- * new ColumnSpec("fill:10dlu:0");
- * </pre><p>
+ * new ColumnSpec(&quot;10dlu&quot;);
+ * new ColumnSpec(&quot;10dlu:0&quot;);
+ * new ColumnSpec(&quot;fill:10dlu:0&quot;);
+ * </pre>
+ * <p>
  * 
- * The {@link com.jgoodies.forms.factories.FormFactory} provides
- * predefined frequently used ColumnSpec instances.
- *
- * @author	Karsten Lentzsch
+ * The {@link com.jgoodies.forms.factories.FormFactory} provides predefined
+ * frequently used ColumnSpec instances.
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.1 $
  * 
- * @see     com.jgoodies.forms.factories.FormFactory
+ * @see com.jgoodies.forms.factories.FormFactory
  */
 
 public final class ColumnSpec extends FormSpec {
-    
-    
-    // Horizontal Orientations *********************************************
-    
-    /**
-     * By default put components in the left.
-     */
-    public static final DefaultAlignment LEFT = FormSpec.LEFT_ALIGN;
 
-    /**
-     * By default put the components in the center.
-     */
-    public static final DefaultAlignment CENTER = FormSpec.CENTER_ALIGN;
+	// Horizontal Orientations *********************************************
 
-    /**
-     * By default put components in the middle.
-     */
-    public static final DefaultAlignment MIDDLE = CENTER;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5204879376362009230L;
 
-    /**
-     * By default put components in the right.
-     */
-    public static final DefaultAlignment RIGHT = FormSpec.RIGHT_ALIGN;
+	/**
+	 * By default put components in the left.
+	 */
+	public static final DefaultAlignment LEFT = FormSpec.LEFT_ALIGN;
 
-    /**
-     * By default fill the component into the column.
-     */
-    public static final DefaultAlignment FILL = FormSpec.FILL_ALIGN;
-    
-    /**
-     * Unless overridden the default alignment for a column is FILL.
-     */
-    public static final DefaultAlignment DEFAULT = FILL;
+	/**
+	 * By default put the components in the center.
+	 */
+	public static final DefaultAlignment CENTER = FormSpec.CENTER_ALIGN;
 
+	/**
+	 * By default put components in the middle.
+	 */
+	public static final DefaultAlignment MIDDLE = CENTER;
 
-    // Instance Creation ****************************************************
+	/**
+	 * By default put components in the right.
+	 */
+	public static final DefaultAlignment RIGHT = FormSpec.RIGHT_ALIGN;
 
-    /**
-     * Constructs a ColumnSpec for the given default alignment,
-     * size and resize weight.<p>
-     * 
-     * The resize weight must be a non-negative double; you can use
-     * <code>NO_GROW</code> as a convenience value for no resize.
-     * 
-     * @param defaultAlignment the column's default alignment
-     * @param size             constant, component size or bounded size
-     * @param resizeWeight     the column's non-negative resize weight      
-     * @throws IllegalArgumentException if the size is invalid or 
-     *      the resize weight is negative
-     */
-    public ColumnSpec(DefaultAlignment defaultAlignment, 
-                        Size size, 
-                        double resizeWeight) {
+	/**
+	 * By default fill the component into the column.
+	 */
+	public static final DefaultAlignment FILL = FormSpec.FILL_ALIGN;
+
+	/**
+	 * Unless overridden the default alignment for a column is FILL.
+	 */
+	public static final DefaultAlignment DEFAULT = FILL;
+
+	// Instance Creation ****************************************************
+
+	/**
+	 * Constructs a ColumnSpec for the given default alignment, size and resize
+	 * weight.
+	 * <p>
+	 * 
+	 * The resize weight must be a non-negative double; you can use
+	 * <code>NO_GROW</code> as a convenience value for no resize.
+	 * 
+	 * @param defaultAlignment
+	 *            the column's default alignment
+	 * @param size
+	 *            constant, component size or bounded size
+	 * @param resizeWeight
+	 *            the column's non-negative resize weight
+	 * @throws IllegalArgumentException
+	 *             if the size is invalid or the resize weight is negative
+	 */
+	public ColumnSpec(DefaultAlignment defaultAlignment, Size size,
+			double resizeWeight) {
 		super(defaultAlignment, size, resizeWeight);
 	}
-	
-	
-    /**
-     * Constructs a ColumnSpec for the given size using the
-     * default alignment, and no resizing.
-     * 
-     * @param size             constant size, component size, or bounded size
-     * @throws IllegalArgumentException if the size is invalid
-     */
-    public ColumnSpec(Size size) {
-        super(DEFAULT, size, NO_GROW);
-    }
-    
-    
-    /**
-     * Constructs a ColumnSpec from the specified encoded description. 
-     * The description will be parsed to set initial values.
-     * 
-     * @param encodedDescription	the encoded description
-     */
-	public ColumnSpec(String encodedDescription) {
-        super(DEFAULT, encodedDescription);
+
+	/**
+	 * Constructs a ColumnSpec for the given size using the default alignment,
+	 * and no resizing.
+	 * 
+	 * @param size
+	 *            constant size, component size, or bounded size
+	 * @throws IllegalArgumentException
+	 *             if the size is invalid
+	 */
+	public ColumnSpec(Size size) {
+		super(DEFAULT, size, NO_GROW);
 	}
 
-    
-    // Implementing Abstract Behavior ***************************************
+	/**
+	 * Constructs a ColumnSpec from the specified encoded description. The
+	 * description will be parsed to set initial values.
+	 * 
+	 * @param encodedDescription
+	 *            the encoded description
+	 */
+	public ColumnSpec(String encodedDescription) {
+		super(DEFAULT, encodedDescription);
+	}
 
-    /**
-     * Returns if this is a horizontal specification (vs. vertical).
-     * Used to distinct between horizontal and vertical dialog units,
-     * which have different conversion factors.
-     * 
-     * @return  always true (for horizontal)
-     */
-    protected final boolean isHorizontal() { 
-        return true; 
-    }
+	// Implementing Abstract Behavior ***************************************
 
+	/**
+	 * Returns if this is a horizontal specification (vs. vertical). Used to
+	 * distinct between horizontal and vertical dialog units, which have
+	 * different conversion factors.
+	 * 
+	 * @return always true (for horizontal)
+	 */
+	protected final boolean isHorizontal() {
+		return true;
+	}
 
-    // Parsing and Decoding of Column Descriptions **************************
-    
-    /**
-     * Parses and splits encoded column specifications and returns 
-     * an array of ColumnSpec objects.
-     * 
-     * @param encodedColumnSpecs  comma separated encoded column specifications
-     * @return an array of decoded column specifications
-     * @throws NullPointerException if the encoded column specifications string
-     *     is <code>null</code>
-     * 
-     * @see ColumnSpec#ColumnSpec(String)
-     */
-    public static ColumnSpec[] decodeSpecs(String encodedColumnSpecs) {
-        if (encodedColumnSpecs == null) 
-            throw new NullPointerException("The column specification must not be null.");
-        
-        StringTokenizer tokenizer = new StringTokenizer(encodedColumnSpecs, ", ");
-        int columnCount = tokenizer.countTokens();
-        ColumnSpec[] columnSpecs = new ColumnSpec[columnCount]; 
-        for (int i = 0; i < columnCount; i++) {
-            columnSpecs[i] = new ColumnSpec(tokenizer.nextToken());
-        }
-        return columnSpecs;
-    }
+	// Parsing and Decoding of Column Descriptions **************************
+
+	/**
+	 * Parses and splits encoded column specifications and returns an array of
+	 * ColumnSpec objects.
+	 * 
+	 * @param encodedColumnSpecs
+	 *            comma separated encoded column specifications
+	 * @return an array of decoded column specifications
+	 * @throws NullPointerException
+	 *             if the encoded column specifications string is
+	 *             <code>null</code>
+	 * 
+	 * @see ColumnSpec#ColumnSpec(String)
+	 */
+	public static ColumnSpec[] decodeSpecs(String encodedColumnSpecs) {
+		if (encodedColumnSpecs == null)
+			throw new NullPointerException(
+					"The column specification must not be null.");
+
+		StringTokenizer tokenizer = new StringTokenizer(encodedColumnSpecs,
+				", ");
+		int columnCount = tokenizer.countTokens();
+		ColumnSpec[] columnSpecs = new ColumnSpec[columnCount];
+		for (int i = 0; i < columnCount; i++) {
+			columnSpecs[i] = new ColumnSpec(tokenizer.nextToken());
+		}
+		return columnSpecs;
+	}
 
 }
-

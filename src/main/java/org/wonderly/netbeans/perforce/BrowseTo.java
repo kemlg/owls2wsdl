@@ -13,8 +13,9 @@ import org.openide.util.actions.CookieAction;
 public final class BrowseTo extends CookieAction {
 
 	protected void performAction(Node[] activatedNodes) {
-		/*EditorCookie editorCookie =*/ activatedNodes[0].getLookup().lookup(EditorCookie.class);
-	// TODO use editorCookie
+		/* EditorCookie editorCookie = */activatedNodes[0].getLookup().lookup(
+				EditorCookie.class);
+		// TODO use editorCookie
 	}
 
 	protected int mode() {
@@ -25,8 +26,8 @@ public final class BrowseTo extends CookieAction {
 		return NbBundle.getMessage(BrowseTo.class, "CTL_BrowseTo");
 	}
 
-	protected Class[] cookieClasses() {
-		return new Class[]{EditorCookie.class};
+	protected Class<?>[] cookieClasses() {
+		return new Class<?>[] { EditorCookie.class };
 	}
 
 	@Override
@@ -43,4 +44,3 @@ public final class BrowseTo extends CookieAction {
 		return false;
 	}
 }
-

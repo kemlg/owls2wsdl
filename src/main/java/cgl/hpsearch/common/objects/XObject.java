@@ -59,132 +59,135 @@ import java.util.Hashtable;
 
 public class XObject {
 
-    public static final String XSI_NAMESPACE_PREFIX = "xsi";
+	public static final String XSI_NAMESPACE_PREFIX = "xsi";
 
-    public static final String XSI_NAMESPACE_URI = "http://www.w3.org/2001/XMLSchema-instance";
+	public static final String XSI_NAMESPACE_URI = "http://www.w3.org/2001/XMLSchema-instance";
 
-    // For internal use only...
-    private XObject _parent;
+	// For internal use only...
+	private XObject _parent;
 
-    String _name;
+	String _name;
 
-    Hashtable _typeTable;
+	Hashtable<String, String> _typeTable;
 
-    Hashtable _valueTable;
+	Hashtable<String, Object> _valueTable;
 
-    public XObject(String name) {
-        _name = name;
-        _typeTable = new Hashtable();
-        _valueTable = new Hashtable();
-        _parent = null;
-    }
+	public XObject(String name) {
+		_name = name;
+		_typeTable = new Hashtable<String, String>();
+		_valueTable = new Hashtable<String, Object>();
+		_parent = null;
+	}
 
-    public final void setParent(XObject parent) {
-        _parent = parent;
-    }
+	public final void setParent(XObject parent) {
+		_parent = parent;
+	}
 
-    public final XObject getParent() {
-        return _parent;
-    }
+	public final XObject getParent() {
+		return _parent;
+	}
 
-    public final String getName() {
-        return _name;
-    }
+	public final String getName() {
+		return _name;
+	}
 
-    public void setObjectField(String name, String type, Object value) {
-        _typeTable.put(name, type);
-        _valueTable.put(name, value);
-    }
+	public void setObjectField(String name, String type, Object value) {
+		_typeTable.put(name, type);
+		_valueTable.put(name, value);
+	}
 
-    public void show(String prefix) {
-        System.out.println(prefix + _name + ":->");
+	public void show(String prefix) {
+		System.out.println(prefix + _name + ":->");
 
-        for (Enumeration e = _typeTable.keys(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            Object o = _valueTable.get(key);
+		for (Enumeration<String> e = _typeTable.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
+			Object o = _valueTable.get(key);
 
-            if (o instanceof XObject) {
-                ((XObject) o).show(prefix + "-");
-            } else {
-                System.out.println(prefix + "  " + (String) _typeTable.get(key) + "  " + key);
-            }
-        }
-    }
+			if (o instanceof XObject) {
+				((XObject) o).show(prefix + "-");
+			} else {
+				System.out.println(prefix + "  " + _typeTable.get(key) + "  "
+						+ key);
+			}
+		}
+	}
 
-    public void set(String key, Object o) {
-        if (_typeTable.containsKey(key)) {
-            if (_valueTable.get(key).getClass().equals(o.getClass())) {
-                _valueTable.put(key, o);
-            }
-        }
-    }
+	public void set(String key, Object o) {
+		if (_typeTable.containsKey(key)) {
+			if (_valueTable.get(key).getClass().equals(o.getClass())) {
+				_valueTable.put(key, o);
+			}
+		}
+	}
 
-    public String toXML(boolean includeSelfName) {
-        StringBuffer _sb = new StringBuffer();
-        if (includeSelfName)
-                _sb.append("<" + _name + " xmlns:" + XSI_NAMESPACE_PREFIX + "=\""
-                        + XSI_NAMESPACE_URI + "\">");
-        for (Enumeration e = _typeTable.keys(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            Object o = _valueTable.get(key);
-            if (o instanceof XObject) {
-                // _sb.append("<" + key + ">\n");
-                _sb.append(((XObject) o).toXML(true));
-                // _sb.append("</" + key + ">");
-            } else {
+	public String toXML(boolean includeSelfName) {
+		StringBuffer _sb = new StringBuffer();
+		if (includeSelfName)
+			_sb.append("<" + _name + " xmlns:" + XSI_NAMESPACE_PREFIX + "=\""
+					+ XSI_NAMESPACE_URI + "\">");
+		for (Enumeration<String> e = _typeTable.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
+			Object o = _valueTable.get(key);
+			if (o instanceof XObject) {
+				// _sb.append("<" + key + ">\n");
+				_sb.append(((XObject) o).toXML(true));
+				// _sb.append("</" + key + ">");
+			} else {
 
-                _sb.append("<" + key + " xmlns:" + XSI_NAMESPACE_PREFIX + "=\"" + XSI_NAMESPACE_URI
-                        + "\" " + XSI_NAMESPACE_PREFIX + ":type=\"");
-                _sb.append(_typeTable.get(key));
-                _sb.append("\">");
-                if (o.toString().equals(""))
-                    _sb.append("0");
-                else
-                    _sb.append(o.toString());
-                _sb.append("</" + key + ">\n");
-            }
-        }
-        if (includeSelfName) _sb.append("</" + _name + ">");
+				_sb.append("<" + key + " xmlns:" + XSI_NAMESPACE_PREFIX + "=\""
+						+ XSI_NAMESPACE_URI + "\" " + XSI_NAMESPACE_PREFIX
+						+ ":type=\"");
+				_sb.append(_typeTable.get(key));
+				_sb.append("\">");
+				if (o.toString().equals(""))
+					_sb.append("0");
+				else
+					_sb.append(o.toString());
+				_sb.append("</" + key + ">\n");
+			}
+		}
+		if (includeSelfName)
+			_sb.append("</" + _name + ">");
 
-        return _sb.toString();
-    }
+		return _sb.toString();
+	}
 
-    public static void main(String[] o) {
-        XObject myObj = new XObject("myObj");
+	public static void main(String[] o) {
+		XObject myObj = new XObject("myObj");
 
-        // Define the object
-        myObj.setObjectField("ipAddress", "xsd:string", new String());
-        myObj.setObjectField("licenseKey", "xsd:string", new String());
+		// Define the object
+		myObj.setObjectField("ipAddress", "xsd:string", new String());
+		myObj.setObjectField("licenseKey", "xsd:string", new String());
 
-        // Set values
-        myObj.set("ipAddress", "156.56.104.155");
-        myObj.set("licenseKey", "0");
+		// Set values
+		myObj.set("ipAddress", "156.56.104.155");
+		myObj.set("licenseKey", "0");
 
-        myObj.show("");
-        System.out.println(myObj.toXML(true));
+		myObj.show("");
+		System.out.println(myObj.toXML(true));
 
-        // ------ NESTED OBJECT TEST ---------
-        System.out.println("\n\n");
+		// ------ NESTED OBJECT TEST ---------
+		System.out.println("\n\n");
 
-        XObject myObj1 = new XObject("myObj1");
-        XObject myObj2 = new XObject("myObj2");
+		XObject myObj1 = new XObject("myObj1");
+		XObject myObj2 = new XObject("myObj2");
 
-        // Define the object
-        myObj2.setObjectField("name", "xsd:string", new String());
-        myObj2.setObjectField("dept", "xsd:string", new String());
+		// Define the object
+		myObj2.setObjectField("name", "xsd:string", new String());
+		myObj2.setObjectField("dept", "xsd:string", new String());
 
-        myObj1.setObjectField("details", "", myObj2);
-        myObj1.setObjectField("aid", "xsd:int", new Integer(0));
+		myObj1.setObjectField("details", "", myObj2);
+		myObj1.setObjectField("aid", "xsd:int", new Integer(0));
 
-        myObj1.show("\t  ");
+		myObj1.show("\t  ");
 
-        // Set values
-        myObj2.set("name", "Jim");
-        myObj2.set("details", "Hr. Mgr.");
-        myObj1.set("aid", new Integer(10332));
+		// Set values
+		myObj2.set("name", "Jim");
+		myObj2.set("details", "Hr. Mgr.");
+		myObj1.set("aid", new Integer(10332));
 
-        System.out.println(myObj1.toXML(true));
+		System.out.println(myObj1.toXML(true));
 
-    }
+	}
 
 }

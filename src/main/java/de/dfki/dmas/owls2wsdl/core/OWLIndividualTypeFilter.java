@@ -21,20 +21,22 @@ import com.hp.hpl.jena.ontology.Individual;
 
 /**
  * Filter for OntModel.listIndividuals() method
+ * 
  * @author Oliver Fourman
  */
-public class OWLIndividualTypeFilter extends com.hp.hpl.jena.util.iterator.Filter {
-    
-    private String _ontClassURI;
-    
-    /** Creates a new instance of OWLIndividualTypeFilter */
-    public OWLIndividualTypeFilter(String ontClassURI) {
-        this._ontClassURI = ontClassURI;
-    }
-    
-    /** accept for OWL individuals with given OntClass URI */
-    public boolean accept(Object value) {
-        return value instanceof Individual && ((Individual)value).getRDFType().toString().equals(this._ontClassURI);
-    }
-    
+public class OWLIndividualTypeFilter extends
+		com.hp.hpl.jena.util.iterator.Filter<Individual> {
+
+	private String _ontClassURI;
+
+	/** Creates a new instance of OWLIndividualTypeFilter */
+	public OWLIndividualTypeFilter(String ontClassURI) {
+		this._ontClassURI = ontClassURI;
+	}
+
+	/** accept for OWL individuals with given OntClass URI */
+	public boolean accept(Individual value) {
+		return value.getRDFType().toString().equals(this._ontClassURI);
+	}
+
 }

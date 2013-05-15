@@ -6,64 +6,75 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultStyledDocument;
 
 class SyntaxDocument extends DefaultStyledDocument {
-    private boolean doHighlight = false;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4822506257611606503L;
 
-    private Thread highlighterThread;
+	private boolean doHighlight = false;
 
-    private boolean restartHighlightingRequested;
-    
-    private HighlightStrategy highlightStrategy;
-        
-    public SyntaxDocument(String type) {
-        System.out.println("Creating SyntaxDocument");
-        putProperty( DefaultEditorKit.EndOfLineStringProperty, "\n" );
-        if (type.equals("java")) {
-            highlightStrategy = new JavaHighlightStrategy(this);
-        } else {
-            highlightStrategy = new XmlHighlightStrategy(this);
-        }
-        //highlighterThread = new Thread(new Highlighter(this, highlightStrategy));
-        highlighterThread = new Highlighter(this, highlightStrategy);
-        highlighterThread.setDaemon(true);
-        highlighterThread.start();
-    }
+	private Thread highlighterThread;
 
-    /*
-     *  Override to apply syntax highlighting after the document has been updated
-     */
-    public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
-        super.insertString(offset, str, a);
-        restartHighlightThread();
-     }
+	private boolean restartHighlightingRequested;
 
-    /*
-     *  Override to apply syntax highlighting after the document has been updated
-     */
-    public void remove(int offset, int length) throws BadLocationException {
-        super.remove(offset, length);
-        restartHighlightThread();
-    }
+	private HighlightStrategy highlightStrategy;
 
-    public void initiateHighlighting() throws BadLocationException {
-        doHighlight = true;
-        restartHighlightThread();
-    }
+	public SyntaxDocument(String type) {
+		System.out.println("Creating SyntaxDocument");
+		putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+		if (type.equals("java")) {
+			highlightStrategy = new JavaHighlightStrategy(this);
+		} else {
+			highlightStrategy = new XmlHighlightStrategy(this);
+		}
+		// highlighterThread = new Thread(new Highlighter(this,
+		// highlightStrategy));
+		highlighterThread = new Highlighter(this, highlightStrategy);
+		highlighterThread.setDaemon(true);
+		highlighterThread.start();
+	}
 
-    private void restartHighlightThread() {
-        if (!doHighlight) return;
-        setRestartHighlightingRequested(true);
-        synchronized(highlighterThread) {
-            System.out.println("Restarting highlighter thread " + highlighterThread);
-            highlighterThread.notify();
-            System.out.println("Notified highlighter thread " + highlighterThread);
-        }
-    }
+	/*
+	 * Override to apply syntax highlighting after the document has been updated
+	 */
+	public void insertString(int offset, String str, AttributeSet a)
+			throws BadLocationException {
+		super.insertString(offset, str, a);
+		restartHighlightThread();
+	}
 
-    public synchronized void setRestartHighlightingRequested(boolean restartHighlighting) {
-        this.restartHighlightingRequested = restartHighlighting;
-    }
+	/*
+	 * Override to apply syntax highlighting after the document has been updated
+	 */
+	public void remove(int offset, int length) throws BadLocationException {
+		super.remove(offset, length);
+		restartHighlightThread();
+	}
 
-    public synchronized boolean isRestartHighlightingRequested() {
-        return restartHighlightingRequested;
-    }
+	public void initiateHighlighting() throws BadLocationException {
+		doHighlight = true;
+		restartHighlightThread();
+	}
+
+	private void restartHighlightThread() {
+		if (!doHighlight)
+			return;
+		setRestartHighlightingRequested(true);
+		synchronized (highlighterThread) {
+			System.out.println("Restarting highlighter thread "
+					+ highlighterThread);
+			highlighterThread.notify();
+			System.out.println("Notified highlighter thread "
+					+ highlighterThread);
+		}
+	}
+
+	public synchronized void setRestartHighlightingRequested(
+			boolean restartHighlighting) {
+		this.restartHighlightingRequested = restartHighlighting;
+	}
+
+	public synchronized boolean isRestartHighlightingRequested() {
+		return restartHighlightingRequested;
+	}
 }

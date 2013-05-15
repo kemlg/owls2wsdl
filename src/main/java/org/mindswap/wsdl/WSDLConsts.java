@@ -32,12 +32,15 @@ public interface WSDLConsts {
 	public static final String xslURI = "http://www.w3.org/1999/XSL/Transform";
 	public static final String soapURI = "http://schemas.xmlsoap.org/soap/envelope/";
 	public static final String soapEnc = "http://schemas.xmlsoap.org/soap/encoding/";
-	
+
 	public static final QName soapEncArray = new QName(soapEnc, "Array");
-	
+
 	// Axis 1.1 has a bug when prefix is specified so last param is empty string
-	public static final PrefixedQName xsiType  = new PrefixedQName(xsiURI, "type", "xsi");
-	public static final PrefixedQName xsiNull  = new PrefixedQName(xsiURI, "null", "xsi");
-	public static final PrefixedQName arrType  = new PrefixedQName(soapEnc, "arrayType", "soapenv");					
-	    	
+	public static final PrefixedQName xsiType = new PrefixedQName(xsiURI,
+			"type", "xsi");
+	public static final PrefixedQName xsiNull = new PrefixedQName(xsiURI,
+			"null", "xsi");
+	public static final PrefixedQName arrType = new PrefixedQName(soapEnc,
+			"arrayType", "soapenv");
+
 }

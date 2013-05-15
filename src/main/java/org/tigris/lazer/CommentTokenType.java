@@ -7,12 +7,12 @@
 package org.tigris.lazer;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
 public abstract class CommentTokenType extends TokenType {
-    
-    /** Creates a new instance of CommentToken */
-    public CommentTokenType() {
-    }
+
+	/** Creates a new instance of CommentToken */
+	public CommentTokenType() {
+	}
 }

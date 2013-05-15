@@ -64,8 +64,8 @@ import org.exolab.castor.xml.schema.XMLType;
 import cgl.hpsearch.common.objects.XObject;
 
 /**
- * Parses the specified schema to retrieve all elements defined in the schema. This program uses the
- * Castor SchemaReader to parse the schema <br>
+ * Parses the specified schema to retrieve all elements defined in the schema.
+ * This program uses the Castor SchemaReader to parse the schema <br>
  * Created on Feb 7, 2005
  * 
  * @author Harshawardhan Gadgil (hgadgil@grids.ucs.indiana.edu)
@@ -73,149 +73,151 @@ import cgl.hpsearch.common.objects.XObject;
 
 public class TypesParser {
 
-    public Hashtable types = new Hashtable();
+	public Hashtable<String, XObject> types = new Hashtable<String, XObject>();
 
-    public void init(Schema schema) {
-        try {
-            processSchema(schema);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public void init(Schema schema) {
+		try {
+			processSchema(schema);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    boolean topLevel;
+	boolean topLevel;
 
-    public void processSchema(Schema schema) {
-        for (Enumeration e = schema.getElementDecls(); e.hasMoreElements();) {
-            ElementDecl element = (ElementDecl) e.nextElement();
-            // System.out.println(element.getName() + " = {");
-            topLevel = true;
-            processElement(element);
-            // System.out.println("};\n");
+	public void processSchema(Schema schema) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<ElementDecl> e = schema.getElementDecls(); e
+				.hasMoreElements();) {
+			ElementDecl element = e.nextElement();
+			// System.out.println(element.getName() + " = {");
+			topLevel = true;
+			processElement(element);
+			// System.out.println("};\n");
 
-        }
-    }
+		}
+	}
 
-    public void processElement(ElementDecl element) {
-        // System.out.println("* PROCESSING: " + element.getName());
-        if (element.isReference()) {
-            // Process the Reference ...
-            System.out.println("Reference...");
-            element = element.getReference();
-            processElement(element);
-        }
+	public void processElement(ElementDecl element) {
+		// System.out.println("* PROCESSING: " + element.getName());
+		if (element.isReference()) {
+			// Process the Reference ...
+			System.out.println("Reference...");
+			element = element.getReference();
+			processElement(element);
+		}
 
-        else if (element.isAbstract()) {
-            // Abstract Element.. ??
-            System.out.println("Abstract...");
-        }
+		else if (element.isAbstract()) {
+			// Abstract Element.. ??
+			System.out.println("Abstract...");
+		}
 
-        else {
+		else {
 
-            XMLType type = element.getType();
+			XMLType type = element.getType();
 
-            if (type.isSimpleType()) {
-                // This is SimpleType...
+			if (type.isSimpleType()) {
+				// This is SimpleType...
 
-                String elementType = type.getName();
+				String elementType = type.getName();
 
-                String out = "\t" + type.getName();
+				int max = element.getMaxOccurs();
+				if (max < 1) {
+					// This element occurs unbounded no. of times...
+					elementType += "[]";
+				}// else if (max > 1) out += "[" + max + "]";
 
-                int min = element.getMinOccurs();
-                int max = element.getMaxOccurs();
-                if (max < 1) {
-                    // This element occurs unbounded no. of times...
-                    out += "[]";
-                    elementType += "[]";
-                } else if (max > 1) out += "[" + max + "]";
+				currentObj.setObjectField(element.getName(), elementType, "0");
+				// System.out.println(out);
+			}
 
-                out += "\t" + element.getName();
-                currentObj.setObjectField(element.getName(), elementType, "0");
-                // System.out.println(out);
-            }
+			else if (type.isComplexType()) {
+				// Process ComplexType...
 
-            else if (type.isComplexType()) {
-                // Process ComplexType...
+				if (topLevel) {
+					XObject o = new XObject(element.getName());
+					types.put(element.getName(), o);
+					currentObj = o; // Mark the current Object
+					topLevel = false;
+					o.setParent(null);
+					System.out.println("* - Adding NEW: " + element.getName());
+				} else {
 
-                if (topLevel) {
-                    XObject o = new XObject(element.getName());
-                    types.put(element.getName(), o);
-                    currentObj = o; // Mark the current Object
-                    topLevel = false;
-                    o.setParent(null);
-                    System.out.println("* - Adding NEW: " + element.getName());
-                } else {
+					System.out.println("* - Adding " + element.getName()
+							+ " UNDER " + currentObj.getName());
 
-                    System.out.println("* - Adding " + element.getName() + " UNDER "
-                            + currentObj.getName());
+					XObject o = new XObject(element.getName());
+					currentObj.setObjectField(element.getName(), "", o);
+					o.setParent(currentObj);
+					currentObj = o;
+				}
 
-                    XObject o = new XObject(element.getName());
-                    currentObj.setObjectField(element.getName(), "", o);
-                    o.setParent(currentObj);
-                    currentObj = o;
-                }
+				processComplexType((ComplexType) type);
 
-                processComplexType((ComplexType) type);
+				currentObj = currentObj.getParent();
+			}
+		}
+	}
 
-                currentObj = currentObj.getParent();
-            }
-        }
-    }
+	public void processComplexType(ComplexType c) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<Particle> e = c.enumerate(); e.hasMoreElements();) {
+			Particle p = e.nextElement();
+			processParticle(p);
+		}
+	}
 
-    public void processComplexType(ComplexType c) {
-        for (Enumeration e = c.enumerate(); e.hasMoreElements();) {
-            Particle p = (Particle) e.nextElement();
-            processParticle(p);
-        }
-    }
+	public void processGroup(Group g) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<Particle> e = g.enumerate(); e.hasMoreElements();) {
+			Particle p = e.nextElement();
+			processParticle(p);
+		}
+	}
 
-    public void processGroup(Group g) {
-        for (Enumeration e = g.enumerate(); e.hasMoreElements();) {
-            Particle p = (Particle) e.nextElement();
-            processParticle(p);
-        }
-    }
+	public void processParticle(Particle p) {
+		if (p instanceof ElementDecl)
+			processElement((ElementDecl) p);
+		else if (p instanceof Group)
+			processGroup((Group) p);
+		// else
+		// System.out.println(" :> " + p.toString());
+		//
+	}
 
-    public void processParticle(Particle p) {
-        if (p instanceof ElementDecl)
-            processElement((ElementDecl) p);
-        else if (p instanceof Group) processGroup((Group) p);
-        //         else
-        //            System.out.println(" :> " + p.toString());
-        //        
-    }
+	XObject currentObj;
 
-    XObject currentObj;
+	public static void main(String[] args) {
 
-    public static void main(String[] args) {
+		TypesParser r = new TypesParser();
+		try {
+			// create the sax input source
+			Schema schema = XMLUtils.readSchema(new FileReader(
+					"D:\\development\\xsd\\SchemaEx.xsd"));
+			System.out.println("SCHEMA ( CASTOR) : " + schema.toString());
+			System.out.println("============================================");
+			r.init(schema);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        TypesParser r = new TypesParser();
-        try {
-            // create the sax input source
-            Schema schema = XMLUtils.readSchema(new FileReader("D:\\development\\xsd\\SchemaEx.xsd"));
-            System.out.println("SCHEMA ( CASTOR) : "+schema.toString());
-            System.out.println("============================================");
-            r.init(schema);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		for (Enumeration<String> e = r.types.keys(); e.hasMoreElements();) {
+			String s = e.nextElement();
+			System.out.println("Showing: " + s);
 
-        for (Enumeration e = r.types.keys(); e.hasMoreElements();) {
-            String s = (String) e.nextElement();
-            System.out.println("Showing: " + s);
-            
-            String xml = ((XObject) r.types.get(s)).toXML(true);
-            
-            try {
-                XmlObject obj = XmlObject.Factory.parse(xml);
-                
-                System.out.println(">>>>>> "+obj.xmlText((new XmlOptions()).setSavePrettyPrint()
-                        .setSaveAggressiveNamespaces()));
-            } catch (XmlException e1) {
+			String xml = r.types.get(s).toXML(true);
 
-                e1.printStackTrace();
-            }
+			try {
+				XmlObject obj = XmlObject.Factory.parse(xml);
 
-        }
-    }
+				System.out.println(">>>>>> "
+						+ obj.xmlText((new XmlOptions()).setSavePrettyPrint()
+								.setSaveAggressiveNamespaces()));
+			} catch (XmlException e1) {
+
+				e1.printStackTrace();
+			}
+
+		}
+	}
 }

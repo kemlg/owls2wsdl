@@ -23,43 +23,63 @@
 package org.mindswap.wsdl;
 
 import javax.xml.namespace.QName;
-    
-public class WSDLParameter {	
-	  private String name;
-	  private QName type;
-	  private Object value;
-	  private String textValue;
-	
-	  public WSDLParameter (String name, QName type)
-	  {
-	    this(name, type, null);
-	  } 
 
-	  public WSDLParameter (String name, QName type, Object value)
-	  {
-	    setName(name);
-	    setType(type);
-	    setValue(value);
-	  }
-	
-	  public String toString() { return name; }
-	
-	  private void setName( String name) { this.name = name; }
-	  public String getName() { return name; }
-	
-	  private void setType(QName type) { this.type = type; }
-	  public QName getType(){ return type; }
-	
-	  public void setValue( Object value) { this.value = value; }
-	  public Object getValue() { return value; }
+public class WSDLParameter {
+	private String name;
+	private QName type;
+	private Object value;
+	private String textValue;
 
-	  public void setTextValue( String textValue) { this.textValue = textValue; }
-	  public String getTextValue() { return textValue; }
+	public WSDLParameter(String name, QName type) {
+		this(name, type, null);
+	}
 
-	  public boolean equals(Object o) {
-	  	if(o instanceof WSDLParameter)
-	  		return name.equals(((WSDLParameter) o).getName());
-	  		
-	  	return false;
-	  }	
-} 
+	public WSDLParameter(String name, QName type, Object value) {
+		setName(name);
+		setType(type);
+		setValue(value);
+	}
+
+	public String toString() {
+		return name;
+	}
+
+	private void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	private void setType(QName type) {
+		this.type = type;
+	}
+
+	public QName getType() {
+		return type;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setTextValue(String textValue) {
+		this.textValue = textValue;
+	}
+
+	public String getTextValue() {
+		return textValue;
+	}
+
+	public boolean equals(Object o) {
+		if (o instanceof WSDLParameter)
+			return name.equals(((WSDLParameter) o).getName());
+
+		return false;
+	}
+}

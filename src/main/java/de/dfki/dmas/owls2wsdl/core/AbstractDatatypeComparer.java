@@ -18,17 +18,15 @@ package de.dfki.dmas.owls2wsdl.core;
 import java.util.Comparator;
 
 /**
- *
+ * 
  * @author Oliver Fourman
  */
-public class AbstractDatatypeComparer implements Comparator 
-{    
-        public int compare(Object obj1, Object obj2)
-        {
-                String s1 = ((AbstractDatatype)obj1).getLocalName(); //getUrl();
-                String s2 = ((AbstractDatatype)obj2).getLocalName();
+public class AbstractDatatypeComparer implements Comparator<AbstractDatatype> {
+	public int compare(AbstractDatatype obj1, AbstractDatatype obj2) {
+		String s1 = obj1.getLocalName(); // getUrl();
+		String s2 = obj2.getLocalName();
 
-                return s1.compareTo(s2);
-        }        
-        
+		return s1.compareTo(s2);
+	}
+
 }

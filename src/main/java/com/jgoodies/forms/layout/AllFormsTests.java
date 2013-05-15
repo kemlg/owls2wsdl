@@ -42,26 +42,26 @@ import junit.framework.TestSuite;
  * @version $Revision: 1.11 $
  */
 public final class AllFormsTests {
-    
-    /** A constant for the Turkish locale. */
-    public static final Locale TURKISH = new Locale("tr");
 
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(AllFormsTests.class);
-    }
+	/** A constant for the Turkish locale. */
+	public static final Locale TURKISH = new Locale("tr");
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite("Test for com.jgoodies.forms.layout");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(CellConstraintsTest.class));
-        suite.addTest(new TestSuite(ColumnSpecTest.class));
-        suite.addTest(new TestSuite(DefaultComponentFactoryTest.class));
-        suite.addTest(new TestSuite(FormLayoutTest.class));
-        suite.addTest(new TestSuite(FormLayoutGroupsTest.class));
-        suite.addTest(new TestSuite(RowSpecTest.class));
-        suite.addTest(new TestSuite(SerializationTest.class));
-        suite.addTest(new TestSuite(UnitConversionTest.class));
-        //$JUnit-END$
-        return suite;
-    }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(AllFormsTests.class);
+	}
+
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Test for com.jgoodies.forms.layout");
+		// $JUnit-BEGIN$
+		suite.addTest(new TestSuite(CellConstraintsTest.class));
+		suite.addTest(new TestSuite(ColumnSpecTest.class));
+		suite.addTest(new TestSuite(DefaultComponentFactoryTest.class));
+		suite.addTest(new TestSuite(FormLayoutTest.class));
+		suite.addTest(new TestSuite(FormLayoutGroupsTest.class));
+		suite.addTest(new TestSuite(RowSpecTest.class));
+		suite.addTest(new TestSuite(SerializationTest.class));
+		suite.addTest(new TestSuite(UnitConversionTest.class));
+		// $JUnit-END$
+		return suite;
+	}
 }

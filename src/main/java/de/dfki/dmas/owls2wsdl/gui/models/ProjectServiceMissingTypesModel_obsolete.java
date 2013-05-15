@@ -6,21 +6,28 @@
 
 package de.dfki.dmas.owls2wsdl.gui.models;
 
-import de.dfki.dmas.owls2wsdl.gui.RuntimeModel;
-import de.dfki.dmas.owls2wsdl.core.Project;
 import javax.swing.AbstractListModel;
 
+import de.dfki.dmas.owls2wsdl.gui.RuntimeModel;
+
 /**
- *
+ * 
  * @author Oliver
  */
-public class ProjectServiceMissingTypesModel_obsolete extends AbstractListModel
-{
-    public Object getElementAt(int index) {
-        return RuntimeModel.getInstance().getProject().getServiceMissingTypes().get(index);
-    }
+public class ProjectServiceMissingTypesModel_obsolete extends
+		AbstractListModel<String> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7891181122102813228L;
 
-    public int getSize() {
-        return RuntimeModel.getInstance().getProject().getServiceMissingTypes().size();
-    }   
+	public String getElementAt(int index) {
+		return RuntimeModel.getInstance().getProject().getServiceMissingTypes()
+				.get(index);
+	}
+
+	public int getSize() {
+		return RuntimeModel.getInstance().getProject().getServiceMissingTypes()
+				.size();
+	}
 }

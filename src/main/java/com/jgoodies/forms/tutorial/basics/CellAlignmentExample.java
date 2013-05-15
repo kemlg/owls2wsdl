@@ -37,153 +37,143 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
- * Demonstrates how FormLayout applies the default column and row
- * alignments to cells, and how to override the defaults.
- *
- * @author	Karsten Lentzsch
+ * Demonstrates how FormLayout applies the default column and row alignments to
+ * cells, and how to override the defaults.
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.12 $
  */
 public final class CellAlignmentExample {
 
-    
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: Cell Alignments");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new CellAlignmentExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: Cell Alignments");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		JComponent panel = new CellAlignmentExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
+	public JComponent buildPanel() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
 
-    public JComponent buildPanel() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
+		tabbedPane.add(buildHorizontalPanel(), "Horizontal");
+		tabbedPane.add(buildVerticalPanel(), "Vertical");
+		return tabbedPane;
+	}
 
-        tabbedPane.add(buildHorizontalPanel(), "Horizontal");
-        tabbedPane.add(buildVerticalPanel(),   "Vertical");
-        return tabbedPane;
-    }
-    
-    
-    private JComponent buildHorizontalPanel() {
-        FormLayout layout = new FormLayout(
-                        "r:p, 4dlu, left:pref:g, center:pref:g, right:pref:g, pref:g",
-                        "pref, 8dlu, pref, pref, pref, pref, pref");
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
-        
-        panel.add(new JLabel("Column Spec: "),          "1, 1, r, c");
-        panel.add(new JLabel(" \"left:pref:grow\" "),   "3, 1, c, c");
-        panel.add(new JLabel(" \"center:pref:grow\" "), "4, 1, c, c");
-        panel.add(new JLabel(" \"right:pref:grow\" "),  "5, 1, c, c");
-        panel.add(new JLabel(" \"pref:grow\" "),        "6, 1, c, c");
-        
-        int row = 3;
-        addHorizontalButton(panel, 3, row, CellConstraints.DEFAULT);
-        addHorizontalButton(panel, 4, row, CellConstraints.DEFAULT);
-        addHorizontalButton(panel, 5, row, CellConstraints.DEFAULT);
-        addHorizontalButton(panel, 6, row, CellConstraints.DEFAULT);
+	private JComponent buildHorizontalPanel() {
+		FormLayout layout = new FormLayout(
+				"r:p, 4dlu, left:pref:g, center:pref:g, right:pref:g, pref:g",
+				"pref, 8dlu, pref, pref, pref, pref, pref");
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
 
-        row++;
-        addHorizontalButton(panel, 3, row, CellConstraints.FILL);
-        addHorizontalButton(panel, 4, row, CellConstraints.FILL);
-        addHorizontalButton(panel, 5, row, CellConstraints.FILL);
-        addHorizontalButton(panel, 6, row, CellConstraints.FILL);
+		panel.add(new JLabel("Column Spec: "), "1, 1, r, c");
+		panel.add(new JLabel(" \"left:pref:grow\" "), "3, 1, c, c");
+		panel.add(new JLabel(" \"center:pref:grow\" "), "4, 1, c, c");
+		panel.add(new JLabel(" \"right:pref:grow\" "), "5, 1, c, c");
+		panel.add(new JLabel(" \"pref:grow\" "), "6, 1, c, c");
 
-        row++;
-        addHorizontalButton(panel, 3, row, CellConstraints.LEFT);
-        addHorizontalButton(panel, 4, row, CellConstraints.LEFT);
-        addHorizontalButton(panel, 5, row, CellConstraints.LEFT);
-        addHorizontalButton(panel, 6, row, CellConstraints.LEFT);
+		int row = 3;
+		addHorizontalButton(panel, 3, row, CellConstraints.DEFAULT);
+		addHorizontalButton(panel, 4, row, CellConstraints.DEFAULT);
+		addHorizontalButton(panel, 5, row, CellConstraints.DEFAULT);
+		addHorizontalButton(panel, 6, row, CellConstraints.DEFAULT);
 
-        row++;
-        addHorizontalButton(panel, 3, row, CellConstraints.CENTER);
-        addHorizontalButton(panel, 4, row, CellConstraints.CENTER);
-        addHorizontalButton(panel, 5, row, CellConstraints.CENTER);
-        addHorizontalButton(panel, 6, row, CellConstraints.CENTER);
+		row++;
+		addHorizontalButton(panel, 3, row, CellConstraints.FILL);
+		addHorizontalButton(panel, 4, row, CellConstraints.FILL);
+		addHorizontalButton(panel, 5, row, CellConstraints.FILL);
+		addHorizontalButton(panel, 6, row, CellConstraints.FILL);
 
-        row++;
-        addHorizontalButton(panel, 3, row, CellConstraints.RIGHT);
-        addHorizontalButton(panel, 4, row, CellConstraints.RIGHT);
-        addHorizontalButton(panel, 5, row, CellConstraints.RIGHT);
-        addHorizontalButton(panel, 6, row, CellConstraints.RIGHT);
+		row++;
+		addHorizontalButton(panel, 3, row, CellConstraints.LEFT);
+		addHorizontalButton(panel, 4, row, CellConstraints.LEFT);
+		addHorizontalButton(panel, 5, row, CellConstraints.LEFT);
+		addHorizontalButton(panel, 6, row, CellConstraints.LEFT);
 
-        return panel;
-    }
-    
-    
-    private JComponent buildVerticalPanel() {
-        FormLayout layout = new FormLayout(
-                        "left:pref, 8dlu, p, c:p, p, p, p",
-                        "p, 4dlu, top:pref:g, center:pref:g, bottom:pref:g, pref:g");
-        layout.setColumnGroups(new int[][] {{3, 5, 6, 7}});
-        JPanel panel = new JPanel(layout);
-        panel.setBorder(Borders.DIALOG_BORDER);
+		row++;
+		addHorizontalButton(panel, 3, row, CellConstraints.CENTER);
+		addHorizontalButton(panel, 4, row, CellConstraints.CENTER);
+		addHorizontalButton(panel, 5, row, CellConstraints.CENTER);
+		addHorizontalButton(panel, 6, row, CellConstraints.CENTER);
 
-        panel.add(new JLabel("Row Spec:"),             "1, 1, r, c");
-        panel.add(new JLabel("\"top:pref:grow\""),     "1, 3, r, c");
-        panel.add(new JLabel("\"center:pref:grow\""), "1, 4, r, c");
-        panel.add(new JLabel("\"bottom:pref:grow\""),  "1, 5, r, c");
-        panel.add(new JLabel("\"pref:grow\""),         "1, 6, r, c");
-        
-        int col = 3;
-        addVerticalButton(panel, col, 3, CellConstraints.DEFAULT);
-        addVerticalButton(panel, col, 4, CellConstraints.DEFAULT);
-        addVerticalButton(panel, col, 5, CellConstraints.DEFAULT);
-        addVerticalButton(panel, col, 6, CellConstraints.DEFAULT);
+		row++;
+		addHorizontalButton(panel, 3, row, CellConstraints.RIGHT);
+		addHorizontalButton(panel, 4, row, CellConstraints.RIGHT);
+		addHorizontalButton(panel, 5, row, CellConstraints.RIGHT);
+		addHorizontalButton(panel, 6, row, CellConstraints.RIGHT);
 
-        col++;
-        addVerticalButton(panel, col, 3, CellConstraints.FILL);
-        addVerticalButton(panel, col, 4, CellConstraints.FILL);
-        addVerticalButton(panel, col, 5, CellConstraints.FILL);
-        addVerticalButton(panel, col, 6, CellConstraints.FILL);
+		return panel;
+	}
 
-        col++;
-        addVerticalButton(panel, col, 3, CellConstraints.TOP);
-        addVerticalButton(panel, col, 4, CellConstraints.TOP);
-        addVerticalButton(panel, col, 5, CellConstraints.TOP);
-        addVerticalButton(panel, col, 6, CellConstraints.TOP);
+	private JComponent buildVerticalPanel() {
+		FormLayout layout = new FormLayout("left:pref, 8dlu, p, c:p, p, p, p",
+				"p, 4dlu, top:pref:g, center:pref:g, bottom:pref:g, pref:g");
+		layout.setColumnGroups(new int[][] { { 3, 5, 6, 7 } });
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(Borders.DIALOG_BORDER);
 
-        col++;
-        addVerticalButton(panel, col, 3, CellConstraints.CENTER);
-        addVerticalButton(panel, col, 4, CellConstraints.CENTER);
-        addVerticalButton(panel, col, 5, CellConstraints.CENTER);
-        addVerticalButton(panel, col, 6, CellConstraints.CENTER);
+		panel.add(new JLabel("Row Spec:"), "1, 1, r, c");
+		panel.add(new JLabel("\"top:pref:grow\""), "1, 3, r, c");
+		panel.add(new JLabel("\"center:pref:grow\""), "1, 4, r, c");
+		panel.add(new JLabel("\"bottom:pref:grow\""), "1, 5, r, c");
+		panel.add(new JLabel("\"pref:grow\""), "1, 6, r, c");
 
-        col++;
-        addVerticalButton(panel, col, 3, CellConstraints.BOTTOM);
-        addVerticalButton(panel, col, 4, CellConstraints.BOTTOM);
-        addVerticalButton(panel, col, 5, CellConstraints.BOTTOM);
-        addVerticalButton(panel, col, 6, CellConstraints.BOTTOM);
+		int col = 3;
+		addVerticalButton(panel, col, 3, CellConstraints.DEFAULT);
+		addVerticalButton(panel, col, 4, CellConstraints.DEFAULT);
+		addVerticalButton(panel, col, 5, CellConstraints.DEFAULT);
+		addVerticalButton(panel, col, 6, CellConstraints.DEFAULT);
 
-        return panel;
-    }
-    
-    
-    private void addHorizontalButton(JPanel panel, int col, int row, 
-                                    CellConstraints.Alignment hAlignment) {
-        JButton button = new JButton(hAlignment.toString());
-        panel.add(button, new CellConstraints(col, row, 
-                                              hAlignment, 
-                                              CellConstraints.DEFAULT));
-    }
-    
-    
-    private void addVerticalButton(JPanel panel, int col, int row, 
-                                    CellConstraints.Alignment vAlignment) {
-        JButton button = new JButton(vAlignment.toString());
-        panel.add(button, new CellConstraints(col, row, 
-                                              CellConstraints.DEFAULT,
-                                              vAlignment));
-    }
-    
-    
+		col++;
+		addVerticalButton(panel, col, 3, CellConstraints.FILL);
+		addVerticalButton(panel, col, 4, CellConstraints.FILL);
+		addVerticalButton(panel, col, 5, CellConstraints.FILL);
+		addVerticalButton(panel, col, 6, CellConstraints.FILL);
+
+		col++;
+		addVerticalButton(panel, col, 3, CellConstraints.TOP);
+		addVerticalButton(panel, col, 4, CellConstraints.TOP);
+		addVerticalButton(panel, col, 5, CellConstraints.TOP);
+		addVerticalButton(panel, col, 6, CellConstraints.TOP);
+
+		col++;
+		addVerticalButton(panel, col, 3, CellConstraints.CENTER);
+		addVerticalButton(panel, col, 4, CellConstraints.CENTER);
+		addVerticalButton(panel, col, 5, CellConstraints.CENTER);
+		addVerticalButton(panel, col, 6, CellConstraints.CENTER);
+
+		col++;
+		addVerticalButton(panel, col, 3, CellConstraints.BOTTOM);
+		addVerticalButton(panel, col, 4, CellConstraints.BOTTOM);
+		addVerticalButton(panel, col, 5, CellConstraints.BOTTOM);
+		addVerticalButton(panel, col, 6, CellConstraints.BOTTOM);
+
+		return panel;
+	}
+
+	private void addHorizontalButton(JPanel panel, int col, int row,
+			CellConstraints.Alignment hAlignment) {
+		JButton button = new JButton(hAlignment.toString());
+		panel.add(button, new CellConstraints(col, row, hAlignment,
+				CellConstraints.DEFAULT));
+	}
+
+	private void addVerticalButton(JPanel panel, int col, int row,
+			CellConstraints.Alignment vAlignment) {
+		JButton button = new JButton(vAlignment.toString());
+		panel.add(button, new CellConstraints(col, row,
+				CellConstraints.DEFAULT, vAlignment));
+	}
+
 }
-

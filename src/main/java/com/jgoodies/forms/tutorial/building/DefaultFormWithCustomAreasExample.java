@@ -38,141 +38,135 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 /**
- * Compares approaches how to append a custom area at the end of
- * a panel built with the DefaultFormBuilder:<ol>
- * <li> using two custom rows to align the leading label,
- * <li> using a single custom row with label on top,
- * <li> using a separator.
+ * Compares approaches how to append a custom area at the end of a panel built
+ * with the DefaultFormBuilder:
+ * <ol>
+ * <li>using two custom rows to align the leading label,
+ * <li>using a single custom row with label on top,
+ * <li>using a separator.
  * </ol>
- * These differ in the position of the leading 'Feedback" label,
- * and in turn in the alignment of font baselines between label
- * and the text area. 
- *
- * @author  Karsten Lentzsch
+ * These differ in the position of the leading 'Feedback" label, and in turn in
+ * the alignment of font baselines between label and the text area.
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.11 $
  * 
- * @see     DefaultFormBuilder
- * @see     DefaultFormWithCustomRowsExample
+ * @see DefaultFormBuilder
+ * @see DefaultFormWithCustomRowsExample
  */
 
 public final class DefaultFormWithCustomAreasExample {
 
-    
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: Custom Areas");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		JComponent panel = new DefaultFormWithCustomAreasExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: Custom Areas");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new DefaultFormWithCustomAreasExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
+	// Building ***************************************************************
 
+	public JComponent buildPanel() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
 
+		tabbedPane.add(buildCustomAreaWithAlignedLabelPanel(), "Aligned label");
+		tabbedPane.add(buildCustomAreaWithTopLabelPanel(), "Top label");
+		tabbedPane.add(buildCustomAreaWithSeparatorPanel(), "Separator");
+		return tabbedPane;
+	}
 
-    // Building ***************************************************************
+	private DefaultFormBuilder buildPanelHeader() {
+		FormLayout layout = new FormLayout("right:pref, 3dlu, min:grow", "");
+		DefaultFormBuilder builder = new DefaultFormBuilder(layout);
+		builder.setDefaultDialogBorder();
+		builder.setRowGroupingEnabled(true);
 
-    public JComponent buildPanel() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
+		builder.appendSeparator("Customer Data");
+		builder.append("Last Name", new JTextField());
+		builder.append("First Name", new JTextField());
+		builder.append("Street", new JTextField());
+		builder.append("Email", new JTextField());
 
-        tabbedPane.add(buildCustomAreaWithAlignedLabelPanel(), "Aligned label");
-        tabbedPane.add(buildCustomAreaWithTopLabelPanel(),     "Top label");
-        tabbedPane.add(buildCustomAreaWithSeparatorPanel(),    "Separator");
-        return tabbedPane;
-    }
-    
-    
-    private DefaultFormBuilder buildPanelHeader() {
-        FormLayout layout = new FormLayout(
-                "right:pref, 3dlu, min:grow", 
-                "");
-        DefaultFormBuilder builder = new DefaultFormBuilder(layout);
-        builder.setDefaultDialogBorder();
-        builder.setRowGroupingEnabled(true);
-        
-        builder.appendSeparator("Customer Data");
-        builder.append("Last Name",  new JTextField());
-        builder.append("First Name", new JTextField());
-        builder.append("Street",     new JTextField());
-        builder.append("Email",      new JTextField());
+		return builder;
+	}
 
-        return builder;
-    }
-    
-    
-    /**
-     * Demonstrates how to append a larger custom area at the end of
-     * a panel that is build with a {@link DefaultFormBuilder}.<p>
-     * 
-     * We add a gap and a single custom row that grows and that
-     * is filled vertically (where the default is center vertically).
-     * The area uses a standard leading label.
-     * 
-     * @return the custom area panel with aligned labels
-     */
-    private JComponent buildCustomAreaWithAlignedLabelPanel() {
-        DefaultFormBuilder builder = buildPanelHeader();
+	/**
+	 * Demonstrates how to append a larger custom area at the end of a panel
+	 * that is build with a {@link DefaultFormBuilder}.
+	 * <p>
+	 * 
+	 * We add a gap and a single custom row that grows and that is filled
+	 * vertically (where the default is center vertically). The area uses a
+	 * standard leading label.
+	 * 
+	 * @return the custom area panel with aligned labels
+	 */
+	private JComponent buildCustomAreaWithAlignedLabelPanel() {
+		DefaultFormBuilder builder = buildPanelHeader();
 
-        CellConstraints cc = new CellConstraints();
-        builder.append("Feedback");
-        builder.appendRow(new RowSpec("0:grow"));
-        builder.add(new JScrollPane(new JTextArea("Feedback - font baselines shall be aligned")),
-                    cc.xywh(builder.getColumn(), builder.getRow(), 1, 2, "fill, fill"));
+		CellConstraints cc = new CellConstraints();
+		builder.append("Feedback");
+		builder.appendRow(new RowSpec("0:grow"));
+		builder.add(new JScrollPane(new JTextArea(
+				"Feedback - font baselines shall be aligned")), cc.xywh(
+				builder.getColumn(), builder.getRow(), 1, 2, "fill, fill"));
 
-        return builder.getPanel();
-    }
+		return builder.getPanel();
+	}
 
+	/**
+	 * Demonstrates how to append two custom areas at the end of a panel that is
+	 * build with a DefaultFormBuilder.
+	 * 
+	 * @return the custom area panel with label in the top
+	 */
+	private JComponent buildCustomAreaWithTopLabelPanel() {
+		DefaultFormBuilder builder = buildPanelHeader();
 
-    /**
-     * Demonstrates how to append two custom areas at the end of
-     * a panel that is build with a DefaultFormBuilder.
-     * 
-     * @return the custom area panel with label in the top
-     */
-    private JComponent buildCustomAreaWithTopLabelPanel() {
-        DefaultFormBuilder builder = buildPanelHeader();
+		CellConstraints cc = new CellConstraints();
+		builder.appendRow(builder.getLineGapSpec());
+		builder.appendRow(new RowSpec("top:28dlu:grow"));
+		builder.nextLine(2);
+		builder.append("Feedback");
+		builder.add(new JScrollPane(new JTextArea(
+				"Feedback - likely the baselines are not aligned")), cc.xy(
+				builder.getColumn(), builder.getRow(), "fill, fill"));
 
-        CellConstraints cc = new CellConstraints();
-        builder.appendRow(builder.getLineGapSpec());
-        builder.appendRow(new RowSpec("top:28dlu:grow"));
-        builder.nextLine(2);
-        builder.append("Feedback");
-        builder.add(new JScrollPane(new JTextArea("Feedback - likely the baselines are not aligned")),
-                    cc.xy(builder.getColumn(), builder.getRow(), "fill, fill"));
+		return builder.getPanel();
+	}
 
-        return builder.getPanel();
-    }
-    
+	/**
+	 * Demonstrates how to append a larger custom area at the end of a panel
+	 * that is build with a DefaultFormBuilder.
+	 * <p>
+	 * 
+	 * We add a gap and a single custom row that grows and that is filled
+	 * vertically (where the default is center vertically). The area is
+	 * separated by a titled separator and it is indented using an empty leading
+	 * label.
+	 * 
+	 * @return the custom area panel with separators
+	 */
+	private JComponent buildCustomAreaWithSeparatorPanel() {
+		DefaultFormBuilder builder = buildPanelHeader();
 
-    /**
-     * Demonstrates how to append a larger custom area at the end of
-     * a panel that is build with a DefaultFormBuilder.<p>
-     * 
-     * We add a gap and a single custom row that grows and that
-     * is filled vertically (where the default is center vertically).
-     * The area is separated by a titled separator and it is indented
-     * using an empty leading label.
-     * 
-     * @return the custom area panel with separators
-     */
-    private JComponent buildCustomAreaWithSeparatorPanel() {
-        DefaultFormBuilder builder = buildPanelHeader();
-        
-        builder.appendSeparator("Customer Feedback");
-        builder.appendRow(builder.getLineGapSpec());
-        builder.appendRow(new RowSpec("fill:28dlu:grow"));
-        builder.nextLine(2);
-        builder.append("", new JScrollPane(new JTextArea()));
+		builder.appendSeparator("Customer Feedback");
+		builder.appendRow(builder.getLineGapSpec());
+		builder.appendRow(new RowSpec("fill:28dlu:grow"));
+		builder.nextLine(2);
+		builder.append("", new JScrollPane(new JTextArea()));
 
-        return builder.getPanel();
-    }
+		return builder.getPanel();
+	}
 
-
- }
+}

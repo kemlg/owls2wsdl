@@ -9,12 +9,17 @@ package org.tigris.lazer;
 import java.util.ArrayList;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
-public class TokenList extends ArrayList {
+public class TokenList<T> extends ArrayList<T> {
 
-    public void removeRange(int start, int end) {
-        super.removeRange(start, end);
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6961353681447771550L;
+
+	public void removeRange(int start, int end) {
+		super.removeRange(start, end);
+	}
 }

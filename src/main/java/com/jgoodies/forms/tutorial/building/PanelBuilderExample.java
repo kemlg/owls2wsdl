@@ -42,145 +42,144 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
- * Demonstrates a typical use of the FormLayout.
- * Columns and rows are specified before the panel is filled with
- * components, and the panel is filled with a PanelBuilder.<p>
+ * Demonstrates a typical use of the FormLayout. Columns and rows are specified
+ * before the panel is filled with components, and the panel is filled with a
+ * PanelBuilder.
+ * <p>
  * 
- * Unlike the PlainExample, this implementation can delegate
- * the component creation for text labels and titled separators
- * to the builder.<p>
+ * Unlike the PlainExample, this implementation can delegate the component
+ * creation for text labels and titled separators to the builder.
+ * <p>
  * 
- * This panel building style is recommended for panels with
- * a medium number of rows and components. If the panel has more rows, 
- * you may consider using a row variable to address the current row.
- *
+ * This panel building style is recommended for panels with a medium number of
+ * rows and components. If the panel has more rows, you may consider using a row
+ * variable to address the current row.
+ * 
  * @author Karsten Lentzsch
  * @version $Revision: 1.12 $
  * 
- * @see     PanelBuilder
- * @see	RowCounterExample
- * @see	DynamicRowsExample
- * @see	DefaultFormBuilderExample
+ * @see PanelBuilder
+ * @see RowCounterExample
+ * @see DynamicRowsExample
+ * @see DefaultFormBuilderExample
  */
 
 public final class PanelBuilderExample {
 
-    private JTextField companyNameField;
-    private JTextField contactPersonField;
-    private JTextField orderNoField;
-    private JTextField inspectorField;
-    private JTextField referenceNoField;
-    private JComboBox  approvalStatusComboBox;
-    private JTextField shipYardField;
-    private JTextField registerNoField;
-    private JTextField hullNumbersField;
-    private JComboBox  projectTypeComboBox;
+	private JTextField companyNameField;
+	private JTextField contactPersonField;
+	private JTextField orderNoField;
+	private JTextField inspectorField;
+	private JTextField referenceNoField;
+	private JComboBox<String> approvalStatusComboBox;
+	private JTextField shipYardField;
+	private JTextField registerNoField;
+	private JTextField hullNumbersField;
+	private JComboBox<String> projectTypeComboBox;
 
- 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: PanelBuilder");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new PanelBuilderExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
-    
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: PanelBuilder");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		JComponent panel = new PanelBuilderExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
-    // Component Creation and Initialization **********************************
+	// Component Creation and Initialization **********************************
 
-    /**
-     *  Creates and intializes the UI components.
-     */
-    private void initComponents() {
-        companyNameField       = new JTextField();
-        contactPersonField     = new JTextField();
-        orderNoField           = new JTextField();
-        inspectorField         = new JTextField();
-        referenceNoField       = new JTextField();
-        approvalStatusComboBox = createApprovalStatusComboBox();
-        shipYardField          = new JTextField();
-        registerNoField        = new JTextField();
-        hullNumbersField       = new JTextField();
-        projectTypeComboBox    = createProjectTypeComboBox();
-    }
+	/**
+	 * Creates and intializes the UI components.
+	 */
+	private void initComponents() {
+		companyNameField = new JTextField();
+		contactPersonField = new JTextField();
+		orderNoField = new JTextField();
+		inspectorField = new JTextField();
+		referenceNoField = new JTextField();
+		approvalStatusComboBox = createApprovalStatusComboBox();
+		shipYardField = new JTextField();
+		registerNoField = new JTextField();
+		hullNumbersField = new JTextField();
+		projectTypeComboBox = createProjectTypeComboBox();
+	}
 
-    /**
-     * Creates and returns a combo box for the approval states.
-     * 
-     * @return a combo box for the approval status
-     */
-    private JComboBox createApprovalStatusComboBox() {
-        return new JComboBox(
-            new String[] { "In Progress", "Finished", "Released" });
-    }
+	/**
+	 * Creates and returns a combo box for the approval states.
+	 * 
+	 * @return a combo box for the approval status
+	 */
+	private JComboBox<String> createApprovalStatusComboBox() {
+		return new JComboBox<String>(new String[] { "In Progress", "Finished",
+				"Released" });
+	}
 
-    /**
-     * Creates and returns a combo box for the project types.
-     * 
-     * @return a combo box for the project type
-     */
-    private JComboBox createProjectTypeComboBox() {
-        return new JComboBox(
-            new String[] { "New Building", "Conversion", "Repair" });
-    }
+	/**
+	 * Creates and returns a combo box for the project types.
+	 * 
+	 * @return a combo box for the project type
+	 */
+	private JComboBox<String> createProjectTypeComboBox() {
+		return new JComboBox<String>(new String[] { "New Building",
+				"Conversion", "Repair" });
+	}
 
+	// Building *************************************************************
 
-    // Building *************************************************************
+	/**
+	 * Builds the pane.
+	 * 
+	 * @return the built panel
+	 */
+	public JComponent buildPanel() {
+		initComponents();
 
-    /**
-     * Builds the pane.
-     * 
-     * @return the built panel
-     */
-    public JComponent buildPanel() {
-        initComponents();
+		FormLayout layout = new FormLayout(
+				"right:max(40dlu;pref), 3dlu, 70dlu, 7dlu, "
+						+ "right:max(40dlu;pref), 3dlu, 70dlu",
+				"p, 3dlu, p, 3dlu, p, 3dlu, p, 9dlu, "
+						+ "p, 3dlu, p, 3dlu, p, 3dlu, p, 9dlu, "
+						+ "p, 3dlu, p, 3dlu, p, 3dlu, p");
 
-        FormLayout layout = new FormLayout(
-                "right:max(40dlu;pref), 3dlu, 70dlu, 7dlu, "
-              + "right:max(40dlu;pref), 3dlu, 70dlu",
-                "p, 3dlu, p, 3dlu, p, 3dlu, p, 9dlu, " +
-                "p, 3dlu, p, 3dlu, p, 3dlu, p, 9dlu, " +
-                "p, 3dlu, p, 3dlu, p, 3dlu, p");
-                
-        PanelBuilder builder = new PanelBuilder(layout);
-        builder.setDefaultDialogBorder();
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
 
-        // Fill the table with labels and components.
-        CellConstraints cc = new CellConstraints();
-        builder.addSeparator("Manufacturer", cc.xyw(1,  1, 7));
-        builder.addLabel("Company",          cc.xy (1,  3));
-        builder.add(companyNameField,        cc.xyw(3,  3, 5));
-        builder.addLabel("Contact",          cc.xy (1,  5));
-        builder.add(contactPersonField,      cc.xyw(3,  5, 5));
-        builder.addLabel("Order No",         cc.xy (1,  7));
-        builder.add(orderNoField,            cc.xy (3,  7));
+		// Fill the table with labels and components.
+		CellConstraints cc = new CellConstraints();
+		builder.addSeparator("Manufacturer", cc.xyw(1, 1, 7));
+		builder.addLabel("Company", cc.xy(1, 3));
+		builder.add(companyNameField, cc.xyw(3, 3, 5));
+		builder.addLabel("Contact", cc.xy(1, 5));
+		builder.add(contactPersonField, cc.xyw(3, 5, 5));
+		builder.addLabel("Order No", cc.xy(1, 7));
+		builder.add(orderNoField, cc.xy(3, 7));
 
-        builder.addSeparator("Inspector",    cc.xyw(1,  9, 7));
-        builder.addLabel("Name",             cc.xy (1, 11));
-        builder.add(inspectorField,          cc.xyw(3, 11, 5));
-        builder.addLabel("Reference No",     cc.xy (1, 13));
-        builder.add(referenceNoField,        cc.xy (3, 13));
-        builder.addLabel("Status",           cc.xy (1, 15));
-        builder.add(approvalStatusComboBox,  cc.xy (3, 15));
-        
-        builder.addSeparator("Ship",         cc.xyw(1, 17, 7));
-        builder.addLabel("Shipyard",         cc.xy (1, 19));
-        builder.add(shipYardField,           cc.xyw(3, 19, 5));
-        builder.addLabel("Register No",      cc.xy (1, 21));
-        builder.add(registerNoField,         cc.xy (3, 21));
-        builder.addLabel("Hull No",          cc.xy (5, 21));
-        builder.add(hullNumbersField,        cc.xy (7, 21));
-        builder.addLabel("Project Type",     cc.xy (1, 23));
-        builder.add(projectTypeComboBox,     cc.xy (3, 23));
-        
-        return builder.getPanel();
-    }
-    
+		builder.addSeparator("Inspector", cc.xyw(1, 9, 7));
+		builder.addLabel("Name", cc.xy(1, 11));
+		builder.add(inspectorField, cc.xyw(3, 11, 5));
+		builder.addLabel("Reference No", cc.xy(1, 13));
+		builder.add(referenceNoField, cc.xy(3, 13));
+		builder.addLabel("Status", cc.xy(1, 15));
+		builder.add(approvalStatusComboBox, cc.xy(3, 15));
+
+		builder.addSeparator("Ship", cc.xyw(1, 17, 7));
+		builder.addLabel("Shipyard", cc.xy(1, 19));
+		builder.add(shipYardField, cc.xyw(3, 19, 5));
+		builder.addLabel("Register No", cc.xy(1, 21));
+		builder.add(registerNoField, cc.xy(3, 21));
+		builder.addLabel("Hull No", cc.xy(5, 21));
+		builder.add(hullNumbersField, cc.xy(7, 21));
+		builder.addLabel("Project Type", cc.xy(1, 23));
+		builder.add(projectTypeComboBox, cc.xy(3, 23));
+
+		return builder.getPanel();
+	}
+
 }

@@ -16,20 +16,21 @@ import org.tigris.lazer.Token;
  * @author Bob Tarling
  */
 public class OperatorTokenFactory extends AbstractTokenFactory {
-    
-    private static String operators = ".,<>=!%&|*+-/=^{}[]();~";
-    
-    /** Creates a new instance of OperatorTokenFactory */
-    public OperatorTokenFactory() {
-    }
-    
-    public boolean isApplicable(String text, int start) {
-        return operators.indexOf(text.charAt(start)) != -1;
-    }
-    
-    public Token createToken(String text, int start) {
-        int position = start;
-        position++;
-        return createToken(text, start, position, OperatorTokenType.getInstance());
-    }
+
+	private static String operators = ".,<>=!%&|*+-/=^{}[]();~";
+
+	/** Creates a new instance of OperatorTokenFactory */
+	public OperatorTokenFactory() {
+	}
+
+	public boolean isApplicable(String text, int start) {
+		return operators.indexOf(text.charAt(start)) != -1;
+	}
+
+	public Token createToken(String text, int start) {
+		int position = start;
+		position++;
+		return createToken(text, start, position,
+				OperatorTokenType.getInstance());
+	}
 }

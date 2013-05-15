@@ -10,13 +10,13 @@
 package de.dfki.dmas.owls2wsdl.utils;
 
 /**
- *
+ * 
  * @author cosmic
  */
 public class CastorCodeGen {
-    
-    /** Creates a new instance of CastorCodeGen */
-    public CastorCodeGen() {
-    }
-    
+
+	/** Creates a new instance of CastorCodeGen */
+	public CastorCodeGen() {
+	}
+
 }

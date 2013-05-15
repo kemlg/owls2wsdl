@@ -18,39 +18,68 @@
 package de.dfki.dmas.owls2wsdl.core;
 
 /**
- *
+ * 
  * @author Oliver Fourman
  */
-public class AbstractDatatypeRestrictionElement implements java.io.Serializable  {
-    private String _restrictionType;
-    private String _restrictionValue;
-    private String _inheritedBy;
-    private int    _level;
-    
-    /** Creates a new instance of AbstractDatatypeRestrictionElement */
-    public AbstractDatatypeRestrictionElement() {
-        
-    }
-    
-    public AbstractDatatypeRestrictionElement(String restrictionType, String restrictionValue, int level, String inheritedBy) {
-        //System.out.println("[C] AbstractDatatypeRestrictionElement");
-        this._restrictionType    = restrictionType;
-        this._restrictionValue   = restrictionValue;
-        this._inheritedBy        = inheritedBy;
-        this._level              = level;
-    }
-    
-    public void setRestrictionType(String restrictionType) { this._restrictionType = restrictionType; }
-    public void setRestrictionValue(String restrictionValue) { this._restrictionValue = restrictionValue; }
-    public void setInheritedBy(String inheritedBy) { this._inheritedBy = inheritedBy; }
-    public void setLevel(int level) { this._level = level; }
-    
-    public String getRestrictionType() { return this._restrictionType; }
-    public String getRestrictionValue() { return this._restrictionValue; }
-    public String getInheritedBy() { return this._inheritedBy; }
-    public int    getLevel() { return this._level; }
-    
-    public String toString() {
-        return this._restrictionType+": "+this._restrictionValue+ "(Level: "+this._level+", inheritedBy "+this._inheritedBy+")";
-    }
+public class AbstractDatatypeRestrictionElement implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5700940271117135491L;
+	private String _restrictionType;
+	private String _restrictionValue;
+	private String _inheritedBy;
+	private int _level;
+
+	/** Creates a new instance of AbstractDatatypeRestrictionElement */
+	public AbstractDatatypeRestrictionElement() {
+
+	}
+
+	public AbstractDatatypeRestrictionElement(String restrictionType,
+			String restrictionValue, int level, String inheritedBy) {
+		// System.out.println("[C] AbstractDatatypeRestrictionElement");
+		this._restrictionType = restrictionType;
+		this._restrictionValue = restrictionValue;
+		this._inheritedBy = inheritedBy;
+		this._level = level;
+	}
+
+	public void setRestrictionType(String restrictionType) {
+		this._restrictionType = restrictionType;
+	}
+
+	public void setRestrictionValue(String restrictionValue) {
+		this._restrictionValue = restrictionValue;
+	}
+
+	public void setInheritedBy(String inheritedBy) {
+		this._inheritedBy = inheritedBy;
+	}
+
+	public void setLevel(int level) {
+		this._level = level;
+	}
+
+	public String getRestrictionType() {
+		return this._restrictionType;
+	}
+
+	public String getRestrictionValue() {
+		return this._restrictionValue;
+	}
+
+	public String getInheritedBy() {
+		return this._inheritedBy;
+	}
+
+	public int getLevel() {
+		return this._level;
+	}
+
+	public String toString() {
+		return this._restrictionType + ": " + this._restrictionValue
+				+ "(Level: " + this._level + ", inheritedBy "
+				+ this._inheritedBy + ")";
+	}
 }

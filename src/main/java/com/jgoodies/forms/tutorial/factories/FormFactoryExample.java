@@ -42,107 +42,95 @@ import com.jgoodies.forms.layout.Sizes;
 
 /**
  * Demonstrates the use of Factories as provided by the Forms framework.
- *
- * @author	Karsten Lentzsch
+ * 
+ * @author Karsten Lentzsch
  * @version $Revision: 1.13 $
  * 
- * @see	com.jgoodies.forms.factories.ButtonBarFactory
+ * @see com.jgoodies.forms.factories.ButtonBarFactory
  */
 public final class FormFactoryExample {
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (Exception e) {
-            // Likely PlasticXP is not in the class path; ignore.
-        }
-        JFrame frame = new JFrame();
-        frame.setTitle("Forms Tutorial :: FormFactory");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new FormFactoryExample().buildPanel();
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
+	public static void main(String[] args) {
+		try {
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			// Likely PlasticXP is not in the class path; ignore.
+		}
+		JFrame frame = new JFrame();
+		frame.setTitle("Forms Tutorial :: FormFactory");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		JComponent panel = new FormFactoryExample().buildPanel();
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
-    public JComponent buildPanel() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
+	public JComponent buildPanel() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.putClientProperty("jgoodies.noContentBorder", Boolean.TRUE);
 
-        tabbedPane.add(buildDefaultForm(1, 1),  "1 - 1");
-        tabbedPane.add(buildDefaultForm(1, 2),  "1 - 2");
-        tabbedPane.add(buildDefaultForm(1, 3),  "1 - 3");
-        tabbedPane.add(buildDefaultForm(2, 1),  "2 - 1");
-        tabbedPane.add(buildDefaultForm(2, 2),  "2 - 2");
-        tabbedPane.add(buildDefaultForm(3, 1),  "3 - 1");
-        return tabbedPane;
-    }
+		tabbedPane.add(buildDefaultForm(1, 1), "1 - 1");
+		tabbedPane.add(buildDefaultForm(1, 2), "1 - 2");
+		tabbedPane.add(buildDefaultForm(1, 3), "1 - 3");
+		tabbedPane.add(buildDefaultForm(2, 1), "2 - 1");
+		tabbedPane.add(buildDefaultForm(2, 2), "2 - 2");
+		tabbedPane.add(buildDefaultForm(3, 1), "3 - 1");
+		return tabbedPane;
+	}
 
+	private Component buildDefaultForm(int majorCols, int minorCols) {
+		FormLayout layout = FormFactory.createColumnLayout(majorCols,
+				minorCols, new ColumnSpec("right:p"), Sizes.DLUX9, Sizes.DLUX1);
 
-    private Component buildDefaultForm(int majorCols, int minorCols) {
-        FormLayout layout =
-            FormFactory.createColumnLayout(
-                majorCols,
-                minorCols,
-                new ColumnSpec("right:p"),
-                Sizes.DLUX9,
-                Sizes.DLUX1);
+		DefaultFormBuilder builder = new DefaultFormBuilder(layout);
+		builder.setDefaultDialogBorder();
+		builder.setLeadingColumnOffset(1);
 
-        DefaultFormBuilder builder = new DefaultFormBuilder(layout);
-        builder.setDefaultDialogBorder();
-        builder.setLeadingColumnOffset(1);
-        
-        buildParagraph(builder, 4, majorCols, minorCols, "Propeller Shaft");
-        buildParagraph(builder, 3, majorCols, minorCols, "Intermediate Shaft");
+		buildParagraph(builder, 4, majorCols, minorCols, "Propeller Shaft");
+		buildParagraph(builder, 3, majorCols, minorCols, "Intermediate Shaft");
 
-        return builder.getContainer();
-    }
+		return builder.getContainer();
+	}
 
-    private void buildParagraph(
-        DefaultFormBuilder builder,
-        int rows,
-        int majorCols,
-        int minorCols,
-        String text) {
-        builder.appendSeparator(text);
-        for (int row = 0; row < rows; row++) {
-            buildRow(builder, majorCols, minorCols);
-        }
-    }
+	private void buildParagraph(DefaultFormBuilder builder, int rows,
+			int majorCols, int minorCols, String text) {
+		builder.appendSeparator(text);
+		for (int row = 0; row < rows; row++) {
+			buildRow(builder, majorCols, minorCols);
+		}
+	}
 
-    private void buildRow(
-        DefaultFormBuilder builder,
-        int majorCols,
-        int minorCols) {
-        int charCols = 50 / (majorCols * (1 + minorCols));
-        for (int majorCol = 0; majorCol < majorCols; majorCol++) {
-            buildSection(builder, minorCols, charCols);
-        }
-        builder.nextLine();
-    }
+	private void buildRow(DefaultFormBuilder builder, int majorCols,
+			int minorCols) {
+		int charCols = 50 / (majorCols * (1 + minorCols));
+		for (int majorCol = 0; majorCol < majorCols; majorCol++) {
+			buildSection(builder, minorCols, charCols);
+		}
+		builder.nextLine();
+	}
 
-    private void buildSection(DefaultFormBuilder builder, int minorCols, int charCols) {
-        builder.append(nextLabel(), new JTextField(charCols));
-        for (int minorCol = 1; minorCol < minorCols; minorCol++) {
-            builder.append(new JTextField(charCols));
-        }
-    }
+	private void buildSection(DefaultFormBuilder builder, int minorCols,
+			int charCols) {
+		builder.append(nextLabel(), new JTextField(charCols));
+		for (int minorCol = 1; minorCol < minorCols; minorCol++) {
+			builder.append(new JTextField(charCols));
+		}
+	}
 
-    // Helper Code ************************************************************
+	// Helper Code ************************************************************
 
-    private static int nextInt = 0;
+	private static int nextInt = 0;
 
-    private String nextLabel() {
-        if (nextInt++ == LABELS.length - 1)
-            nextInt = 0;
-        return LABELS[nextInt];
-    }
-    
-    private static final String[] LABELS = {
-        "da/mm", "ds/mm", "kl/cm", "Weight/Kg", "Size/mm",
-        "da2/mm", "ds2/mm", "cv/cm", "pl/cm", "mt/mm",
-        "ep/mm", "cvn/mm", "nz/cm", "Power/kW", "Length/cm",
-        "R/cm", "D/mm", "PTI/kW"
-    };
+	private String nextLabel() {
+		if (nextInt++ == LABELS.length - 1)
+			nextInt = 0;
+		return LABELS[nextInt];
+	}
+
+	private static final String[] LABELS = { "da/mm", "ds/mm", "kl/cm",
+			"Weight/Kg", "Size/mm", "da2/mm", "ds2/mm", "cv/cm", "pl/cm",
+			"mt/mm", "ep/mm", "cvn/mm", "nz/cm", "Power/kW", "Length/cm",
+			"R/cm", "D/mm", "PTI/kW" };
 
 }

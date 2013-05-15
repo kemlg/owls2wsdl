@@ -40,51 +40,49 @@ import com.jgoodies.forms.util.DefaultUnitConverter;
 import junit.framework.TestCase;
 
 /**
- * Tests the unit conversion used by the Forms layout system. 
- *
+ * Tests the unit conversion used by the Forms layout system.
+ * 
  * @author Karsten Lentzsch
  * @version $Revision: 1.5 $
  */
 
 public final class UnitConversionTest extends TestCase {
-    
-    /**
-     * Checks that users can set a custom font for use in 
-     * the DefaultUnitConverter.
-     */ 
-    public void testSetDefaultDialogFont() {
-        DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
-        Font customFont = new Font("Serif", Font.PLAIN, 16);
-        duc.setDefaultDialogFont(customFont);
-    }
-    
-    
-    /**
-     * Checks that users can set a custom string for testing
-     * the average character width in the DefaultUnitConverter.
-     */
-    public void testSetAverageCharacterWidthTestString() {
-        DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
-        String customString = "Einen Vorsprung im Leben hat, " +
-                              "wer da anpackt, " +
-                              "wo die anderen erst einmal reden.";
-        duc.setAverageCharacterWidthTestString(customString);
-    }
-    
-    
-    /**
-     * Checks that a size with a value of 0 map to 0 px regardless
-     * which unit has been specified.
-     */
-    public void testZeroSizesMapToZeroPixels() {
-        Component component = new JLabel();
-        assertEquals("Centimeter to pixel", 0, Sizes.centimeterAsPixel(0.0d, component));
-        assertEquals("DluX to pixel",       0, Sizes.dialogUnitXAsPixel(0, component));
-        assertEquals("DluY to pixel",       0, Sizes.dialogUnitYAsPixel(0, component));
-        assertEquals("Inch to pixel",       0, Sizes.inchAsPixel      (0.0d, component));
-        assertEquals("Millimeter to pixel", 0, Sizes.millimeterAsPixel(0.0d, component));
-        assertEquals("Point to pixel",      0, Sizes.pointAsPixel     (0,    component));
-    }
-    
+
+	/**
+	 * Checks that users can set a custom font for use in the
+	 * DefaultUnitConverter.
+	 */
+	public void testSetDefaultDialogFont() {
+		DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
+		Font customFont = new Font("Serif", Font.PLAIN, 16);
+		duc.setDefaultDialogFont(customFont);
+	}
+
+	/**
+	 * Checks that users can set a custom string for testing the average
+	 * character width in the DefaultUnitConverter.
+	 */
+	public void testSetAverageCharacterWidthTestString() {
+		DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
+		String customString = "Einen Vorsprung im Leben hat, "
+				+ "wer da anpackt, " + "wo die anderen erst einmal reden.";
+		duc.setAverageCharacterWidthTestString(customString);
+	}
+
+	/**
+	 * Checks that a size with a value of 0 map to 0 px regardless which unit
+	 * has been specified.
+	 */
+	public void testZeroSizesMapToZeroPixels() {
+		Component component = new JLabel();
+		assertEquals("Centimeter to pixel", 0,
+				Sizes.centimeterAsPixel(0.0d, component));
+		assertEquals("DluX to pixel", 0, Sizes.dialogUnitXAsPixel(0, component));
+		assertEquals("DluY to pixel", 0, Sizes.dialogUnitYAsPixel(0, component));
+		assertEquals("Inch to pixel", 0, Sizes.inchAsPixel(0.0d, component));
+		assertEquals("Millimeter to pixel", 0,
+				Sizes.millimeterAsPixel(0.0d, component));
+		assertEquals("Point to pixel", 0, Sizes.pointAsPixel(0, component));
+	}
 
 }

@@ -39,92 +39,87 @@ import javax.swing.UIManager;
 /**
  * Consists only of static utility methods.
  * 
- * This class may be merged with the FormLayoutUtils extra - or not. * 
- *
+ * This class may be merged with the FormLayoutUtils extra - or not. *
+ * 
  * @author Karsten Lentzsch
  * @version $Revision: 1.2 $
  */
 public final class Utilities {
-    
-        
-    // Instance *************************************************************
-        
-    private Utilities() {
-        // Suppresses default constructor, ensuring non-instantiability.
-    }
-    
 
-    /**
-     * Lazily checks and answers whether the Aqua look&amp;feel is active.
-     * 
-     * @return true if the current look&amp;feel is Aqua
-     */
-    public static boolean isLafAqua() {
-        if (cachedIsLafAqua == null) {
-            cachedIsLafAqua = Boolean.valueOf(computeIsLafAqua());
-            ensureLookAndFeelChangeHandlerRegistered();
-        }
-        return cachedIsLafAqua.booleanValue();
-    }
-    
+	// Instance *************************************************************
 
-    // Caching and Lazily Computing the Laf State *****************************
-    
-    /**
-     * Holds the cached result of the Aqua l&amp;f check.
-     * Is invalidated by the <code>LookAndFeelChangeHandler</code>
-     * if the look&amp;feel changes.
-     */
-    private static Boolean cachedIsLafAqua;
-    
-    /**
-     * Describes whether the <code>LookAndFeelChangeHandler</code>
-     * has been registered with the <code>UIManager</code> or not.
-     * It is registered lazily when the first cached l&amp;f state is computed.
-     */
-    private static boolean lafChangeHandlerRegistered = false;
-    
-    private static synchronized void ensureLookAndFeelChangeHandlerRegistered() {
-        if (!lafChangeHandlerRegistered) {
-            UIManager.addPropertyChangeListener(new LookAndFeelChangeHandler());
-            lafChangeHandlerRegistered = true;
-        }
-    }
-    
-    
-    /**
-     * Computes and answers whether the Aqua look&amp;feel is active.
-     * 
-     * @return true if the current look&amp;feel is Aqua
-     */
-    private static boolean computeIsLafAqua() {
-        LookAndFeel laf = UIManager.getLookAndFeel();
-        return laf.getName().startsWith("Mac OS X Aqua");
-    }
+	private Utilities() {
+		// Suppresses default constructor, ensuring non-instantiability.
+	}
 
-    
-    /**
-     * Listens to changes of the Look and Feel and invalidates the cache.
-     */
-    private static final class LookAndFeelChangeHandler implements PropertyChangeListener {
-        
-        /**
-         * Invalidates the cached laf states, if the UIManager has fired 
-         * any property change event. Since we need to handle look&amp;feel 
-         * changes only, we check the event's property name to be 
-         * "lookAndFeel" or <code>null</code>. The check for null is necessary
-         * to handle the special event where property name, old and new value
-         * are all <code>null</code> to indicate that multiple properties
-         * have changed.
-         * 
-         * @param evt  describes the property change
-         */
-        public void propertyChange(PropertyChangeEvent evt) {
-            String propertyName = evt.getPropertyName();
-            if ((propertyName == null) || propertyName.equals("lookAndFeel")) {
-                cachedIsLafAqua = null;
-            }
-        }
-    }
-    
+	/**
+	 * Lazily checks and answers whether the Aqua look&amp;feel is active.
+	 * 
+	 * @return true if the current look&amp;feel is Aqua
+	 */
+	public static boolean isLafAqua() {
+		if (cachedIsLafAqua == null) {
+			cachedIsLafAqua = Boolean.valueOf(computeIsLafAqua());
+			ensureLookAndFeelChangeHandlerRegistered();
+		}
+		return cachedIsLafAqua.booleanValue();
+	}
+
+	// Caching and Lazily Computing the Laf State *****************************
+
+	/**
+	 * Holds the cached result of the Aqua l&amp;f check. Is invalidated by the
+	 * <code>LookAndFeelChangeHandler</code> if the look&amp;feel changes.
+	 */
+	private static Boolean cachedIsLafAqua;
+
+	/**
+	 * Describes whether the <code>LookAndFeelChangeHandler</code> has been
+	 * registered with the <code>UIManager</code> or not. It is registered
+	 * lazily when the first cached l&amp;f state is computed.
+	 */
+	private static boolean lafChangeHandlerRegistered = false;
+
+	private static synchronized void ensureLookAndFeelChangeHandlerRegistered() {
+		if (!lafChangeHandlerRegistered) {
+			UIManager.addPropertyChangeListener(new LookAndFeelChangeHandler());
+			lafChangeHandlerRegistered = true;
+		}
+	}
+
+	/**
+	 * Computes and answers whether the Aqua look&amp;feel is active.
+	 * 
+	 * @return true if the current look&amp;feel is Aqua
+	 */
+	private static boolean computeIsLafAqua() {
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		return laf.getName().startsWith("Mac OS X Aqua");
+	}
+
+	/**
+	 * Listens to changes of the Look and Feel and invalidates the cache.
+	 */
+	private static final class LookAndFeelChangeHandler implements
+			PropertyChangeListener {
+
+		/**
+		 * Invalidates the cached laf states, if the UIManager has fired any
+		 * property change event. Since we need to handle look&amp;feel changes
+		 * only, we check the event's property name to be "lookAndFeel" or
+		 * <code>null</code>. The check for null is necessary to handle the
+		 * special event where property name, old and new value are all
+		 * <code>null</code> to indicate that multiple properties have changed.
+		 * 
+		 * @param evt
+		 *            describes the property change
+		 */
+		public void propertyChange(PropertyChangeEvent evt) {
+			String propertyName = evt.getPropertyName();
+			if ((propertyName == null) || propertyName.equals("lookAndFeel")) {
+				cachedIsLafAqua = null;
+			}
+		}
+	}
+
 }

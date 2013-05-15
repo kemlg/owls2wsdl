@@ -38,208 +38,211 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticTheme;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 
-
-/** 
- * Describes most of the optional settings of the JGoodies Looks.
- * Used by the <code>DemoFrame</code> to configure the UI.
+/**
+ * Describes most of the optional settings of the JGoodies Looks. Used by the
+ * <code>DemoFrame</code> to configure the UI.
  * 
- * @author  Karsten Lentzsch
+ * @author Karsten Lentzsch
  * @version $Revision: 1.6 $
  * 
- * @see     com.jgoodies.looks.BorderStyle
- * @see     com.jgoodies.looks.HeaderStyle
- * @see     com.jgoodies.looks.Options
+ * @see com.jgoodies.looks.BorderStyle
+ * @see com.jgoodies.looks.HeaderStyle
+ * @see com.jgoodies.looks.Options
  */
 public final class Settings {
-    
-    private LookAndFeel selectedLookAndFeel;
 
-    private PlasticTheme selectedTheme;
+	private LookAndFeel selectedLookAndFeel;
 
-    private boolean useNarrowButtons;
+	private PlasticTheme selectedTheme;
 
-    private boolean tabIconsEnabled;
-    
-    private String plasticTabStyle;
-    
-    private boolean plasticHighContrastFocusEnabled;
+	private boolean useNarrowButtons;
 
-    private Boolean popupDropShadowEnabled;
-    
-    private HeaderStyle menuBarHeaderStyle;
+	private boolean tabIconsEnabled;
 
-    private BorderStyle menuBarPlasticBorderStyle;
+	private String plasticTabStyle;
 
-    private BorderStyle menuBarWindowsBorderStyle;
+	private boolean plasticHighContrastFocusEnabled;
 
-    private Boolean menuBar3DHint;
-        
-    private HeaderStyle toolBarHeaderStyle;
+	private Boolean popupDropShadowEnabled;
 
-    private BorderStyle toolBarPlasticBorderStyle;
+	private HeaderStyle menuBarHeaderStyle;
 
-    private BorderStyle toolBarWindowsBorderStyle;
+	private BorderStyle menuBarPlasticBorderStyle;
 
-    private Boolean toolBar3DHint;
+	private BorderStyle menuBarWindowsBorderStyle;
 
-    
-    // Instance Creation ******************************************************
+	private Boolean menuBar3DHint;
 
-    private Settings() {
-        // Override default constructor; prevents instantiability.
-    }
+	private HeaderStyle toolBarHeaderStyle;
 
-    public static Settings createDefault() {
-        Settings settings = new Settings();
-        settings.setSelectedLookAndFeel(new PlasticXPLookAndFeel());
-        settings.setSelectedTheme(PlasticLookAndFeel.createMyDefaultTheme());
-        settings.setUseNarrowButtons(true);
-        settings.setTabIconsEnabled(true);
-        settings.setPlasticTabStyle(PlasticLookAndFeel.TAB_STYLE_DEFAULT_VALUE);
-        settings.setPlasticHighContrastFocusEnabled(false);
-        settings.setPopupDropShadowEnabled(null);
-        settings.setMenuBarHeaderStyle(null);
-        settings.setMenuBarPlasticBorderStyle(null);
-        settings.setMenuBarWindowsBorderStyle(null);
-        settings.setMenuBar3DHint(null);
-        settings.setToolBarHeaderStyle(null);
-        settings.setToolBarPlasticBorderStyle(null);
-        settings.setToolBarWindowsBorderStyle(null);
-        settings.setToolBar3DHint(null);
-        return settings;
-    }
+	private BorderStyle toolBarPlasticBorderStyle;
 
+	private BorderStyle toolBarWindowsBorderStyle;
 
-    // Accessors **************************************************************
+	private Boolean toolBar3DHint;
 
-    public Boolean getMenuBar3DHint() {
-        return menuBar3DHint;
-    }
+	// Instance Creation ******************************************************
 
-    public void setMenuBar3DHint(Boolean menuBar3DHint) {
-        this.menuBar3DHint = menuBar3DHint;
-    }
+	private Settings() {
+		// Override default constructor; prevents instantiability.
+	}
 
-    public HeaderStyle getMenuBarHeaderStyle() {
-        return menuBarHeaderStyle;
-    }
+	public static Settings createDefault() {
+		Settings settings = new Settings();
+		settings.setSelectedLookAndFeel(new PlasticXPLookAndFeel());
+		settings.setSelectedTheme(PlasticLookAndFeel.createMyDefaultTheme());
+		settings.setUseNarrowButtons(true);
+		settings.setTabIconsEnabled(true);
+		settings.setPlasticTabStyle(PlasticLookAndFeel.TAB_STYLE_DEFAULT_VALUE);
+		settings.setPlasticHighContrastFocusEnabled(false);
+		settings.setPopupDropShadowEnabled(null);
+		settings.setMenuBarHeaderStyle(null);
+		settings.setMenuBarPlasticBorderStyle(null);
+		settings.setMenuBarWindowsBorderStyle(null);
+		settings.setMenuBar3DHint(null);
+		settings.setToolBarHeaderStyle(null);
+		settings.setToolBarPlasticBorderStyle(null);
+		settings.setToolBarWindowsBorderStyle(null);
+		settings.setToolBar3DHint(null);
+		return settings;
+	}
 
-    public void setMenuBarHeaderStyle(HeaderStyle menuBarHeaderStyle) {
-        this.menuBarHeaderStyle = menuBarHeaderStyle;
-    }
+	// Accessors **************************************************************
 
-    public BorderStyle getMenuBarPlasticBorderStyle() {
-        return menuBarPlasticBorderStyle;
-    }
+	public Boolean getMenuBar3DHint() {
+		return menuBar3DHint;
+	}
 
-    public void setMenuBarPlasticBorderStyle(BorderStyle menuBarPlasticBorderStyle) {
-        this.menuBarPlasticBorderStyle = menuBarPlasticBorderStyle;
-    }
+	public void setMenuBar3DHint(Boolean menuBar3DHint) {
+		this.menuBar3DHint = menuBar3DHint;
+	}
 
-    public BorderStyle getMenuBarWindowsBorderStyle() {
-        return menuBarWindowsBorderStyle;
-    }
+	public HeaderStyle getMenuBarHeaderStyle() {
+		return menuBarHeaderStyle;
+	}
 
-    public void setMenuBarWindowsBorderStyle(BorderStyle menuBarWindowsBorderStyle) {
-        this.menuBarWindowsBorderStyle = menuBarWindowsBorderStyle;
-    }
+	public void setMenuBarHeaderStyle(HeaderStyle menuBarHeaderStyle) {
+		this.menuBarHeaderStyle = menuBarHeaderStyle;
+	}
 
-    public Boolean isPopupDropShadowEnabled() {
-        return popupDropShadowEnabled;
-    }
+	public BorderStyle getMenuBarPlasticBorderStyle() {
+		return menuBarPlasticBorderStyle;
+	}
 
-    public void setPopupDropShadowEnabled(Boolean popupDropShadowEnabled) {
-        this.popupDropShadowEnabled = popupDropShadowEnabled;
-    }
+	public void setMenuBarPlasticBorderStyle(
+			BorderStyle menuBarPlasticBorderStyle) {
+		this.menuBarPlasticBorderStyle = menuBarPlasticBorderStyle;
+	}
 
-    public boolean isPlasticHighContrastFocusEnabled() {
-        return plasticHighContrastFocusEnabled;
-    }
+	public BorderStyle getMenuBarWindowsBorderStyle() {
+		return menuBarWindowsBorderStyle;
+	}
 
-    public void setPlasticHighContrastFocusEnabled(boolean plasticHighContrastFocusEnabled) {
-        this.plasticHighContrastFocusEnabled = plasticHighContrastFocusEnabled;
-    }
+	public void setMenuBarWindowsBorderStyle(
+			BorderStyle menuBarWindowsBorderStyle) {
+		this.menuBarWindowsBorderStyle = menuBarWindowsBorderStyle;
+	}
 
-    public String getPlasticTabStyle() {
-        return plasticTabStyle;
-    }
+	public Boolean isPopupDropShadowEnabled() {
+		return popupDropShadowEnabled;
+	}
 
-    public void setPlasticTabStyle(String plasticTabStyle) {
-        this.plasticTabStyle = plasticTabStyle;
-    }
+	public void setPopupDropShadowEnabled(Boolean popupDropShadowEnabled) {
+		this.popupDropShadowEnabled = popupDropShadowEnabled;
+	}
 
-    public LookAndFeel getSelectedLookAndFeel() {
-        return selectedLookAndFeel;
-    }
+	public boolean isPlasticHighContrastFocusEnabled() {
+		return plasticHighContrastFocusEnabled;
+	}
 
-    public void setSelectedLookAndFeel(LookAndFeel selectedLookAndFeel) {
-        this.selectedLookAndFeel = selectedLookAndFeel;
-    }
-    
-    public void setSelectedLookAndFeel(String selectedLookAndFeelClassName) {
-        try {
-            Class theClass = Class.forName(selectedLookAndFeelClassName);
-            setSelectedLookAndFeel((LookAndFeel) theClass.newInstance());
-        } catch (Exception e) {
-            System.out.println("Can't instantiate " + selectedLookAndFeelClassName);
-            e.printStackTrace();
-        }
-    }
+	public void setPlasticHighContrastFocusEnabled(
+			boolean plasticHighContrastFocusEnabled) {
+		this.plasticHighContrastFocusEnabled = plasticHighContrastFocusEnabled;
+	}
 
-    public PlasticTheme getSelectedTheme() {
-        return selectedTheme;
-    }
+	public String getPlasticTabStyle() {
+		return plasticTabStyle;
+	}
 
-    public void setSelectedTheme(PlasticTheme selectedTheme) {
-        this.selectedTheme = selectedTheme;
-    }
+	public void setPlasticTabStyle(String plasticTabStyle) {
+		this.plasticTabStyle = plasticTabStyle;
+	}
 
-    public boolean isTabIconsEnabled() {
-        return tabIconsEnabled;
-    }
+	public LookAndFeel getSelectedLookAndFeel() {
+		return selectedLookAndFeel;
+	}
 
-    public void setTabIconsEnabled(boolean tabIconsEnabled) {
-        this.tabIconsEnabled = tabIconsEnabled;
-    }
+	public void setSelectedLookAndFeel(LookAndFeel selectedLookAndFeel) {
+		this.selectedLookAndFeel = selectedLookAndFeel;
+	}
 
-    public Boolean getToolBar3DHint() {
-        return toolBar3DHint;
-    }
+	public void setSelectedLookAndFeel(String selectedLookAndFeelClassName) {
+		try {
+			Class<?> theClass = Class.forName(selectedLookAndFeelClassName);
+			setSelectedLookAndFeel((LookAndFeel) theClass.newInstance());
+		} catch (Exception e) {
+			System.out.println("Can't instantiate "
+					+ selectedLookAndFeelClassName);
+			e.printStackTrace();
+		}
+	}
 
-    public void setToolBar3DHint(Boolean toolBar3DHint) {
-        this.toolBar3DHint = toolBar3DHint;
-    }
+	public PlasticTheme getSelectedTheme() {
+		return selectedTheme;
+	}
 
-    public HeaderStyle getToolBarHeaderStyle() {
-        return toolBarHeaderStyle;
-    }
+	public void setSelectedTheme(PlasticTheme selectedTheme) {
+		this.selectedTheme = selectedTheme;
+	}
 
-    public void setToolBarHeaderStyle(HeaderStyle toolBarHeaderStyle) {
-        this.toolBarHeaderStyle = toolBarHeaderStyle;
-    }
+	public boolean isTabIconsEnabled() {
+		return tabIconsEnabled;
+	}
 
-    public BorderStyle getToolBarPlasticBorderStyle() {
-        return toolBarPlasticBorderStyle;
-    }
+	public void setTabIconsEnabled(boolean tabIconsEnabled) {
+		this.tabIconsEnabled = tabIconsEnabled;
+	}
 
-    public void setToolBarPlasticBorderStyle(BorderStyle toolBarPlasticBorderStyle) {
-        this.toolBarPlasticBorderStyle = toolBarPlasticBorderStyle;
-    }
+	public Boolean getToolBar3DHint() {
+		return toolBar3DHint;
+	}
 
-    public BorderStyle getToolBarWindowsBorderStyle() {
-        return toolBarWindowsBorderStyle;
-    }
+	public void setToolBar3DHint(Boolean toolBar3DHint) {
+		this.toolBar3DHint = toolBar3DHint;
+	}
 
-    public void setToolBarWindowsBorderStyle(BorderStyle toolBarWindowsBorderStyle) {
-        this.toolBarWindowsBorderStyle = toolBarWindowsBorderStyle;
-    }
+	public HeaderStyle getToolBarHeaderStyle() {
+		return toolBarHeaderStyle;
+	}
 
-    public boolean isUseNarrowButtons() {
-        return useNarrowButtons;
-    }
+	public void setToolBarHeaderStyle(HeaderStyle toolBarHeaderStyle) {
+		this.toolBarHeaderStyle = toolBarHeaderStyle;
+	}
 
-    public void setUseNarrowButtons(boolean useNarrowButtons) {
-        this.useNarrowButtons = useNarrowButtons;
-    }
+	public BorderStyle getToolBarPlasticBorderStyle() {
+		return toolBarPlasticBorderStyle;
+	}
+
+	public void setToolBarPlasticBorderStyle(
+			BorderStyle toolBarPlasticBorderStyle) {
+		this.toolBarPlasticBorderStyle = toolBarPlasticBorderStyle;
+	}
+
+	public BorderStyle getToolBarWindowsBorderStyle() {
+		return toolBarWindowsBorderStyle;
+	}
+
+	public void setToolBarWindowsBorderStyle(
+			BorderStyle toolBarWindowsBorderStyle) {
+		this.toolBarWindowsBorderStyle = toolBarWindowsBorderStyle;
+	}
+
+	public boolean isUseNarrowButtons() {
+		return useNarrowButtons;
+	}
+
+	public void setUseNarrowButtons(boolean useNarrowButtons) {
+		this.useNarrowButtons = useNarrowButtons;
+	}
 
 }

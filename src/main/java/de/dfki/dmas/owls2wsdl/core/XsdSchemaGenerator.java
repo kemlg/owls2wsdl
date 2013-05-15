@@ -18,23 +18,30 @@
 package de.dfki.dmas.owls2wsdl.core;
 
 // XSD generation
-import com.sun.org.apache.bcel.internal.generic.ISHL;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.Iterator;
-import java.io.IOException;
-import java.io.Writer;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import org.exolab.castor.xml.schema.writer.SchemaWriter;
-import org.exolab.castor.xml.schema.*;
-import org.exolab.castor.xml.schema.simpletypes.*;
-import org.exolab.castor.xml.schema.simpletypes.factory.*;
-import org.exolab.castor.xml.ValidationException;
-import org.exolab.castor.util.LocalConfiguration;
-import java.net.URI;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import org.exolab.castor.util.LocalConfiguration;
+import org.exolab.castor.xml.schema.Annotation;
+import org.exolab.castor.xml.schema.ComplexType;
+import org.exolab.castor.xml.schema.Documentation;
+import org.exolab.castor.xml.schema.ElementDecl;
+import org.exolab.castor.xml.schema.Facet;
+import org.exolab.castor.xml.schema.Group;
+import org.exolab.castor.xml.schema.Order;
+import org.exolab.castor.xml.schema.Particle;
+import org.exolab.castor.xml.schema.Schema;
+import org.exolab.castor.xml.schema.SchemaException;
+import org.exolab.castor.xml.schema.SchemaNames;
+import org.exolab.castor.xml.schema.SimpleType;
+import org.exolab.castor.xml.schema.SimpleTypesFactory;
+import org.exolab.castor.xml.schema.XMLType;
+import org.exolab.castor.xml.schema.writer.SchemaWriter;
 
 /**
  * Collects further code from AbstractDatatype and AbstractDatatypeKB
@@ -45,14 +52,16 @@ public class XsdSchemaGenerator {
 
 	private Schema schema;
 	private boolean hack_01; // Use only one element declaration
-	private HashSet hack_02; // For ABSTRACT elements reinit. hack01 (more
-								// element declarations)
-	private HashSet renamedTypes; // temp. registry to lookup renamed types:
-									// +"Type"
+	private HashSet<String> hack_02; // For ABSTRACT elements reinit. hack01
+										// (more
+	// element declarations)
+	private HashSet<AbstractDatatype> renamedTypes; // temp. registry to lookup
+													// renamed types:
+	// +"Type"
 
 	private boolean useHierarchyPattern; // subclassing
-	private boolean useAbstractSubstitution; // abstract superclasses
-	private boolean useAnonRestrictionTypes; //
+	// private boolean useAbstractSubstitution; // abstract superclasses
+	// private boolean useAnonRestrictionTypes; //
 	private boolean printOwlInformation; // to enhance matchmaking
 	private boolean printAnnotations; // standard xsd annotations
 
@@ -88,8 +97,8 @@ public class XsdSchemaGenerator {
 		this.schema.addNamespace("tns",
 				"http://schemas.dmas.dfki.de/venetianblind");
 		this.hack_01 = false;
-		this.hack_02 = new HashSet();
-		this.renamedTypes = new HashSet();
+		this.hack_02 = new HashSet<String>();
+		this.renamedTypes = new HashSet<AbstractDatatype>();
 		this.useHierarchyPattern = useHierarchyPattern;
 		this.printOwlInformation = false;
 		this.printAnnotations = false;
@@ -297,8 +306,8 @@ public class XsdSchemaGenerator {
 			// SimpleType simpleTypeWithValues =
 			// this.schema.createSimpleType(simpleTypeName+"Data", simpleType);
 
-			for (Iterator it = curtype.getIndividualRange().keySet().iterator(); it
-					.hasNext();) {
+			for (Iterator<String> it = curtype.getIndividualRange().keySet()
+					.iterator(); it.hasNext();) {
 				String individualURI = it.next().toString();
 				String value = this.extractLocalName(individualURI);
 				simpleType.addFacet(new Facet(Facet.ENUMERATION, value));
@@ -400,8 +409,8 @@ public class XsdSchemaGenerator {
 					curtype.getLocalName() + "DATA", simpleAnyType);
 		}
 
-		for (Iterator it = curtype.getIndividualRange().keySet().iterator(); it
-				.hasNext();) {
+		for (Iterator<String> it = curtype.getIndividualRange().keySet()
+				.iterator(); it.hasNext();) {
 			String individualURI = it.next().toString();
 			String value = this.extractLocalName(individualURI);
 			simpleDATAType.addFacet(new Facet(Facet.ENUMERATION, value));
@@ -557,12 +566,14 @@ public class XsdSchemaGenerator {
 
 		// collect documentation from previous used types (Bugfix, noch nicht in
 		// Castor 1.1!)
-		Enumeration annotations = this.schema.getAnnotations();
+		@SuppressWarnings("unchecked")
+		Enumeration<Annotation> annotations = this.schema.getAnnotations();
 		while (annotations.hasMoreElements()) {
-			Annotation annotation = (Annotation) annotations.nextElement();
-			Enumeration docs = annotation.getDocumentation();
+			Annotation annotation = annotations.nextElement();
+			@SuppressWarnings("unchecked")
+			Enumeration<Documentation> docs = annotation.getDocumentation();
 			while (docs.hasMoreElements()) {
-				Documentation doc = (Documentation) docs.nextElement();
+				Documentation doc = docs.nextElement();
 				System.out.println("Annotation /COLLECT DOC: "
 						+ doc.getSource());
 				currentSchemaAnnotation.addDocumentation(doc);
@@ -659,16 +670,19 @@ public class XsdSchemaGenerator {
 	}
 
 	private void changeElementTypesOfObsoleteTypes() {
+		@SuppressWarnings("unchecked")
 		Enumeration<ComplexType> cts = this.schema.getComplexTypes();
 		while (cts.hasMoreElements()) {
 			ComplexType complexType = cts.nextElement();
 			System.out.println("[xsdgen] process CT " + complexType.getName());
-			Enumeration particles = complexType.enumerate();
+			@SuppressWarnings("unchecked")
+			Enumeration<Object> particles = complexType.enumerate();
 			while (particles.hasMoreElements()) {
 				Object obj = particles.nextElement();
 				if (obj instanceof org.exolab.castor.xml.schema.Group) {
 					Group grp = (Group) obj;
-					Enumeration grpEnumeration = grp.enumerate();
+					@SuppressWarnings("unchecked")
+					Enumeration<Object> grpEnumeration = grp.enumerate();
 					while (grpEnumeration.hasMoreElements()) {
 						Object grpObj = grpEnumeration.nextElement();
 						if (grpObj instanceof org.exolab.castor.xml.schema.ElementDecl) {
@@ -771,9 +785,10 @@ public class XsdSchemaGenerator {
 		System.out.println("\n*********** " + "Properties for "
 				+ curtype.getLocalName() + " *********\n");
 
-		Iterator pit = curtype.getProperties(depth).iterator();
+		Iterator<AbstractDatatypeElement> pit = curtype.getProperties(depth)
+				.iterator();
 		while (pit.hasNext()) {
-			AbstractDatatypeElement elem = (AbstractDatatypeElement) pit.next();
+			AbstractDatatypeElement elem = pit.next();
 			System.out.println("=========================================");
 			System.out.println("[xsdgen] AbstractDatatypeElement: "
 					+ elem.toString());
@@ -795,10 +810,9 @@ public class XsdSchemaGenerator {
 			}
 
 			if (!elem.getRestrictions().isEmpty() && this.printAnnotations) {
-				for (Iterator it = elem.getRestrictions().iterator(); it
-						.hasNext();) {
-					AbstractDatatypeRestrictionElement resElem = (AbstractDatatypeRestrictionElement) it
-							.next();
+				for (Iterator<AbstractDatatypeRestrictionElement> it = elem
+						.getRestrictions().iterator(); it.hasNext();) {
+					AbstractDatatypeRestrictionElement resElem = it.next();
 					Annotation annotation = new Annotation();
 					Documentation doc = new Documentation();
 					doc.setSource("OWL Restriction "
@@ -898,8 +912,8 @@ public class XsdSchemaGenerator {
 				else if (elem.getRestrictedRange().size() >= 1) {
 					SimpleType simpleType = this.schema.createSimpleType(
 							elem.getLocalName() + "Type", baseType);
-					for (Iterator it = elem.getRestrictedRange().iterator(); it
-							.hasNext();) {
+					for (Iterator<String> it = elem.getRestrictedRange()
+							.iterator(); it.hasNext();) {
 						String rangeURI = it.next().toString();
 						System.out.println("[XSD GEN] RANGE: " + rangeURI);
 						String value = this.extractLocalName(rangeURI);
@@ -1045,10 +1059,9 @@ public class XsdSchemaGenerator {
 				// restrictionGroup.addElementDecl(isRestrictionElement);
 
 				if (this.schema.getComplexType(metatype.getLocalName()) == null) {
-					for (Iterator metaIt = metatype.getProperties().iterator(); metaIt
-							.hasNext();) {
-						AbstractDatatypeElement atypeElem = (AbstractDatatypeElement) metaIt
-								.next();
+					for (Iterator<AbstractDatatypeElement> metaIt = metatype
+							.getProperties().iterator(); metaIt.hasNext();) {
+						AbstractDatatypeElement atypeElem = metaIt.next();
 						if (atypeElem.getOwlSource().equals("ONPROPERTY")) {
 							// SimpleType onPropertyType =
 							// this.schema.createSimpleType(this.extractLocalName(atypeElem.getType()),
@@ -1149,9 +1162,9 @@ public class XsdSchemaGenerator {
 							.get(elem.getType()).getProperties(this.depth)
 							.isEmpty()) {
 						// searching for meta information in restriction list
-						for (Iterator it = elem.getRestrictions().iterator(); it
-								.hasNext();) {
-							AbstractDatatypeRestrictionElement restriction = (AbstractDatatypeRestrictionElement) it
+						for (Iterator<AbstractDatatypeRestrictionElement> it = elem
+								.getRestrictions().iterator(); it.hasNext();) {
+							AbstractDatatypeRestrictionElement restriction = it
 									.next();
 							if (restriction.getRestrictionType().equals(
 									"isFunctional")) {
@@ -1181,9 +1194,9 @@ public class XsdSchemaGenerator {
 						}
 
 						SimpleTypesFactory stf = new SimpleTypesFactory();
-						SimpleType simpleAnyType = stf
-								.getBuiltInType(this.schema
-										.getBuiltInTypeName(SimpleTypesFactory.ANYURI_TYPE));
+						// SimpleType simpleAnyType = stf
+						// .getBuiltInType(this.schema
+						// .getBuiltInTypeName(SimpleTypesFactory.ANYURI_TYPE));
 						SimpleType simpleType = null;
 
 						//
@@ -1232,8 +1245,9 @@ public class XsdSchemaGenerator {
 							simpleType = this.schema.createSimpleType(
 									restrictedSimpleTypeName, baseType);
 
-							for (Iterator it = elem.getRestrictedRange()
-									.iterator(); it.hasNext();) {
+							for (Iterator<String> it = elem
+									.getRestrictedRange().iterator(); it
+									.hasNext();) {
 								// System.out.println("[XSD GEN] RANGE: "+elem.getRestrictedRange().get(i).toString());
 								// String value =
 								// this.extractLocalName(elem.getRestrictedRange().get(i).toString());
@@ -1376,8 +1390,8 @@ public class XsdSchemaGenerator {
 							simpleType = this.schema.createSimpleType(
 									elem.getLocalTypeName(), baseType);
 						}
-						for (Iterator it = elem.getRestrictedRange().iterator(); it
-								.hasNext();) {
+						for (Iterator<String> it = elem.getRestrictedRange()
+								.iterator(); it.hasNext();) {
 							// System.out.println("[XSD GEN] RANGE: "+elem.getRestrictedRange().get(i).toString());
 							// String value =
 							// this.extractLocalName(elem.getRestrictedRange().get(i).toString());
@@ -1528,7 +1542,7 @@ public class XsdSchemaGenerator {
 	 *            The AbstractDatatype object that is used to build an element
 	 */
 	public void toXSD(AbstractDatatype curtype) throws SchemaException {
-		ArrayList dependencies = new ArrayList();
+		ArrayList<AbstractDatatype> dependencies = new ArrayList<AbstractDatatype>();
 		System.out.println();
 		System.out.println("[xsdgen] to XSD: " + curtype.getUrl());
 		System.out.println("[xsdgen] to XSD, depth: " + this.depth);
@@ -1972,16 +1986,19 @@ public class XsdSchemaGenerator {
 
 			if (DEBUGFLAG) {
 				System.out.println("[xsdgen] SCHEMA CONTENT =================");
-				Enumeration allElDecls = this.schema.getElementDecls();
+				@SuppressWarnings("unchecked")
+				Enumeration<ElementDecl> allElDecls = this.schema
+						.getElementDecls();
 				while (allElDecls.hasMoreElements()) {
 					System.out.println("[xsdgen] ELEM: "
 							+ ((ElementDecl) allElDecls.nextElement())
 									.getName());
 				}
 
-				Enumeration cte = this.schema.getComplexTypes();
+				@SuppressWarnings("unchecked")
+				Enumeration<ComplexType> cte = this.schema.getComplexTypes();
 				while (cte.hasMoreElements()) {
-					ComplexType temp = (ComplexType) cte.nextElement();
+					ComplexType temp = cte.nextElement();
 					System.out.println("[xsdgen] CT " + temp.getName());
 				}
 			}
@@ -1995,9 +2012,8 @@ public class XsdSchemaGenerator {
 				System.out
 						.println("=======================================================================");
 				System.out.println("REKURSION with "
-						+ ((AbstractDatatype) dependencies.get(i))
-								.getLocalName());
-				this.toXSD((AbstractDatatype) dependencies.get(i));
+						+ dependencies.get(i).getLocalName());
+				this.toXSD(dependencies.get(i));
 			}
 		}
 	}

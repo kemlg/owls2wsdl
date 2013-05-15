@@ -7,23 +7,22 @@
 package org.tigris.lazer;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
 public class BlockCommentTokenType extends CommentTokenType {
-    
-    static private BlockCommentTokenType INSTANCE = 
-        new BlockCommentTokenType();
-    
-    /** Creates a new instance of CommentToken */
-    private BlockCommentTokenType() {
-    }
-    
-    static public BlockCommentTokenType getInstance() {
-        return INSTANCE;
-    }
 
-    public String toString() {
-        return "BC";
-    }
+	static private BlockCommentTokenType INSTANCE = new BlockCommentTokenType();
+
+	/** Creates a new instance of CommentToken */
+	private BlockCommentTokenType() {
+	}
+
+	static public BlockCommentTokenType getInstance() {
+		return INSTANCE;
+	}
+
+	public String toString() {
+		return "BC";
+	}
 }

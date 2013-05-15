@@ -20,25 +20,28 @@ package de.dfki.dmas.owls2wsdl.gui.models;
 import javax.swing.table.*;
 
 /**
- *
+ * 
  * @author Oliver
  */
-public class ProjectServiceDependencyTypesTableColumnModel extends DefaultTableColumnModel
-{
-    public static final String[] COLHEADS = {
-        "#", "URI of type", "missing?" };
-    
-    public static final int[] COLHEADWIDTHS = {
-        50, 400, 50  };    
-    
-    /** Creates a new instance of ProjectServiceDependencyTypesTableColumnModel */
-    public ProjectServiceDependencyTypesTableColumnModel() {
-                super();
-        for(int i=0; i<COLHEADS.length; ++i) {
-            TableColumn col = new TableColumn(i, COLHEADWIDTHS[i]);
-            col.setHeaderValue(COLHEADS[i]);
-            addColumn(col);
-        }
-    }
-    
+public class ProjectServiceDependencyTypesTableColumnModel extends
+		DefaultTableColumnModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5187533153377428050L;
+
+	public static final String[] COLHEADS = { "#", "URI of type", "missing?" };
+
+	public static final int[] COLHEADWIDTHS = { 50, 400, 50 };
+
+	/** Creates a new instance of ProjectServiceDependencyTypesTableColumnModel */
+	public ProjectServiceDependencyTypesTableColumnModel() {
+		super();
+		for (int i = 0; i < COLHEADS.length; ++i) {
+			TableColumn col = new TableColumn(i, COLHEADWIDTHS[i]);
+			col.setHeaderValue(COLHEADS[i]);
+			addColumn(col);
+		}
+	}
+
 }

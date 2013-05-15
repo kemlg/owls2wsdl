@@ -18,22 +18,26 @@
 
 package de.dfki.dmas.owls2wsdl.gui.models;
 
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
 
-public class RegisteredDatatypeElementTableColumnModel extends DefaultTableColumnModel
-{
-    public static final String[] COLHEADS = {
-        "Restriction", "Values" };
-    
-    public static final int[] COLHEADWIDTHS = {
-        90, 398 };
-    
-    public RegisteredDatatypeElementTableColumnModel() {
-        super();
-        for(int i=0; i<COLHEADS.length; ++i) {
-            TableColumn col = new TableColumn(i, COLHEADWIDTHS[i]);
-            col.setHeaderValue(COLHEADS[i]);
-            addColumn(col);
-        }
-    }
+public class RegisteredDatatypeElementTableColumnModel extends
+		DefaultTableColumnModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4017158269915810117L;
+
+	public static final String[] COLHEADS = { "Restriction", "Values" };
+
+	public static final int[] COLHEADWIDTHS = { 90, 398 };
+
+	public RegisteredDatatypeElementTableColumnModel() {
+		super();
+		for (int i = 0; i < COLHEADS.length; ++i) {
+			TableColumn col = new TableColumn(i, COLHEADWIDTHS[i]);
+			col.setHeaderValue(COLHEADS[i]);
+			addColumn(col);
+		}
+	}
 }

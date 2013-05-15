@@ -7,23 +7,22 @@
 package org.tigris.lazer;
 
 /**
- *
+ * 
  * @author Bob Tarling
  */
 public class OperatorTokenType extends CodeTokenType {
-    
-    static private OperatorTokenType INSTANCE = 
-        new OperatorTokenType();
-    
-    /** Creates a new instance of CommentToken */
-    private OperatorTokenType() {
-    }
-    
-    static public OperatorTokenType getInstance() {
-        return INSTANCE;
-    }
 
-    public String toString() {
-        return "OP";
-    }
+	static private OperatorTokenType INSTANCE = new OperatorTokenType();
+
+	/** Creates a new instance of CommentToken */
+	private OperatorTokenType() {
+	}
+
+	static public OperatorTokenType getInstance() {
+		return INSTANCE;
+	}
+
+	public String toString() {
+		return "OP";
+	}
 }

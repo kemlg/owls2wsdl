@@ -63,62 +63,63 @@ import java.util.List;
 
 public class ServiceInfo {
 
-    /** The service name */
-    String name = "";
+	/** The service name */
+	String name = "";
 
-    /** The list of operations that this service defines. */
-    List operations = new ArrayList();
+	/** The list of operations that this service defines. */
+	List<OperationInfo> operations = new ArrayList<OperationInfo>();
 
-    /**
-     * Constructor
-     */
-    public ServiceInfo() {
-    }
+	/**
+	 * Constructor
+	 */
+	public ServiceInfo() {
+	}
 
-    /**
-     * Sets the name of the service
-     * 
-     * @param value
-     *            The name of the service
-     */
-    public void setName(String value) {
-        name = value;
-    }
+	/**
+	 * Sets the name of the service
+	 * 
+	 * @param value
+	 *            The name of the service
+	 */
+	public void setName(String value) {
+		name = value;
+	}
 
-    /**
-     * Gets the name of the service
-     * 
-     * @return The name of the service is returned
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the name of the service
+	 * 
+	 * @return The name of the service is returned
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Add an ooperation info object to this service definition
-     * 
-     * @param operation
-     *            The operation to add to this service definition
-     */
-    public void addOperation(OperationInfo operation) {
-        operations.add(operation);
-    }
+	/**
+	 * Add an ooperation info object to this service definition
+	 * 
+	 * @param operation
+	 *            The operation to add to this service definition
+	 */
+	public void addOperation(OperationInfo operation) {
+		operations.add(operation);
+	}
 
-    /**
-     * Returs the operations defined by this service
-     * 
-     * @return an Iterator that can be used to iterate the operations defined by this service
-     */
-    public Iterator getOperations() {
-        return operations.iterator();
-    }
+	/**
+	 * Returs the operations defined by this service
+	 * 
+	 * @return an Iterator that can be used to iterate the operations defined by
+	 *         this service
+	 */
+	public Iterator<OperationInfo> getOperations() {
+		return operations.iterator();
+	}
 
-    /**
-     * Override toString to return the name of the service
-     * 
-     * @return The name of the service is returned
-     */
-    public String toString() {
-        return getName();
-    }
+	/**
+	 * Override toString to return the name of the service
+	 * 
+	 * @return The name of the service is returned
+	 */
+	public String toString() {
+		return getName();
+	}
 }

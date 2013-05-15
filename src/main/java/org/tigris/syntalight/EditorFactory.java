@@ -8,12 +8,12 @@ package org.tigris.syntalight;
 
 /**
  * @author BTARLING
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class EditorFactory {
 
-    public static void main(String[] args) {
-    }
+	public static void main(String[] args) {
+	}
 }
