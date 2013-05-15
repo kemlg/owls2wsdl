@@ -36,7 +36,6 @@ import com.hp.hpl.jena.graph.query.QueryHandler;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.ontology.*;
 import com.hp.hpl.jena.ontology.impl.*;
-import com.hp.hpl.jena.ontology.event.OntEventManager;
 import com.hp.hpl.jena.shared.Command;
 import com.hp.hpl.jena.shared.ReificationStyle;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -46,7 +45,6 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.datatypes.BaseDatatype;
 import com.hp.hpl.jena.vocabulary.*;
 import com.hp.hpl.jena.reasoner.*;
-import com.hp.hpl.jena.reasoner.dig.*; // RACER
 import com.hp.hpl.jena.reasoner.rulesys.RDFSRuleReasonerFactory;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 import org.mindswap.owl.OWLIndividual;

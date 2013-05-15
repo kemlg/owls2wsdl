@@ -40,7 +40,6 @@ import org.mindswap.owl.OWLOntology;
 */
 
 import com.hp.hpl.jena.ontology.impl.OntologyImpl;
-import com.hp.hpl.jena.reasoner.rulesys.impl.oldCode.OWLExptRuleReasoner;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.OutputStreamWriter;
