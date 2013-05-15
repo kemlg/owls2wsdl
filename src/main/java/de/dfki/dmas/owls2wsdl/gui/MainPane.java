@@ -19,6 +19,7 @@ package de.dfki.dmas.owls2wsdl.gui;
 
 import de.dfki.dmas.owls2wsdl.core.AbstractDatatype;
 import de.dfki.dmas.owls2wsdl.core.AbstractDatatypeKB; // import static ab 1.5
+import de.dfki.dmas.owls2wsdl.core.AbstractService;
 import de.dfki.dmas.owls2wsdl.gui.models.AbstractDatatypeListModel;
 import de.dfki.dmas.owls2wsdl.gui.models.ServiceListModel;
 
@@ -31,7 +32,6 @@ import java.awt.Color;
 //import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ChangeListener;
@@ -72,7 +72,7 @@ final class MainPane implements ChangeListener, Observer
     private SimpleInternalFrame sif_output;
     
     protected ServiceListModel              serviceListModel;
-    protected JList                         serviceList;
+    protected JList<AbstractService>        serviceList;
     
     protected AbstractDatatypeListModel     datatypeListModel;    
     protected JList                         datatypeList;    
@@ -136,7 +136,7 @@ final class MainPane implements ChangeListener, Observer
 //            }
 //        }); 
         
-        serviceList = new JList(serviceListModel);        
+        serviceList = new JList<AbstractService>(serviceListModel);        
         serviceList.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         serviceList.addListSelectionListener( new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
@@ -150,7 +150,7 @@ final class MainPane implements ChangeListener, Observer
 //                            }
                     }
                     else if(serviceList.getSelectedValues().length == 1) {
-                        RuntimeModel.getInstance().setSelectedService(((ServiceListModel)serviceList.getModel()).getAbstractServiceAt(serviceList.getSelectedIndex()));
+                        RuntimeModel.getInstance().setSelectedService(((ServiceListModel)serviceList.getModel()).getElementAt(serviceList.getSelectedIndex()));
                         RuntimeModel.getInstance().setStatusAndNotify("RUNTIME", RuntimeModel.SINGLE_SERVICE_SELECTED, "single service");
                         // sdp.updateServiceDetailPanel();  // obsolete due to the usage of the Observable pattern.
                     }
@@ -247,12 +247,12 @@ final class MainPane implements ChangeListener, Observer
         horizontalSplitComponent.revalidate();
     }
     
-    public Vector getSelectedServicesList() {
-        Vector selectedAbstractServices = new Vector();
+    public Vector<AbstractService> getSelectedServicesList() {
+        Vector<AbstractService> selectedAbstractServices = new Vector<AbstractService>();
         int selectionIndex = -1;
         for(int i=0; i<this.serviceList.getSelectedIndices().length; i++) {
             selectionIndex = this.serviceList.getSelectedIndices()[i];
-            selectedAbstractServices.add( ((ServiceListModel)serviceList.getModel()).getAbstractServiceAt(selectionIndex) );
+            selectedAbstractServices.add( ((ServiceListModel)serviceList.getModel()).getElementAt(selectionIndex) );
         }
         return selectedAbstractServices;
     }

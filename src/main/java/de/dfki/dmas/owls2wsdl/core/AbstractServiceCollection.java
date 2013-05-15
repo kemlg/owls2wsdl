@@ -31,41 +31,50 @@ import java.io.File;
  */
 public class AbstractServiceCollection implements java.io.Serializable {
     
-    private Vector _serviceCollection;
-    private int    _count10;
-    private int    _count11;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6035758993387299717L;
+	
+	private Vector<AbstractService> _serviceCollection;
+    private int    					_count10;
+    private int    					_count11;
         
     /** Creates a new instance of AbstractServiceCollection */
     public AbstractServiceCollection() {
-        this._serviceCollection = new Vector();
+        this._serviceCollection = new Vector<AbstractService>();
     }
     
-    public Vector getServiceCollection() {
+    public Vector<AbstractService> getServiceCollection() {
         return this._serviceCollection;        
     }
     public int getCount10() { return this._count10; }
     public int getCount11() { return this._count11; }    
     
-    public void setServiceCollection(Vector collection) {
+    public void setServiceCollection(Vector<AbstractService> collection) {
         this._serviceCollection = collection;
     }
     public void setCount10(int count) { this._count10 = count; }
     public void setCount11(int count) { this._count11 = count; }
     
     public void addAbstractService(AbstractService service) {
-        boolean NEW_SERVICE = true;
-        for(Iterator it=this._serviceCollection.iterator(); it.hasNext(); ) {
-            if(service.getBase().equals( ((AbstractService)it.next()).getBase() )) {
-                NEW_SERVICE = false;
-            }
-        }
-        if(NEW_SERVICE) {
+//        boolean NEW_SERVICE = true;
+//        for(Iterator<AbstractService> it=this._serviceCollection.iterator(); it.hasNext(); ) {
+//        	AbstractService oldService = it.next();
+//        	System.out.println("Old service base: " + oldService.getBase());
+//        	System.out.println("New service base: " + service.getBase());
+//        	
+//            if(service.getBase().equals( oldService.getBase() )) {
+//                NEW_SERVICE = false;
+//            }
+//        }
+//        if(NEW_SERVICE) {
             if(service.getVersion().equals("1.0"))
                 this._count10++;
             else if(service.getVersion().equals("1.1"))
                 this._count11++;
             this._serviceCollection.add(service);
-        }
+//        }
     }
     
     public AbstractService getAbstractService(int pos) {
@@ -82,9 +91,11 @@ public class AbstractServiceCollection implements java.io.Serializable {
         return null;
     }
        
-    public void addAbstractServiceList(Vector listofServices) {
-        for(Iterator it=listofServices.iterator(); it.hasNext(); ) {
-            this.addAbstractService((AbstractService)it.next());
+    public void addAbstractServiceList(Vector<AbstractService> listofServices) {
+        for(Iterator<AbstractService> it=listofServices.iterator(); it.hasNext(); ) {
+        	AbstractService aService = it.next();
+        	System.out.println("Adding: " + aService.getName());
+            this.addAbstractService(aService);
         }
     }
     
@@ -120,9 +131,9 @@ public class AbstractServiceCollection implements java.io.Serializable {
         this._count11 += serviceCollection.getCount11();
     }
     
-    public Vector getParameterTypes() {
+    public Vector<AbstractService> getParameterTypes() {
         Vector datatypeList = new Vector();
-        for(Iterator it = this._serviceCollection.iterator(); it.hasNext(); ) {
+        for(Iterator<AbstractService> it = this._serviceCollection.iterator(); it.hasNext(); ) {
             AbstractService aService = (AbstractService)it.next();
             for(Iterator paramIt = aService.getInputParameter().iterator(); paramIt.hasNext(); ) {
                 AbstractServiceParameter param = (AbstractServiceParameter)paramIt.next();
@@ -141,14 +152,14 @@ public class AbstractServiceCollection implements java.io.Serializable {
     }
     
     public void printData() {
-        for(Iterator it = this._serviceCollection.iterator(); it.hasNext(); ) {
-            System.out.println( ((AbstractService)it.next()).toString() );
+        for(Iterator<AbstractService> it = this._serviceCollection.iterator(); it.hasNext(); ) {
+            System.out.println( it.next().toString() );
         }        
     }
     
     public void printFullData() {
-        for(Iterator it = this._serviceCollection.iterator(); it.hasNext(); ) {
-            ((AbstractService)it.next()).printInfo();
+        for(Iterator<AbstractService> it = this._serviceCollection.iterator(); it.hasNext(); ) {
+            it.next().printInfo();
         }
     }
     
@@ -160,8 +171,8 @@ public class AbstractServiceCollection implements java.io.Serializable {
      */
     public int[] getTranslateableCount() {
         int[] c = {0,0};
-        for(Iterator it=this._serviceCollection.iterator(); it.hasNext(); ) {
-            AbstractService aService = (AbstractService)it.next();
+        for(Iterator<AbstractService> it=this._serviceCollection.iterator(); it.hasNext(); ) {
+            AbstractService aService = it.next();
             
             if( aService.getVersion().equals("1.0") && aService.istranslatable() ) {
                 c[0]++;
@@ -204,11 +215,11 @@ public class AbstractServiceCollection implements java.io.Serializable {
     }
 }
 
-class AbstractServiceComparer implements Comparator {
-        public int compare(Object obj1, Object obj2)
+class AbstractServiceComparer implements Comparator<AbstractService> {
+        public int compare(AbstractService obj1, AbstractService obj2)
         {
-                String s1 = ((AbstractService)obj1).getName();
-                String s2 = ((AbstractService)obj2).getName();
+                String s1 = obj1.getName();
+                String s2 = obj2.getName();
 
                 return s1.compareTo(s2);
         }

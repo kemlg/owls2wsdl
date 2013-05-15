@@ -18,6 +18,7 @@
 
 package de.dfki.dmas.owls2wsdl.gui;
 
+import de.dfki.dmas.owls2wsdl.core.AbstractService;
 import de.dfki.dmas.owls2wsdl.gui.models.ServiceListModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -63,7 +64,7 @@ public class ServiceOverviewPanel extends JPanel  {
         headLabel = new JLabel("OWLS Services", JLabel.CENTER);
         
         serviceListModel    = new ServiceListModel();        
-        serviceList         = new JList(serviceListModel);
+        serviceList         = new JList<AbstractService>(serviceListModel);
         serviceList.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
         leftScrollPanel  = new JScrollPane();
@@ -97,7 +98,7 @@ public class ServiceOverviewPanel extends JPanel  {
                                 System.out.println("MANY SERVICES SELECTED");
                             }
                             else {
-                                System.out.println(">>>> "+ ((ServiceListModel)serviceList.getModel()).getAbstractServiceAt(serviceList.getSelectedIndex()));
+                                System.out.println(">>>> "+ ((ServiceListModel)serviceList.getModel()).getElementAt(serviceList.getSelectedIndex()));
                                 //detailViewPanel.updatePanel( ((ServiceListModel)serviceList.getModel()).getAbstractServiceAt(serviceList.getSelectedIndex()) );
                                 //jSplitPane1Main.setRightComponent(detailViewPanel);
                             }

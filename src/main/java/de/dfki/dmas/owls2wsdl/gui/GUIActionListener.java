@@ -147,7 +147,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
                 Vector<AbstractService> aserviceList = new Vector<AbstractService>();
                 
                 for(int i=0; i<selectedIndices.length; i++) {                    
-                    AbstractService aservice = this.mainWindowRef.getMainPane().serviceListModel.getAbstractServiceAt(selectedIndices[i]);                    
+                    AbstractService aservice = this.mainWindowRef.getMainPane().serviceListModel.getElementAt(selectedIndices[i]);                    
                     System.out.println("IDX: "+selectedIndices[i]+" Service: "+aservice.getID()+" ("+System.identityHashCode(aservice)+")");
                     aserviceList.add(aservice);
                 }
@@ -238,7 +238,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
             exportFrame.setVisible(true);
             exportFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         }
-        else if(e.getActionCommand().equals(this.SHOW_CONFIGURATIONFRAME)) {
+        else if(e.getActionCommand().equals(SHOW_CONFIGURATIONFRAME)) {
             if(RuntimeModel.getInstance().getProject()!=null) {                
                 //
                 // CONFIGURATION FRAME
@@ -263,9 +263,9 @@ public class GUIActionListener implements ActionListener, WindowListener {
 //                    JOptionPane.ERROR_MESSAGE);
             }
         }
-        else if(e.getActionCommand().equals(this.LOAD_SERVICE_INFORMATION)) 
+        else if(e.getActionCommand().equals(LOAD_SERVICE_INFORMATION)) 
         {
-            System.out.println("[.] process "+this.LOAD_SERVICE_INFORMATION);
+            System.out.println("[.] process "+LOAD_SERVICE_INFORMATION);
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Select XML file.");
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -565,7 +565,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
                 }
             }
         }
-        else if(e.getActionCommand().equals(this.LOAD_OWLS_FILES)) {
+        else if(e.getActionCommand().equals(LOAD_OWLS_FILES)) {
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Select one or more OWL-S service definitions");            
             fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -596,7 +596,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
             OWLS2WSDLSettings.getInstance().setProperty("SERVICE_DIR", fc.getCurrentDirectory().getAbsolutePath());
             OWLS2WSDLSettings.getInstance().addValue("recent_service_dirs", fc.getCurrentDirectory().getAbsolutePath());
         }
-        else if(e.getActionCommand().equals(this.IMPORT_ONTOLOGY_URL)) {
+        else if(e.getActionCommand().equals(IMPORT_ONTOLOGY_URL)) {
             OpenOntologyUrlDialog dl = new OpenOntologyUrlDialog(mainWindowRef, "Enter URL of Ontology", true);
             dl.setVisible(true);            
             String url = dl.getReturnVal();            

@@ -27,17 +27,18 @@ import de.dfki.dmas.owls2wsdl.core.Project;
  *
  * @author Oliver Fourman
  */
-public class ServiceListModel extends AbstractListModel {
-    
-    //private AbstractServiceCollection serviceCollection;
-    
-    private Project projectRef;
-    private Vector services;
+public class ServiceListModel extends AbstractListModel<AbstractService> {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6110952089503426926L;
+	
+    private Vector<AbstractService> services;
     
     /** Creates a new instance of ServiceListModel */
     public ServiceListModel() {
         System.out.println("[C] ServiceListModel");
-        this.services = new Vector();
+        this.services = new Vector<AbstractService>();
     }
     
     public ServiceListModel(Project project) {
@@ -45,7 +46,7 @@ public class ServiceListModel extends AbstractListModel {
             this.services = project.getAbstractServiceCollection().getServiceCollection();
         }
         else {
-            this.services = new Vector();
+            this.services = new Vector<AbstractService>();
         }
     }
     
@@ -74,20 +75,16 @@ public class ServiceListModel extends AbstractListModel {
         this.services.addElement(aService);
     }
     
-    public Object getElementAt(int i) {
+    public AbstractService getElementAt(int i) {
         //return RuntimeModel.getInstance().project.getAbstractServiceCollection().getAbstractService(i).getName();
-        return ((AbstractService)this.services.get(i)).getName();
+        return services.get(i);
     }    
         
-    public AbstractService getAbstractServiceAt(int i) {
-        return (AbstractService)this.services.get(i);
-    }
-    
-    public Vector getServiceData() {
+    public Vector<AbstractService> getServiceData() {
         return this.services;
     }
 
     public int getSize() {
         return this.services.size();
-    }   
+    }
 }

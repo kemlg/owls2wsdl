@@ -39,33 +39,21 @@ import org.mindswap.owls.grounding.AtomicGrounding;
 import org.mindswap.owl.OWLOntology;
 */
 
-import com.hp.hpl.jena.ontology.impl.OntologyImpl;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.OutputStreamWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.MalformedURLException;
-import java.io.FileNotFoundException;
-
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
 import java.util.Vector;
-import java.util.Arrays;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
-import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.*;
-import org.apache.xerces.dom.*;
 import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -175,9 +163,9 @@ public class ServiceParser
 //        validator.validate(service.getOntology());
 //    }
     
-    public Vector parse(URI path) throws Exception 
+    public Vector<AbstractService> parse(URI path) throws Exception 
     {
-        Vector collectedServices = new Vector();
+        Vector<AbstractService> collectedServices = new Vector<AbstractService>();
         if(path.getScheme().equals("http")) {
             this.pathList.add(path);
         }
@@ -194,10 +182,13 @@ public class ServiceParser
         System.out.println("GESAMT: "+pathList.size());
         
         for(Iterator it = this.pathList.iterator(); it.hasNext();) {
-            String curPath = it.next().toString();
-            //System.out.println("PARSING: "+curPath.substring(curPath.lastIndexOf('/')+1,curPath.length())); 
+            String curPathItem = it.next().toString();
+            //System.out.println("PARSING: "+curPathItem.substring(curPathItem.lastIndexOf('/')+1,curPathItem.length())); 
             //this.parseWithOWLSApi(curPath);
-            collectedServices.add(this.parseWithDOM(curPath));
+            AbstractService	servs[] = parseWithDOM(curPathItem);
+            for(int i=0;i<servs.length;i++) {
+                collectedServices.add(servs[i]);
+            }
         }
         this.pathList.removeAllElements();
         return collectedServices;
@@ -241,7 +232,10 @@ public class ServiceParser
             String curPathItem = it.next().toString();
             //System.out.println("PARSING: "+curPathItem.substring(curPathItem.lastIndexOf('/')+1,curPathItem.length())); 
             //this.parseWithOWLSApi(curPath);
-            collectedServices.add(this.parseWithDOM(curPathItem));
+            AbstractService	servs[] = parseWithDOM(curPathItem);
+            for(int i=0;i<servs.length;i++) {
+                collectedServices.add(servs[i]);
+            }
         }
         this.pathList.removeAllElements();
         return collectedServices;
@@ -319,10 +313,13 @@ public class ServiceParser
     /*
      *  // DOM parsing =========================================================
      */
-    public AbstractService parseWithDOM(String curPath) 
+    public AbstractService[] parseWithDOM(String curPath) 
     {   
-        AbstractService curServ = new AbstractService();
-        curServ.setFilename( curPath );
+        AbstractService servs[];
+        AbstractService curServ;
+        NodeList		nodes, nodesService, nodesGlobal;
+        int				i, nService;
+        Document		docService;
         
         DOMParser domp = new DOMParser();
         
@@ -332,122 +329,149 @@ public class ServiceParser
             domp.parse(curPath);
             Document doc = domp.getDocument();
             
-            NodeList nodes = doc.getElementsByTagName("rdf:RDF");
-            //System.out.println("rdf:RDF Namespace (attributes): "+nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                NamedNodeMap curAttrMap = nodes.item(i).getAttributes();
-                for(int j=0; j<curAttrMap.getLength();j++) {
-                    //System.out.println("INFO: "+curAttrMap.item(j).getNodeName()+" = "+curAttrMap.item(j).getNodeValue());
-                    curServ.addNamespaceEntry(curAttrMap.item(j).getNodeName(), curAttrMap.item(j).getNodeValue());
-                    if(curAttrMap.item(j).getNodeValue().equals("http://www.daml.org/services/owl-s/1.0/Service.owl#")) {
-                        curServ.setVersion("1.0");
-                    }
-                    else if(curAttrMap.item(j).getNodeValue().equals("http://www.daml.org/services/owl-s/1.1/Service.owl#")) {
-                        curServ.setVersion("1.1");
-                    }
-                    else if(curAttrMap.item(j).getNodeValue().equals("http://www.daml.org/services/owl-s/1.2/Service.owl#")) {
-                        curServ.setVersion("1.2");
-                    }
-                }
-            }
-                        
-            nodes = doc.getElementsByTagName("owl:imports"); 
-            //System.out.println("owl:Ontology (imports): "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("DATA:"+nodes.item(i).getAttributes().getNamedItem("rdf:resource").getNodeValue());
-                curServ.addImportedOWLFile(nodes.item(i).getAttributes().getNamedItem("rdf:resource").getNodeValue());
-            }
-            
             nodes = doc.getElementsByTagName("service:Service");
-            //System.out.println("service:Service: "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("DATA:"+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-                curServ.setID(nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-            }
-            
-            nodes = doc.getElementsByTagName("profile:serviceName");
-            //System.out.println("profile:serviceName: "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("DATA:"+nodes.item(i).getTextContent());
-                curServ.setName(nodes.item(i).getTextContent());
-            }
-            
-            nodes = doc.getElementsByTagName("profile:textDescription");
-            //System.out.println("profile:textDescription: "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("DATA:"+nodes.item(i).getTextContent());
-                curServ.setDescription(nodes.item(i).getTextContent());
-            }
-            
-            nodes = doc.getElementsByTagName("process:Input");
-            //System.out.println("process:Input: "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-                NodeList inputlist = nodes.item(i).getChildNodes();
-                String inputID = nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue();
-                String inputParam = "";
-                String inputLabel = "";
-                for(int j=0; j<inputlist.getLength();j++) {
-                    if(inputlist.item(j).getNodeName().equals("process:parameterType")) {
-                        if(curServ.getVersion().equals("1.0")) {                            
-                            inputParam = inputlist.item(j).getAttributes().getNamedItem("rdf:resource").getNodeValue();
+            System.out.println("service:Service: "+ nodes.getLength() + " elements.");
+            servs = new AbstractService[nodes.getLength()];
+            for(nService=0; nService<nodes.getLength();nService++) {
+            	curServ = new AbstractService();
+                System.out.println("DATA:"+nodes.item(nService).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+                curServ.setID(nodes.item(nService).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+                curServ.setFilename( curPath );
+                
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                docService = builder.newDocument();
+                Node importedNode = docService.importNode(nodes.item(nService), true);
+                docService.appendChild(importedNode);
+                
+				nodesGlobal = doc.getElementsByTagName("rdf:RDF");
+				// System.out.println("rdf:RDF Namespace (attributes): "+nodes.getLength()
+				// + " elements.");
+				for (i = 0; i < nodesGlobal.getLength(); i++) {
+					NamedNodeMap curAttrMap = nodesGlobal.item(i).getAttributes();
+					for (int j = 0; j < curAttrMap.getLength(); j++) {
+						// System.out.println("INFO: "+curAttrMap.item(j).getNodeName()+" = "+curAttrMap.item(j).getNodeValue());
+						curServ.addNamespaceEntry(curAttrMap.item(j)
+								.getNodeName(), curAttrMap.item(j)
+								.getNodeValue());
+						if (curAttrMap
+								.item(j)
+								.getNodeValue()
+								.equals("http://www.daml.org/services/owl-s/1.0/Service.owl#")) {
+							curServ.setVersion("1.0");
+						} else if (curAttrMap
+								.item(j)
+								.getNodeValue()
+								.equals("http://www.daml.org/services/owl-s/1.1/Service.owl#")) {
+							curServ.setVersion("1.1");
+						} else if (curAttrMap
+								.item(j)
+								.getNodeValue()
+								.equals("http://www.daml.org/services/owl-s/1.2/Service.owl#")) {
+							curServ.setVersion("1.2");
+						}
+					}
+				}
+
+				nodesGlobal = doc.getElementsByTagName("owl:imports");
+				// System.out.println("owl:Ontology (imports): "+
+				// nodes.getLength() + " elements.");
+				for (i = 0; i < nodesGlobal.getLength(); i++) {
+					// System.out.println("DATA:"+nodes.item(i).getAttributes().getNamedItem("rdf:resource").getNodeValue());
+					curServ.addImportedOWLFile(nodesGlobal.item(i).getAttributes()
+							.getNamedItem("rdf:resource").getNodeValue());
+				}
+
+				nodesService = docService
+						.getElementsByTagName("profile:serviceName");
+				// System.out.println("profile:serviceName: "+ nodes.getLength() + " elements.");
+                for(i=0; i<nodesService.getLength();i++) {
+                    // System.out.println("DATA:"+nodes.item(i).getTextContent());
+                    curServ.setName(nodesService.item(i).getTextContent());
+                }
+                
+                nodesService = docService.getElementsByTagName("profile:textDescription");
+                //System.out.println("profile:textDescription: "+ nodes.getLength() + " elements.");
+                for(i=0; i<nodesService.getLength();i++) {
+                    // System.out.println("DATA:"+nodes.item(i).getTextContent());
+                    curServ.setDescription(nodesService.item(i).getTextContent());
+                }
+                
+                nodesService = docService.getElementsByTagName("process:Input");
+                //System.out.println("process:Input: "+ nodes.getLength() + " elements.");
+                for(i=0; i<nodesService.getLength();i++) {
+                    // System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+                    NodeList inputlist = nodesService.item(i).getChildNodes();
+                    String inputID = nodesService.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue();
+                    String inputParam = "";
+                    String inputLabel = "";
+                    for(int j=0; j<inputlist.getLength();j++) {
+                        if(inputlist.item(j).getNodeName().equals("process:parameterType")) {
+                            if(curServ.getVersion().equals("1.0")) {                            
+                                inputParam = inputlist.item(j).getAttributes().getNamedItem("rdf:resource").getNodeValue();
+                            }
+                            else if(curServ.getVersion().equals("1.1")) {
+                                inputParam = inputlist.item(j).getTextContent();
+                            }
+                            else if(curServ.getVersion().equals("1.2")) {
+                                inputParam = inputlist.item(j).getTextContent();
+                            }
+                            else {
+                                throw new Exception("OWL-S Version not known.");
+                            }
+                            curServ.addInputParameter(inputID, inputParam);
                         }
-                        else if(curServ.getVersion().equals("1.1")) {
-                            inputParam = inputlist.item(j).getTextContent();
+                        if(inputlist.item(j).getNodeName().equals("rdfs:label")) {
+                            // System.out.println("rdfs:label  : "+inputlist.item(j).getTextContent());
+                            inputLabel = inputlist.item(j).getTextContent();
+                            curServ.addInputLabel(inputID, inputLabel);
                         }
-                        else if(curServ.getVersion().equals("1.2")) {
-                            inputParam = inputlist.item(j).getTextContent();
+                    }                
+                }
+                
+                nodesService = docService.getElementsByTagName("process:Output");
+                // System.out.println("process:Output: "+ nodes.getLength() + " elements.");
+                for(i=0; i<nodesService.getLength();i++) {
+                    // System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+                    NodeList outputlist = nodesService.item(i).getChildNodes();
+                    String outputID = nodesService.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue();
+                    String outputParam = "";
+                    String outputLabel = "";
+                    for(int j=0; j<outputlist.getLength();j++) {
+                        if(outputlist.item(j).getNodeName().equals("process:parameterType")) {
+                            if(curServ.getVersion().equals("1.0")) {
+                                outputParam = outputlist.item(j).getAttributes().getNamedItem("rdf:resource").getNodeValue();
+                            }
+                            else if(curServ.getVersion().equals("1.1")) {
+                                outputParam = outputlist.item(j).getTextContent();
+                            }
+                            else if(curServ.getVersion().equals("1.2")) {
+                                outputParam = outputlist.item(j).getTextContent();
+                            }
+                            else {
+                                throw new Exception("OWL-S Version not known.");
+                            }
+                            curServ.addOutputParameter(outputID, outputParam);
                         }
-                        else {
-                            throw new Exception("OWL-S Version not known.");
+                        if(outputlist.item(j).getNodeName().equals("rdfs:label")) {
+                            //System.out.println("rdfs:label  : "+outputlist.item(j).getTextContent());
+                            outputLabel = outputlist.item(j).getTextContent();
+                            curServ.addOuputLabel(outputID, outputLabel);
                         }
-                        curServ.addInputParameter(inputID, inputParam);
-                    }
-                    if(inputlist.item(j).getNodeName().equals("rdfs:label")) {
-                        // System.out.println("rdfs:label  : "+inputlist.item(j).getTextContent());
-                        inputLabel = inputlist.item(j).getTextContent();
-                        curServ.addInputLabel(inputID, inputLabel);
-                    }
-                }                
-            }
-            
-            nodes = doc.getElementsByTagName("process:Output");
-            // System.out.println("process:Output: "+ nodes.getLength() + " elements.");
-            for(int i=0; i<nodes.getLength();i++) {
-                // System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-                NodeList outputlist = nodes.item(i).getChildNodes();
-                String outputID = nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue();
-                String outputParam = "";
-                String outputLabel = "";
-                for(int j=0; j<outputlist.getLength();j++) {
-                    if(outputlist.item(j).getNodeName().equals("process:parameterType")) {
-                        if(curServ.getVersion().equals("1.0")) {
-                            outputParam = outputlist.item(j).getAttributes().getNamedItem("rdf:resource").getNodeValue();
-                        }
-                        else if(curServ.getVersion().equals("1.1")) {
-                            outputParam = outputlist.item(j).getTextContent();
-                        }
-                        else if(curServ.getVersion().equals("1.2")) {
-                            outputParam = outputlist.item(j).getTextContent();
-                        }
-                        else {
-                            throw new Exception("OWL-S Version not known.");
-                        }
-                        curServ.addOutputParameter(outputID, outputParam);
-                    }
-                    if(outputlist.item(j).getNodeName().equals("rdfs:label")) {
-                        //System.out.println("rdfs:label  : "+outputlist.item(j).getTextContent());
-                        outputLabel = outputlist.item(j).getTextContent();
-                        curServ.addOuputLabel(outputID, outputLabel);
                     }
                 }
+                
+                servs[nService] = curServ;
             }
         } 
         catch (Exception ex) {
-              System.out.println(ex);
-              ex.printStackTrace();
+        	servs = new AbstractService[0];
+            System.out.println(ex);
+            ex.printStackTrace();
         }
-        return curServ;
+        
+        return servs;
     }
     
     public static void main(String[] args) {

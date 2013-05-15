@@ -39,8 +39,8 @@ public class AbstractService implements java.io.Serializable {
     private HashMap    namespaceEntries;
     private Vector     importedOWLFiles;
     
-    private Vector    inputParameter;
-    private Vector    outputParameter;
+    private Vector<AbstractServiceParameter>    inputParameter;
+    private Vector<AbstractServiceParameter>    outputParameter;
     
     private HashMap    inputLabel;
     private HashMap    outputLabel;
@@ -96,8 +96,8 @@ public class AbstractService implements java.io.Serializable {
     public HashMap getNamespaceEntries() { return this.namespaceEntries; }
     public Vector getImportedOWLFiles() { return this.importedOWLFiles; }
             
-    public Vector getInputParameter() { return this.inputParameter; }
-    public Vector getOutputParameter() { return this.outputParameter; }
+    public Vector<AbstractServiceParameter> getInputParameter() { return this.inputParameter; }
+    public Vector<AbstractServiceParameter> getOutputParameter() { return this.outputParameter; }
     
     /**
      * Avoids duplicate ids in WSDL message. (WSDL validation)
@@ -221,7 +221,8 @@ public class AbstractService implements java.io.Serializable {
     }
     
     public String toString() {
-        return this._id+" Name: "+this._name+" ("+this._version+") "+this._filename;
+//        return this._id+" Name: "+this._name+" ("+this._version+") "+this._filename;
+    	return this._name;
     }
     
     /**
