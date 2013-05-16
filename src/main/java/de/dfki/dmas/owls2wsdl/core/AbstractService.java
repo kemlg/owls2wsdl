@@ -41,35 +41,18 @@ public class AbstractService implements java.io.Serializable {
 
 	private HashMap<String, String> namespaceEntries;
 	private Vector<String> importedOWLFiles;
-
-	private Vector<AbstractServiceParameter> inputParameter;
-	private Vector<AbstractServiceParameter> outputParameter;
-
-	private HashMap<String, String> inputLabel;
-	private HashMap<String, String> outputLabel;
+	private Vector<AtomicProcess> processes;
 
 	// BESSER:
 	// http://www.castor.org/api/org/exolab/castor/util/OrderedHashMap.html
 	// private Vector inputOrder;
 	// private Vector outputOrder;
 
-	private int inputCount;
-	private int outputCount;
-
 	/** Creates a new instance of ProcessContainer */
 	public AbstractService() {
 		this.namespaceEntries = new HashMap<String, String>();
 		this.importedOWLFiles = new Vector<String>();
-
-		this.inputParameter = new Vector<AbstractServiceParameter>();
-		this.outputParameter = new Vector<AbstractServiceParameter>();
-
-		this.inputLabel = new HashMap<String, String>();
-		this.outputLabel = new HashMap<String, String>();
-		// this.inputOrder = new Vector();
-		// this.outputOrder = new Vector();
-		this.inputCount = 0;
-		this.outputCount = 0;
+		this.processes = new Vector<AtomicProcess>();
 	}
 
 	/** Creates a new instance of ProcessContainer */
@@ -122,46 +105,6 @@ public class AbstractService implements java.io.Serializable {
 		return this.importedOWLFiles;
 	}
 
-	public Vector<AbstractServiceParameter> getInputParameter() {
-		return this.inputParameter;
-	}
-
-	public Vector<AbstractServiceParameter> getOutputParameter() {
-		return this.outputParameter;
-	}
-
-	/**
-	 * Avoids duplicate ids in WSDL message. (WSDL validation)
-	 */
-	public boolean hasDuplicateInputParameter() {
-		if (this.inputParameter.size() > 1) {
-			AbstractServiceParameterComparator comp = new AbstractServiceParameterComparator();
-			for (int i = 1; i < this.inputParameter.size(); i++) {
-				if (comp.compare(this.inputParameter.get(0),
-						this.inputParameter.get(i)) == 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Avoids duplicate ids in WSDL message. (WSDL validation)
-	 */
-	public boolean hasDuplicateOutputParameter() {
-		if (this.outputParameter.size() > 1) {
-			AbstractServiceParameterComparator comp = new AbstractServiceParameterComparator();
-			for (int i = 1; i < this.outputParameter.size(); i++) {
-				if (comp.compare(this.outputParameter.get(0),
-						this.outputParameter.get(i)) == 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	public void setFilename(String filename) {
 		this._filename = filename;
 	}
@@ -184,32 +127,6 @@ public class AbstractService implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this._description = description.trim();
-	}
-
-	public void addInputParameter(String name, String paramType) {
-		this.inputCount++;
-		AbstractServiceParameter param = new AbstractServiceParameter(name,
-				paramType, this.inputCount);
-		// System.out.println("PARAM-I: "+param.toString());
-		// this.inputParameter.put(name, param);
-		this.inputParameter.add(param);
-	}
-
-	public void addOutputParameter(String name, String paramType) {
-		this.outputCount++;
-		AbstractServiceParameter param = new AbstractServiceParameter(name,
-				paramType, this.outputCount);
-		// System.out.println("PARAM-O: "+param.toString());
-		// this.outputParameter.put(name, param);
-		this.outputParameter.add(param);
-	}
-
-	public void addInputLabel(String name, String label) {
-		this.inputLabel.put(name, label);
-	}
-
-	public void addOuputLabel(String name, String label) {
-		this.outputLabel.put(name, label);
 	}
 
 	public void addNamespaceEntry(String key, String val) {
@@ -250,14 +167,14 @@ public class AbstractService implements java.io.Serializable {
 		for (int i = 0; i < this.importedOWLFiles.size(); i++) {
 			System.out.println("IMPORT  : " + this.importedOWLFiles.get(i));
 		}
-		for (Iterator<AbstractServiceParameter> it = this.inputParameter
-				.iterator(); it.hasNext();) {
-			System.out.println("INPUT   : " + it.next().toString());
+		Iterator<AtomicProcess>	itAp = this.getProcesses().iterator();
+		while(itAp.hasNext()) {
+			itAp.next().printInfo();
 		}
-		for (Iterator<AbstractServiceParameter> it = this.outputParameter
-				.iterator(); it.hasNext();) {
-			System.out.println("OUTPUT  : " + it.next().toString());
-		}
+	}
+
+	Vector<AtomicProcess> getProcesses() {
+		return processes;
 	}
 
 	public String toString() {
@@ -274,46 +191,12 @@ public class AbstractService implements java.io.Serializable {
 	 */
 	public boolean istranslatable() {
 		boolean returnVal = true;
-		for (Iterator<AbstractServiceParameter> it = this.getInputParameter()
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter param = it.next();
-			if (!param.isValid() && !param.isPrimitiveXsdType()) {
-				returnVal = false;
-			}
-		}
-		for (Iterator<AbstractServiceParameter> it = this.getOutputParameter()
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter param = it.next();
-			if (!param.isValid() && !param.isPrimitiveXsdType()) {
-				returnVal = false;
-			}
+		Iterator<AtomicProcess> it = this.processes.iterator();
+		while(it.hasNext()) {
+			returnVal = returnVal && it.next().istranslatable();
 		}
 
 		return returnVal;
-	}
-
-	public Object[] checkInput4InvalidNCNames() {
-		Vector<String> nameList = new Vector<String>();
-		for (Iterator<AbstractServiceParameter> it = this.getInputParameter()
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter param = it.next();
-			if (param.isValidNCName()) {
-				nameList.add(param.getUri());
-			}
-		}
-		return nameList.toArray();
-	}
-
-	public Object[] checkOutput4InvalidNCNames() {
-		Vector<String> nameList = new Vector<String>();
-		for (Iterator<AbstractServiceParameter> it = this.getOutputParameter()
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter param = it.next();
-			if (param.isValidNCName()) {
-				nameList.add(param.getUri());
-			}
-		}
-		return nameList.toArray();
 	}
 
 	public Vector<String> getImportedOWLFiles(boolean filterOWLSImports) {
@@ -330,24 +213,6 @@ public class AbstractService implements java.io.Serializable {
 			}
 		}
 		return filteredFileList;
-	}
-
-	public String getParameterType(String localName) {
-		for (Iterator<AbstractServiceParameter> it = this.inputParameter
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter aParm = it.next();
-			if (aParm.getID().equals(localName)) {
-				return aParm.getUri();
-			}
-		}
-		for (Iterator<AbstractServiceParameter> it = this.outputParameter
-				.iterator(); it.hasNext();) {
-			AbstractServiceParameter aParm = it.next();
-			if (aParm.getID().equals(localName)) {
-				return aParm.getUri();
-			}
-		}
-		return null;
 	}
 
 	public String getLocalFilename() {
@@ -401,5 +266,38 @@ public class AbstractService implements java.io.Serializable {
 					.println("[er] one or more parameter types not registered.");
 			return false;
 		}
+	}
+
+	public void addProcess(AtomicProcess ap) {
+		this.processes.add(ap);
+	}
+
+	public String getParameterType(String localName) {
+		Iterator<AtomicProcess> itAp = this.processes.iterator();
+		while(itAp.hasNext()) {
+			String retValue = itAp.next().getParameterType(localName);
+			if(retValue != null) {
+				return retValue;
+			}
+		}
+		return null;
+	}
+
+	public Vector<AbstractServiceParameter> getAllOutputParameter() {
+		Iterator<AtomicProcess> itAp = this.processes.iterator();
+		Vector<AbstractServiceParameter> v = new Vector<AbstractServiceParameter>();
+		while(itAp.hasNext()) {
+			v.addAll(itAp.next().getOutputParameter());
+		}
+		return v;
+	}
+
+	public Vector<AbstractServiceParameter> getAllInputParameter() {
+		Iterator<AtomicProcess> itAp = this.processes.iterator();
+		Vector<AbstractServiceParameter> v = new Vector<AbstractServiceParameter>();
+		while(itAp.hasNext()) {
+			v.addAll(itAp.next().getInputParameter());
+		}
+		return v;
 	}
 }

@@ -20,6 +20,7 @@ package de.dfki.dmas.owls2wsdl.grounding;
 import de.dfki.dmas.owls2wsdl.core.AbstractService;
 import de.dfki.dmas.owls2wsdl.config.OWLS2WSDLSettings;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 import java.net.URI;
@@ -101,132 +102,136 @@ public class WsdlGroundingBuilder {
 
 		WSDLService wsdl = new WSDLService(wsdlDef, URI.create(wsdlDef
 				.getTargetNamespace()));
-		WSDLOperation wsdlOp = (WSDLOperation) wsdl.getOperations().get(0);
+		List<WSDLOperation> listOp = wsdl.getOperations();
 
-		System.out.println("[WSDLTranslator] WSDLOperation     : "
-				+ wsdlOp.getName());
-		System.out.println("[WSDLTranslator] wsdl.getFileURI   : "
-				+ wsdl.getFileURI());
-		System.out
-				.println("====================================================");
-
-		WSDLTranslator t = new WSDLTranslator(wsdlOp, baseURI,
+		Iterator<WSDLOperation> itOp = listOp.iterator();
+		WSDLTranslator t = new WSDLTranslator(listOp, baseURI,
 				aService.getReformatedServiceId4Translator(), wsdldocURI);
-
 		t.setServiceName(aService.getName()); // aService.getID().replaceAll(" ",
-												// " _")
+		// " _")
 		t.setTextDescription(aService.getDescription());
 
-		QNameProvider qnames = new QNameProvider();
-		qnames.setMapping("soapEnc", WSDLConsts.soapEnc + "#");
-		// qnames.getPrefixSet();
 
-		//
-		// == OWL-WSDL MAPPING
-		//
-		try {
-			Vector<String> importedOntList = aService.getImportedOWLFiles(true);
-			// int i=0;
-			for (Iterator<String> it = importedOntList.iterator(); it.hasNext();) {
-				String path = it.next().toString();
-				System.out.println("[ont] add imported ont: " + path);
-				// t.addImportEntry(OWLFactory.createOntology(URI.create(path)));
-				t.addImportEntry(path);
-				// qnames.setMapping("ns"+Integer.toString(i), path+"#");
-				// i++;
-			}
-		} catch (java.net.URISyntaxException uriSE) {
-			System.out.println("URISyntaxException: " + uriSE);
-		} catch (java.io.FileNotFoundException fnfE) {
-			System.out.println("FileNotFoundException: " + fnfE);
-		}
+		while(itOp.hasNext()) {
+			WSDLOperation wsdlOp = itOp.next();
+			System.out.println("[WSDLTranslator] WSDLOperation     : "
+					+ wsdlOp.getName());
+			System.out.println("[WSDLTranslator] wsdl.getFileURI   : "
+					+ wsdl.getFileURI());
+			System.out
+					.println("====================================================");
 
-		// == INPUT PARAMS
-		Vector<WSDLParameter> inputs = wsdlOp.getInputs();
-		for (int i = 0; i < inputs.size(); i++) {
-			WSDLParameter p = wsdlOp.getInput(i);
-			String paramName = URIUtils.getLocalName(p.getName());
+			QNameProvider qnames = new QNameProvider();
+			qnames.setMapping("soapEnc", WSDLConsts.soapEnc + "#");
+			// qnames.getPrefixSet();
 
-			QName paramType = (p.getType() == null) ? new QName(
-					WSDLConsts.xsdURI, "any") : p.getType();
-
-			String wsdlType = paramType.getNamespaceURI() + "#"
-					+ paramType.getLocalPart();
-			System.out.println("[i] WSDL input type: " + wsdlType);
-
-			// By default use owl:Thing as param type
-			String owlType = OWL.Thing.toString();
-
-			if (paramType.getNamespaceURI().equals(WSDLConsts.soapEnc)
-					|| (paramType.getNamespaceURI().equals(WSDLConsts.xsdURI) && !paramType
-							.getLocalPart().equals("any"))) {
-				owlType = XSD.ns + paramType.getLocalPart();
-			} else {
-				System.out.println("WSDLParameter Name: " + p.getName());
-				System.out.println("WSDLParameter Type: Ns:"
-						+ p.getType().getNamespaceURI() + " Prefix:"
-						+ p.getType().getPrefix() + " Local:"
-						+ p.getType().getLocalPart());
-				owlType = aService.getParameterType(URIUtils.getLocalName(p
-						.getName()));
-				System.out.println("ABSTRACT TYPE FOR " + p.getName());
+			//
+			// == OWL-WSDL MAPPING
+			//
+			try {
+				Vector<String> importedOntList = aService.getImportedOWLFiles(true);
+				// int i=0;
+				for (Iterator<String> it = importedOntList.iterator(); it.hasNext();) {
+					String path = it.next().toString();
+					System.out.println("[ont] add imported ont: " + path);
+					// t.addImportEntry(OWLFactory.createOntology(URI.create(path)));
+					t.addImportEntry(path);
+					// qnames.setMapping("ns"+Integer.toString(i), path+"#");
+					// i++;
+				}
+			} catch (java.net.URISyntaxException uriSE) {
+				System.out.println("URISyntaxException: " + uriSE);
+			} catch (java.io.FileNotFoundException fnfE) {
+				System.out.println("FileNotFoundException: " + fnfE);
 			}
 
-			System.out.println("OWLTYPE        : " + owlType);
-			System.out.println("OWLTYPE (short): " + qnames.shortForm(owlType));
+			// == INPUT PARAMS
+			Vector<WSDLParameter> inputs = wsdlOp.getInputs();
+			for (int i = 0; i < inputs.size(); i++) {
+				WSDLParameter p = wsdlOp.getInput(i);
+				String paramName = URIUtils.getLocalName(p.getName());
 
-			// System.out.println("URISET: "+qnames.getURISet().size());
-			// for(Iterator it=qnames.getURISet().iterator(); it.hasNext(); ) {
-			// System.out.println("URISET: "+it.next().toString());
-			// }
-			// System.out.println("PREFIXSET: "+qnames.getPrefixSet().size());
+				QName paramType = (p.getType() == null) ? new QName(
+						WSDLConsts.xsdURI, "any") : p.getType();
 
-			URI paramTypeURI = URI.create(owlType);
+				String wsdlType = paramType.getNamespaceURI() + "#"
+						+ paramType.getLocalPart();
+				System.out.println("[i] WSDL input type: " + wsdlType);
 
-			String xsltTransformation = "None (XSL)";
+				// By default use owl:Thing as param type
+				String owlType = OWL.Thing.toString();
 
-			t.addInput(p, paramName, paramTypeURI, xsltTransformation);
-		}
+				if (paramType.getNamespaceURI().equals(WSDLConsts.soapEnc)
+						|| (paramType.getNamespaceURI().equals(WSDLConsts.xsdURI) && !paramType
+								.getLocalPart().equals("any"))) {
+					owlType = XSD.ns + paramType.getLocalPart();
+				} else {
+					System.out.println("WSDLParameter Name: " + p.getName());
+					System.out.println("WSDLParameter Type: Ns:"
+							+ p.getType().getNamespaceURI() + " Prefix:"
+							+ p.getType().getPrefix() + " Local:"
+							+ p.getType().getLocalPart());
+					owlType = aService.getParameterType(URIUtils.getLocalName(p
+							.getName()));
+					System.out.println("ABSTRACT TYPE FOR " + p.getName());
+				}
 
-		// == OUTPUT PARAMS
-		Vector<WSDLParameter> outputs = wsdlOp.getOutputs();
-		for (int i = 0; i < outputs.size(); i++) {
-			WSDLParameter p = wsdlOp.getOutput(i);
-			String paramName = URIUtils.getLocalName(p.getName());
+				System.out.println("OWLTYPE        : " + owlType);
+				System.out.println("OWLTYPE (short): " + qnames.shortForm(owlType));
 
-			QName paramType = (p.getType() == null) ? new QName(
-					WSDLConsts.xsdURI, "any") : p.getType();
+				// System.out.println("URISET: "+qnames.getURISet().size());
+				// for(Iterator it=qnames.getURISet().iterator(); it.hasNext(); ) {
+				// System.out.println("URISET: "+it.next().toString());
+				// }
+				// System.out.println("PREFIXSET: "+qnames.getPrefixSet().size());
 
-			String wsdlType = paramType.getNamespaceURI() + "#"
-					+ paramType.getLocalPart();
-			System.out.println("[i] WSDL output type: " + wsdlType);
+				URI paramTypeURI = URI.create(owlType);
 
-			// By default use owl:Thing as param type
-			String owlType = OWL.Thing.toString();
+				String xsltTransformation = "None (XSL)";
 
-			if (paramType.getNamespaceURI().equals(WSDLConsts.soapEnc)
-					|| (paramType.getNamespaceURI().equals(WSDLConsts.xsdURI) && !paramType
-							.getLocalPart().equals("any"))) {
-				owlType = XSD.ns + paramType.getLocalPart();
-			} else {
-				System.out.println("WSDLParameter Name: " + p.getName());
-				System.out.println("WSDLParameter Type: Ns:"
-						+ p.getType().getNamespaceURI() + " Prefix:"
-						+ p.getType().getPrefix() + " Local:"
-						+ p.getType().getLocalPart());
-				owlType = aService.getParameterType(URIUtils.getLocalName(p
-						.getName()));
-				System.out.println("ABSTRACT TYPE FOR " + p.getName());
+				t.addInput(p, paramName, paramTypeURI, xsltTransformation);
 			}
 
-			System.out.println("OWLTYPE        : " + owlType);
-			System.out.println("OWLTYPE (short): " + qnames.shortForm(owlType));
+			// == OUTPUT PARAMS
+			Vector<WSDLParameter> outputs = wsdlOp.getOutputs();
+			for (int i = 0; i < outputs.size(); i++) {
+				WSDLParameter p = wsdlOp.getOutput(i);
+				String paramName = URIUtils.getLocalName(p.getName());
 
-			URI paramTypeURI = URI.create(owlType);
+				QName paramType = (p.getType() == null) ? new QName(
+						WSDLConsts.xsdURI, "any") : p.getType();
 
-			String xsltTransformation = "None (XSL)";
+				String wsdlType = paramType.getNamespaceURI() + "#"
+						+ paramType.getLocalPart();
+				System.out.println("[i] WSDL output type: " + wsdlType);
 
-			t.addOutput(p, paramName, paramTypeURI, xsltTransformation);
+				// By default use owl:Thing as param type
+				String owlType = OWL.Thing.toString();
+
+				if (paramType.getNamespaceURI().equals(WSDLConsts.soapEnc)
+						|| (paramType.getNamespaceURI().equals(WSDLConsts.xsdURI) && !paramType
+								.getLocalPart().equals("any"))) {
+					owlType = XSD.ns + paramType.getLocalPart();
+				} else {
+					System.out.println("WSDLParameter Name: " + p.getName());
+					System.out.println("WSDLParameter Type: Ns:"
+							+ p.getType().getNamespaceURI() + " Prefix:"
+							+ p.getType().getPrefix() + " Local:"
+							+ p.getType().getLocalPart());
+					owlType = aService.getParameterType(URIUtils.getLocalName(p
+							.getName()));
+					System.out.println("ABSTRACT TYPE FOR " + p.getName());
+				}
+
+				System.out.println("OWLTYPE        : " + owlType);
+				System.out.println("OWLTYPE (short): " + qnames.shortForm(owlType));
+
+				URI paramTypeURI = URI.create(owlType);
+
+				String xsltTransformation = "None (XSL)";
+
+				t.addOutput(p, paramName, paramTypeURI, xsltTransformation);
+			}
 		}
 
 		return t;

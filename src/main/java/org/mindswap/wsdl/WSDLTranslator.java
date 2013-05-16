@@ -25,6 +25,8 @@ package org.mindswap.wsdl;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URI;
+import java.util.Iterator;
+import java.util.List;
 
 import org.mindswap.owl.OWLFactory;
 import org.mindswap.owl.OWLOntology;
@@ -47,7 +49,7 @@ public class WSDLTranslator {
 	/**
 	 * WSDLTranslator generates OWL-S definition with grounding!
 	 */
-	public WSDLTranslator(WSDLOperation op, URI baseURI, String prefix,
+	public WSDLTranslator(List<WSDLOperation> ops, URI baseURI, String prefix,
 			URI wsdldocURI) {
 		this._baseURI = baseURI;
 		System.out.println("[WSDLTranslator] baseURI   : "
@@ -84,14 +86,18 @@ public class WSDLTranslator {
 		ag.setWSDL(wsdldocURI);
 
 		// add the WSDL details to the atomic grounding
-		ag.setProcess(process);
-		ag.setOperation(URI.create(op.getOperationName()));
-		ag.setPortType(URI.create(op.getPortName()));
-		ag.setInputMessage(URI.create(op.getInputMessageName()));
-		ag.setOutputMessage(URI.create(op.getOutputMessageName()));
+		Iterator<WSDLOperation> itOp = ops.iterator();
+		while(itOp.hasNext()) {
+			WSDLOperation op = itOp.next();
+			ag.setProcess(process);
+			ag.setOperation(URI.create(op.getOperationName()));
+			ag.setPortType(URI.create(op.getPortName()));
+			ag.setInputMessage(URI.create(op.getInputMessageName()));
+			ag.setOutputMessage(URI.create(op.getOutputMessageName()));
 
-		// add the atomic process grounding to service grounding
-		grounding.addGrounding(ag);
+			// add the atomic process grounding to service grounding
+			grounding.addGrounding(ag);
+		}
 	}
 
 	public void setServiceName(String serviceName) {

@@ -67,10 +67,13 @@ public class Project implements java.io.Serializable {
 	private Vector<String> _serviceMissingTypes; // all mssing types for loaded
 													// services
 
+	private AtomicProcessCollection _processCollection;
+
 	/** Creates a new instance of Project */
 	public Project() {
 		// this._dependenciesFromOwlsImportSection = new ArrayList();
 		this._serviceCollection = new AbstractServiceCollection();
+		this._processCollection = new AtomicProcessCollection();
 		this._modificationTime = new java.util.Date();
 		this._elementDepth = Integer.parseInt(OWLS2WSDLSettings.getInstance()
 				.getProperty("depth"));
@@ -239,7 +242,7 @@ public class Project implements java.io.Serializable {
 	 */
 	public Vector<String> collectUndefinedDatatypes() {
 		Vector<String> dtypes = new Vector<String>();
-		for (Iterator<String> it = this._serviceCollection.getParameterTypes()
+		for (Iterator<String> it = this._processCollection.getParameterTypes()
 				.iterator(); it.hasNext();) {
 			String uri = it.next().toString();
 			if (AbstractDatatypeKB.getInstance().getAbstractDatatypeKBData()
@@ -261,7 +264,7 @@ public class Project implements java.io.Serializable {
 		this._serviceDependencyTypes.removeAllElements();
 		this._serviceMissingTypes.removeAllElements();
 
-		for (Iterator<String> paramIt = this._serviceCollection
+		for (Iterator<String> paramIt = this._processCollection
 				.getParameterTypes().iterator(); paramIt.hasNext();) {
 			String uri = paramIt.next().toString();
 			System.out.println("\nCURRENT PARAM: " + uri);

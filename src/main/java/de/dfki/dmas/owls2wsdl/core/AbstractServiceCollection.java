@@ -165,29 +165,6 @@ public class AbstractServiceCollection implements java.io.Serializable {
 		this._count12 += serviceCollection.getCount12();
 	}
 
-	public Vector<String> getParameterTypes() {
-		Vector<String> datatypeList = new Vector<String>();
-		for (Iterator<AbstractService> it = this._serviceCollection.iterator(); it
-				.hasNext();) {
-			AbstractService aService = it.next();
-			for (Iterator<AbstractServiceParameter> paramIt = aService
-					.getInputParameter().iterator(); paramIt.hasNext();) {
-				AbstractServiceParameter param = paramIt.next();
-				if (!datatypeList.contains(param.getUri())) {
-					datatypeList.add(param.getUri());
-				}
-			}
-			for (Iterator<AbstractServiceParameter> paramIt = aService
-					.getOutputParameter().iterator(); paramIt.hasNext();) {
-				AbstractServiceParameter param = paramIt.next();
-				if (!datatypeList.contains(param.getUri())) {
-					datatypeList.add(param.getUri());
-				}
-			}
-		}
-		return datatypeList;
-	}
-
 	public void printData() {
 		for (Iterator<AbstractService> it = this._serviceCollection.iterator(); it
 				.hasNext();) {

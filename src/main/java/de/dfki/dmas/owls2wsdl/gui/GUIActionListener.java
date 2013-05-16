@@ -983,7 +983,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
 	// core functionality
 	private void checkServiceParameterTypes() {
 		for (Iterator<AbstractServiceParameter> it = RuntimeModel.getInstance()
-				.getSelectedService().getInputParameter().iterator(); it
+				.getSelectedService().getAllInputParameter().iterator(); it
 				.hasNext();) {
 			AbstractServiceParameter param = it.next();
 			if (AbstractDatatypeKB.getInstance().data.containsKey(param
@@ -998,7 +998,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
 			}
 		}
 		for (Iterator<AbstractServiceParameter> it = RuntimeModel.getInstance()
-				.getSelectedService().getOutputParameter().iterator(); it
+				.getSelectedService().getAllOutputParameter().iterator(); it
 				.hasNext();) {
 			AbstractServiceParameter param = it.next();
 			if (AbstractDatatypeKB.getInstance().data.containsKey(param

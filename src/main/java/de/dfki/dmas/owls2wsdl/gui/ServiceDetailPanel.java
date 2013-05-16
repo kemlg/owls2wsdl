@@ -319,7 +319,7 @@ public class ServiceDetailPanel extends JComponent implements
 		}
 
 		this.serviceParameterModel.reinitParameter(
-				aservice.getInputParameter(), aservice.getOutputParameter());
+				aservice.getAllInputParameter(), aservice.getAllOutputParameter());
 
 		serviceFilenameField.setText(aservice.getFilename());
 		serviceVersionField.setText(aservice.getVersion());

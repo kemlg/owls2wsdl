@@ -954,7 +954,10 @@ public class WSDL2OWLSPanel extends JPanel implements ActionListener {
 		// WSDLOperation op = (WSDLOperation) opList.getSelectedValue();
 		WSDLOperation op = (WSDLOperation) opComboBox.getSelectedItem();
 
-		WSDLTranslator t = new WSDLTranslator(op, URI.create(nameSpaceField
+		Vector<WSDLOperation>	vOp = new Vector<WSDLOperation>();
+		vOp.add(op);
+		
+		WSDLTranslator t = new WSDLTranslator(vOp, URI.create(nameSpaceField
 				.getText()), RuntimeModel.getInstance().getSelectedService()
 				.getReformatedServiceId4Translator(),
 				URI.create(wsdlUriComboBox.getSelectedItem().toString()));

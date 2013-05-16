@@ -22,7 +22,10 @@ package de.dfki.dmas.owls2wsdl.core;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.wsdl.Binding;
@@ -208,15 +211,27 @@ public class WSDLBuilder {
 		return false;
 	}
 
+	public boolean validateServiceParameterTypes(AbstractService abstractService) {
+		Iterator<AtomicProcess> it = abstractService.getProcesses().iterator();
+		boolean retValue = true;
+		
+		while(it.hasNext()) {
+			retValue = retValue && validateServiceParameterTypes(it.next());
+		}
+			
+		return retValue;
+	}
+
 	/**
 	 * Validate Parameter. Checks if KB contains datatype or if datatype is
 	 * primitive.
 	 */
-	public boolean validateServiceParameterTypes(AbstractService abstractService) {
+	public boolean validateServiceParameterTypes(AtomicProcess ap) {
 		boolean CHECK = true;
 		Vector<AbstractServiceParameter> parameter = new Vector<AbstractServiceParameter>();
-		parameter.addAll(abstractService.getInputParameter());
-		parameter.addAll(abstractService.getOutputParameter());
+		
+		parameter.addAll(ap.getInputParameter());
+		parameter.addAll(ap.getOutputParameter());
 
 		for (Iterator<AbstractServiceParameter> it = parameter.iterator(); it
 				.hasNext();) {
@@ -278,28 +293,37 @@ public class WSDLBuilder {
 		String serviceName = helper
 				.reformatOWLSSupportedByString(abstractService.getID());
 		String serviceDescription = abstractService.getDescription();
-
-		// sp�ter f�r jedem OutputParameter ein get oder bei mehreren Outputs
-		// entweder zus�tzlicher Container oder mehrere Operationen.
-		Vector<AbstractServiceParameter> inputParameter = abstractService
-				.getInputParameter();
-		Vector<AbstractServiceParameter> outputParameter = abstractService
-				.getOutputParameter();
+		Map<String,Vector<AbstractServiceParameter>>	mapInputs = new HashMap<String,Vector<AbstractServiceParameter>>();
+		Map<String,Vector<AbstractServiceParameter>>	mapOutputs = new HashMap<String,Vector<AbstractServiceParameter>>();
+		Map<String,AtomicProcess>						mapProcesses = new HashMap<String,AtomicProcess>();
 
 		System.out.println("[BUILD] Servicename: " + serviceName);
 		System.out.println("[BUILD] description: " + serviceDescription);
-
-		for (int i = 0; i < abstractService.getOutputParameter().size(); i++) {
-			String operationName = "get"
-					+ ((AbstractServiceParameter) abstractService
-							.getOutputParameter().get(i)).getID();
-			System.out.println("[BUILD] Operation  : " + operationName);
-		}
 
 		if (!this.validateServiceParameterTypes(abstractService)) {
 			throw new Exception("Error in parameter list. Datatype not found.");
 		}
 
+		Vector<AtomicProcess> processes = abstractService.getProcesses();
+		Iterator<AtomicProcess> itA = processes.iterator();
+		while(itA.hasNext()) {
+			AtomicProcess ap = itA.next();
+			Vector<AbstractServiceParameter> inputParameter = ap
+					.getInputParameter();
+			Vector<AbstractServiceParameter> outputParameter = ap
+					.getOutputParameter();
+			String operationName = ap.getName();
+//			for (int i = 0; i < ap.getOutputParameter().size(); i++) {
+//				String operationName = "get"
+//						+ ((AbstractServiceParameter) ap
+//								.getOutputParameter().get(i)).getID();
+			System.out.println("[BUILD] Operation  : " + operationName);
+//			}
+			mapInputs.put(operationName, inputParameter);
+			mapOutputs.put(operationName, outputParameter);
+			mapProcesses.put(operationName, ap);
+		}
+		
 		WSDLFactory wsdlFactory = WSDLFactory.newInstance();
 		ExtensionRegistry extensionRegistry = wsdlFactory
 				.newPopulatedExtensionRegistry();
@@ -378,24 +402,31 @@ public class WSDLBuilder {
 
 		try {
 			// construct schema model for all parameter
-			for (Iterator<AbstractServiceParameter> it = inputParameter
-					.iterator(); it.hasNext();) {
-				AbstractServiceParameter param = it.next();
-				System.out.println("[BUILD] IN         :" + param.getUri());
-				if (!this.isPrimitiveType(param.getUri())) {
-					xsdgen.appendToSchema(AbstractDatatypeKB.getInstance()
-							.getAbstractDatatypeKBData().get(param.getUri()));
-					System.out.println("[BUILD] added to type section.");
+			Iterator<Entry<String,Vector<AbstractServiceParameter>>> itAp = mapInputs.entrySet().iterator();
+			while(itAp.hasNext()) {
+				for (Iterator<AbstractServiceParameter> it = itAp.next().getValue()
+						.iterator(); it.hasNext();) {
+					AbstractServiceParameter param = it.next();
+					System.out.println("[BUILD] IN         :" + param.getUri());
+					if (!this.isPrimitiveType(param.getUri())) {
+						xsdgen.appendToSchema(AbstractDatatypeKB.getInstance()
+								.getAbstractDatatypeKBData().get(param.getUri()));
+						System.out.println("[BUILD] added to type section.");
+					}
 				}
 			}
-			for (Iterator<AbstractServiceParameter> it = outputParameter
-					.iterator(); it.hasNext();) {
-				AbstractServiceParameter param = it.next();
-				System.out.println("[BUILD] OUT        :" + param.getUri());
-				if (!this.isPrimitiveType(param.getUri())) {
-					xsdgen.appendToSchema(AbstractDatatypeKB.getInstance()
-							.getAbstractDatatypeKBData().get(param.getUri()));
-					System.out.println("[BUILD] added to type section.");
+			
+			itAp = mapOutputs.entrySet().iterator();
+			while(itAp.hasNext()) {
+				for (Iterator<AbstractServiceParameter> it = itAp.next().getValue()
+						.iterator(); it.hasNext();) {
+					AbstractServiceParameter param = it.next();
+					System.out.println("[BUILD] OUT        :" + param.getUri());
+					if (!this.isPrimitiveType(param.getUri())) {
+						xsdgen.appendToSchema(AbstractDatatypeKB.getInstance()
+								.getAbstractDatatypeKBData().get(param.getUri()));
+						System.out.println("[BUILD] added to type section.");
+					}
 				}
 			}
 
@@ -483,163 +514,172 @@ public class WSDLBuilder {
 		// types.addExtensibilityElement(schema);
 
 		// (get-) Operation name
-		String operationName = "get";
-		for (int i = 0; i < outputParameter.size(); i++) {
-			AbstractServiceParameter param = (AbstractServiceParameter) outputParameter
-					.get(i);
-			operationName += param.getID();
-		}
+//		String operationName = "get";
+//		for (int i = 0; i < outputParameter.size(); i++) {
+//			AbstractServiceParameter param = (AbstractServiceParameter) outputParameter
+//					.get(i);
+//			operationName += param.getID();
+//		}
 
 		//
 		// MESSAGES, PARTS
 		// =================================================================
-		Message request = def.createMessage();
-		request.setQName(new QName(targetNS, operationName + "Request"));
-
-		boolean duplicateInputs = false;
-		boolean duplicateOutputs = false;
-		if (abstractService.hasDuplicateInputParameter()) {
-			duplicateInputs = true;
-		}
-		if (abstractService.hasDuplicateOutputParameter()) {
-			duplicateOutputs = true;
-		}
-
-		for (int ipi = 0; ipi < inputParameter.size(); ipi++) {
-			AbstractServiceParameter param = (AbstractServiceParameter) inputParameter
-					.get(ipi);
-			Part part = def.createPart();
-			if (duplicateInputs) {
-				part.setName(param.getID() + String.valueOf(param.getPos()));
-			} else {
-				part.setName(param.getID());
-			}
-			System.out.println("SET TYPE OF PART: " + param.toString());
-			if (param.isPrimitiveXsdType()) {
-				part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema",
-						param.getTypeLocal()));
-			} else {
-				part.setTypeName(new QName(targetNS, param.getTypeRemote()));
-			}
-			request.addPart(part);
-
-		}
-		request.setUndefined(false);
-		def.addMessage(request);
-
-		Message response = def.createMessage();
-		response.setQName(new QName(targetNS, operationName + "Response"));
-		for (int opi = 0; opi < outputParameter.size(); opi++) {
-			AbstractServiceParameter param = (AbstractServiceParameter) outputParameter
-					.get(opi);
-			Part part = def.createPart();
-			if (duplicateOutputs) {
-				part.setName(param.getID() + String.valueOf(param.getPos()));
-			} else {
-				part.setName(param.getID());
-			}
-			System.out.println("SET TYPE OF PART: " + param.toString());
-			if (param.isPrimitiveXsdType()) {
-				part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema",
-						param.getTypeLocal()));
-			} else {
-				part.setTypeName(new QName(targetNS, param.getTypeRemote()));
-			}
-			response.addPart(part);
-		}
-		response.setUndefined(false);
-		def.addMessage(response);
-
-		//
-		// PORTTYPE, OPERATION
-		//
-		Input input = def.createInput();
-		input.setMessage(request);
-		Output output = def.createOutput();
-		output.setMessage(response);
-
-		// == build the wsdl operation + bindings for each owls output parameter
-
-		Operation operation = def.createOperation();
-		operation.setName(operationName);
-		operation.setInput(input);
-		operation.setOutput(output);
-		operation.setUndefined(false);
-
-		// == add PortType and Binding to WSDL defintion
-
-		PortType portType = def.createPortType();
-		portType.setQName(new QName(targetNS, serviceName + "Soap"));
-		portType.addOperation(operation);
-		portType.setUndefined(false);
-		def.addPortType(portType);
-
-		// == Binding section
-
-		SOAPBinding soapBinding = (SOAPBinding) extensionRegistry
-				.createExtension(Binding.class, new QName(
-						"http://schemas.xmlsoap.org/wsdl/soap/", "binding"));
-		soapBinding.setTransportURI("http://schemas.xmlsoap.org/soap/http");
-		soapBinding.setStyle("rpc");
-
-		SOAPBody body = (SOAPBody) extensionRegistry.createExtension(
-				BindingInput.class, new QName(
-						"http://schemas.xmlsoap.org/wsdl/soap/", "body"));
-		body.setUse("literal");
-		ArrayList<String> listOfStyles = new ArrayList<String>();
-		listOfStyles.add("http://schemas.xmlsoap.org/soap/encoding/");
-		body.setEncodingStyles(listOfStyles);
-		body.setNamespaceURI(targetNS);
-
-		Binding binding = def.createBinding();
-		binding.setQName(new QName(targetNS, serviceName + "SoapBinding"));
-		binding.addExtensibilityElement(soapBinding);
-
-		BindingInput binding_input = def.createBindingInput();
-		// binding_input.setName("BINDING IN");
-		binding_input.addExtensibilityElement(body);
-		BindingOutput binding_out = def.createBindingOutput();
-		// binding_out.setName("BINDING OUT");
-		binding_out.addExtensibilityElement(body);
-
-		SOAPOperation soapOperation = (SOAPOperation) extensionRegistry
-				.createExtension(BindingOperation.class, new QName(
-						"http://schemas.xmlsoap.org/wsdl/soap/", "operation"));
-		soapOperation.setSoapActionURI("");
-		// soapOperation.setStyle("document");
-
-		BindingOperation binding_op = def.createBindingOperation();
-		binding_op.setName(operationName);
-		binding_op.addExtensibilityElement(soapOperation);
-		binding_op.setOperation(operation);
-		binding_op.setBindingInput(binding_input);
-		binding_op.setBindingOutput(binding_out);
-		binding.addBindingOperation(binding_op);
-
-		binding.setPortType(portType);
-
-		binding.setUndefined(false);
-		def.addBinding(binding);
-
-		//
-		// SERVICE
-		//
-		SOAPAddress soapAddress = (SOAPAddress) extensionRegistry
-				.createExtension(Port.class, new QName(
-						"http://schemas.xmlsoap.org/wsdl/soap/", "address"));
-		soapAddress.setLocationURI(targetNS);
-
-		Port port = def.createPort();
-		port.setName(serviceName + "Soap");
-		port.setBinding(binding);
-		port.addExtensibilityElement(soapAddress);
-
 		// description fehlt noch
 
 		Service service = def.createService();
 		// service.setDocumentationElement()
 		service.setQName(new QName(targetNS, serviceName + "Service"));
-		service.addPort(port);
+		Iterator<Entry<String, Vector<AbstractServiceParameter>>> itOps = mapInputs.entrySet().iterator();
+		while(itOps.hasNext()) {
+			Entry<String, Vector<AbstractServiceParameter>> op = itOps.next();
+			String operationName = op.getKey();
+			AtomicProcess ap = mapProcesses.get(operationName);
+			Vector<AbstractServiceParameter> inputParameter = mapInputs.get(operationName);
+			Vector<AbstractServiceParameter> outputParameter = mapOutputs.get(operationName);
+			
+			Message request = def.createMessage();
+			request.setQName(new QName(targetNS, operationName + "Request"));
+
+			boolean duplicateInputs = false;
+			boolean duplicateOutputs = false;
+			if (ap.hasDuplicateInputParameter()) {
+				duplicateInputs = true;
+			}
+			if (ap.hasDuplicateOutputParameter()) {
+				duplicateOutputs = true;
+			}
+
+			for (int ipi = 0; ipi < inputParameter.size(); ipi++) {
+				AbstractServiceParameter param = (AbstractServiceParameter) inputParameter
+						.get(ipi);
+				Part part = def.createPart();
+				if (duplicateInputs) {
+					part.setName(param.getID() + String.valueOf(param.getPos()));
+				} else {
+					part.setName(param.getID());
+				}
+				System.out.println("SET TYPE OF PART: " + param.toString());
+				if (param.isPrimitiveXsdType()) {
+					part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema",
+							param.getTypeLocal()));
+				} else {
+					part.setTypeName(new QName(targetNS, param.getTypeRemote()));
+				}
+				request.addPart(part);
+
+			}
+			request.setUndefined(false);
+			def.addMessage(request);
+
+			Message response = def.createMessage();
+			response.setQName(new QName(targetNS, operationName + "Response"));
+			for (int opi = 0; opi < outputParameter.size(); opi++) {
+				AbstractServiceParameter param = (AbstractServiceParameter) outputParameter
+						.get(opi);
+				Part part = def.createPart();
+				if (duplicateOutputs) {
+					part.setName(param.getID() + String.valueOf(param.getPos()));
+				} else {
+					part.setName(param.getID());
+				}
+				System.out.println("SET TYPE OF PART: " + param.toString());
+				if (param.isPrimitiveXsdType()) {
+					part.setTypeName(new QName("http://www.w3.org/2001/XMLSchema",
+							param.getTypeLocal()));
+				} else {
+					part.setTypeName(new QName(targetNS, param.getTypeRemote()));
+				}
+				response.addPart(part);
+			}
+			response.setUndefined(false);
+			def.addMessage(response);
+
+			//
+			// PORTTYPE, OPERATION
+			//
+			Input input = def.createInput();
+			input.setMessage(request);
+			Output output = def.createOutput();
+			output.setMessage(response);
+
+			// == build the wsdl operation + bindings for each owls output parameter
+
+			Operation operation = def.createOperation();
+			operation.setName(operationName);
+			operation.setInput(input);
+			operation.setOutput(output);
+			operation.setUndefined(false);
+
+			// == add PortType and Binding to WSDL defintion
+
+			PortType portType = def.createPortType();
+			portType.setQName(new QName(targetNS, operationName + "PortType"));
+			portType.addOperation(operation);
+			portType.setUndefined(false);
+			def.addPortType(portType);
+
+			// == Binding section
+
+			SOAPBinding soapBinding = (SOAPBinding) extensionRegistry
+					.createExtension(Binding.class, new QName(
+							"http://schemas.xmlsoap.org/wsdl/soap/", "binding"));
+			soapBinding.setTransportURI("http://schemas.xmlsoap.org/soap/http");
+			soapBinding.setStyle("rpc");
+
+			SOAPBody body = (SOAPBody) extensionRegistry.createExtension(
+					BindingInput.class, new QName(
+							"http://schemas.xmlsoap.org/wsdl/soap/", "body"));
+			body.setUse("literal");
+			ArrayList<String> listOfStyles = new ArrayList<String>();
+			listOfStyles.add("http://schemas.xmlsoap.org/soap/encoding/");
+			body.setEncodingStyles(listOfStyles);
+			body.setNamespaceURI(targetNS);
+
+			Binding binding = def.createBinding();
+			binding.setQName(new QName(targetNS, serviceName + "Binding"));
+			binding.addExtensibilityElement(soapBinding);
+
+			BindingInput binding_input = def.createBindingInput();
+			// binding_input.setName("BINDING IN");
+			binding_input.addExtensibilityElement(body);
+			BindingOutput binding_out = def.createBindingOutput();
+			// binding_out.setName("BINDING OUT");
+			binding_out.addExtensibilityElement(body);
+
+			SOAPOperation soapOperation = (SOAPOperation) extensionRegistry
+					.createExtension(BindingOperation.class, new QName(
+							"http://schemas.xmlsoap.org/wsdl/soap/", "operation"));
+			soapOperation.setSoapActionURI("");
+			// soapOperation.setStyle("document");
+
+			BindingOperation binding_op = def.createBindingOperation();
+			binding_op.setName(operationName);
+			binding_op.addExtensibilityElement(soapOperation);
+			binding_op.setOperation(operation);
+			binding_op.setBindingInput(binding_input);
+			binding_op.setBindingOutput(binding_out);
+			binding.addBindingOperation(binding_op);
+
+			binding.setPortType(portType);
+
+			binding.setUndefined(false);
+			def.addBinding(binding);
+
+			//
+			// SERVICE
+			//
+			SOAPAddress soapAddress = (SOAPAddress) extensionRegistry
+					.createExtension(Port.class, new QName(
+							"http://schemas.xmlsoap.org/wsdl/soap/", "address"));
+			soapAddress.setLocationURI(targetNS);
+
+			Port port = def.createPort();
+			port.setName(serviceName + "PortType");
+			port.setBinding(binding);
+			port.addExtensibilityElement(soapAddress);
+
+			service.addPort(port);
+		}
 
 		def.addService(service);
 

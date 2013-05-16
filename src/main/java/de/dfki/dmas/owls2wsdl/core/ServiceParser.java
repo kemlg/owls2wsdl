@@ -410,78 +410,86 @@ public class ServiceParser {
 							.getTextContent());
 				}
 
-				nodesService = docService.getElementsByTagName("process:Input");
-				// System.out.println("process:Input: "+ nodes.getLength() +
-				// " elements.");
-				for (i = 0; i < nodesService.getLength(); i++) {
-					// System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-					NodeList inputlist = nodesService.item(i).getChildNodes();
-					String inputID = nodesService.item(i).getAttributes()
-							.getNamedItem("rdf:ID").getNodeValue();
-					String inputParam = "";
-					String inputLabel = "";
-					for (int j = 0; j < inputlist.getLength(); j++) {
-						if (inputlist.item(j).getNodeName()
-								.equals("process:parameterType")) {
-							if (curServ.getVersion().equals("1.0")) {
-								inputParam = inputlist.item(j).getAttributes()
-										.getNamedItem("rdf:resource")
-										.getNodeValue();
-							} else if (curServ.getVersion().equals("1.1")) {
-								inputParam = inputlist.item(j).getTextContent();
-							} else if (curServ.getVersion().equals("1.2")) {
-								inputParam = inputlist.item(j).getTextContent();
-							} else {
-								throw new Exception("OWL-S Version not known.");
+				nodesService = docService.getElementsByTagName("process:AtomicProcess");
+				for(i = 0;i<nodesService.getLength();i++) {
+					Node n = nodesService.item(i);
+					AtomicProcess ap = new AtomicProcess(n.getAttributes().getNamedItem("rdf:ID").getNodeValue());
+					
+					NodeList nodesProcess = docService.getElementsByTagName("process:Input");
+					// System.out.println("process:Input: "+ nodes.getLength() +
+					// " elements.");
+					for (int k = 0; k < nodesProcess.getLength(); k++) {
+						// System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+						NodeList inputlist = nodesProcess.item(k).getChildNodes();
+						String inputID = nodesProcess.item(k).getAttributes()
+								.getNamedItem("rdf:ID").getNodeValue();
+						String inputParam = "";
+						String inputLabel = "";
+						for (int j = 0; j < inputlist.getLength(); j++) {
+							if (inputlist.item(j).getNodeName()
+									.equals("process:parameterType")) {
+								if (curServ.getVersion().equals("1.0")) {
+									inputParam = inputlist.item(j).getAttributes()
+											.getNamedItem("rdf:resource")
+											.getNodeValue();
+								} else if (curServ.getVersion().equals("1.1")) {
+									inputParam = inputlist.item(j).getTextContent();
+								} else if (curServ.getVersion().equals("1.2")) {
+									inputParam = inputlist.item(j).getTextContent();
+								} else {
+									throw new Exception("OWL-S Version not known.");
+								}
+								ap.addInputParameter(inputID, inputParam);
 							}
-							curServ.addInputParameter(inputID, inputParam);
-						}
-						if (inputlist.item(j).getNodeName()
-								.equals("rdfs:label")) {
-							// System.out.println("rdfs:label  : "+inputlist.item(j).getTextContent());
-							inputLabel = inputlist.item(j).getTextContent();
-							curServ.addInputLabel(inputID, inputLabel);
+							if (inputlist.item(j).getNodeName()
+									.equals("rdfs:label")) {
+								// System.out.println("rdfs:label  : "+inputlist.item(j).getTextContent());
+								inputLabel = inputlist.item(j).getTextContent();
+								ap.addInputLabel(inputID, inputLabel);
+							}
 						}
 					}
-				}
 
-				nodesService = docService
-						.getElementsByTagName("process:Output");
-				// System.out.println("process:Output: "+ nodes.getLength() +
-				// " elements.");
-				for (i = 0; i < nodesService.getLength(); i++) {
-					// System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
-					NodeList outputlist = nodesService.item(i).getChildNodes();
-					String outputID = nodesService.item(i).getAttributes()
-							.getNamedItem("rdf:ID").getNodeValue();
-					String outputParam = "";
-					String outputLabel = "";
-					for (int j = 0; j < outputlist.getLength(); j++) {
-						if (outputlist.item(j).getNodeName()
-								.equals("process:parameterType")) {
-							if (curServ.getVersion().equals("1.0")) {
-								outputParam = outputlist.item(j)
-										.getAttributes()
-										.getNamedItem("rdf:resource")
-										.getNodeValue();
-							} else if (curServ.getVersion().equals("1.1")) {
-								outputParam = outputlist.item(j)
-										.getTextContent();
-							} else if (curServ.getVersion().equals("1.2")) {
-								outputParam = outputlist.item(j)
-										.getTextContent();
-							} else {
-								throw new Exception("OWL-S Version not known.");
+					nodesProcess = docService
+							.getElementsByTagName("process:Output");
+					// System.out.println("process:Output: "+ nodes.getLength() +
+					// " elements.");
+					for (int k = 0; k < nodesProcess.getLength(); k++) {
+						// System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
+						NodeList outputlist = nodesProcess.item(k).getChildNodes();
+						String outputID = nodesProcess.item(k).getAttributes()
+								.getNamedItem("rdf:ID").getNodeValue();
+						String outputParam = "";
+						String outputLabel = "";
+						for (int j = 0; j < outputlist.getLength(); j++) {
+							if (outputlist.item(j).getNodeName()
+									.equals("process:parameterType")) {
+								if (curServ.getVersion().equals("1.0")) {
+									outputParam = outputlist.item(j)
+											.getAttributes()
+											.getNamedItem("rdf:resource")
+											.getNodeValue();
+								} else if (curServ.getVersion().equals("1.1")) {
+									outputParam = outputlist.item(j)
+											.getTextContent();
+								} else if (curServ.getVersion().equals("1.2")) {
+									outputParam = outputlist.item(j)
+											.getTextContent();
+								} else {
+									throw new Exception("OWL-S Version not known.");
+								}
+								ap.addOutputParameter(outputID, outputParam);
 							}
-							curServ.addOutputParameter(outputID, outputParam);
-						}
-						if (outputlist.item(j).getNodeName()
-								.equals("rdfs:label")) {
-							// System.out.println("rdfs:label  : "+outputlist.item(j).getTextContent());
-							outputLabel = outputlist.item(j).getTextContent();
-							curServ.addOuputLabel(outputID, outputLabel);
+							if (outputlist.item(j).getNodeName()
+									.equals("rdfs:label")) {
+								// System.out.println("rdfs:label  : "+outputlist.item(j).getTextContent());
+								outputLabel = outputlist.item(j).getTextContent();
+								ap.addOuputLabel(outputID, outputLabel);
+							}
 						}
 					}
+					
+					curServ.addProcess(ap);
 				}
 
 				servs[nService] = curServ;

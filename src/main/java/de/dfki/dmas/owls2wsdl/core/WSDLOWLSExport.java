@@ -351,51 +351,55 @@ public class WSDLOWLSExport implements Runnable {
 						exc.printStackTrace();
 					}
 				} else {
-					for (Iterator<AbstractServiceParameter> paramIt = aService
-							.getInputParameter().iterator(); paramIt.hasNext();) {
-						AbstractServiceParameter param = paramIt.next();
-						if (!param.isInKB()) {
-							reportWriter.write("\tInput-Parameter\n\t"
-									+ param.getUri()
-									+ "\n\tnot in knowledgebase (KB).\n");
-							if (this._guiRef != null) {
-								this._guiRef.appendLogMsg("\tInput-Parameter "
+					Iterator<AtomicProcess> itAp = aService.getProcesses().iterator();
+					while(itAp.hasNext()) {
+						AtomicProcess ap = itAp.next();
+						for (Iterator<AbstractServiceParameter> paramIt = ap
+								.getInputParameter().iterator(); paramIt.hasNext();) {
+							AbstractServiceParameter param = paramIt.next();
+							if (!param.isInKB()) {
+								reportWriter.write("\tInput-Parameter\n\t"
 										+ param.getUri()
 										+ "\n\tnot in knowledgebase (KB).\n");
-							}
-						} else if (!param.isValidNCName()) {
-							reportWriter.write("\tInput-Paramater\n\t"
-									+ param.getUri()
-									+ "\n\thas invalid NCName.\n");
-							if (this._guiRef != null) {
-								this._guiRef
-										.appendLogMsg("\tInput-Paramater\n\t"
-												+ param.getUri()
-												+ "\n\thas invalid NCName.\n");
+								if (this._guiRef != null) {
+									this._guiRef.appendLogMsg("\tInput-Parameter "
+											+ param.getUri()
+											+ "\n\tnot in knowledgebase (KB).\n");
+								}
+							} else if (!param.isValidNCName()) {
+								reportWriter.write("\tInput-Paramater\n\t"
+										+ param.getUri()
+										+ "\n\thas invalid NCName.\n");
+								if (this._guiRef != null) {
+									this._guiRef
+											.appendLogMsg("\tInput-Paramater\n\t"
+													+ param.getUri()
+													+ "\n\thas invalid NCName.\n");
+								}
 							}
 						}
-					}
-					for (Iterator<AbstractServiceParameter> paramIt = aService
-							.getOutputParameter().iterator(); paramIt.hasNext();) {
-						AbstractServiceParameter param = paramIt.next();
-						if (!param.isInKB()) {
-							reportWriter.write("\tOutput-Parameter\n\t"
-									+ param.getUri()
-									+ "\n\tnot in knowledgebase (KB).\n");
-							if (this._guiRef != null) {
-								this._guiRef
-										.appendLogMsg("\tOutput-Parameter\n\t"
-												+ param.getUri()
-												+ "\n\tnot in knowledgebase (KB).\n");
-							}
-						} else if (!param.isValidNCName()) {
-							reportWriter.write("\tOutput-Paramater\n\t"
-									+ param.getUri() + "has invalid NCName.\n");
-							if (this._guiRef != null) {
-								this._guiRef
-										.appendLogMsg("\tOutput-Paramater\n\t"
-												+ param.getUri()
-												+ "\n\thas invalid NCName.\n");
+						for (Iterator<AbstractServiceParameter> paramIt = ap
+								.getOutputParameter().iterator(); paramIt.hasNext();) {
+							AbstractServiceParameter param = paramIt.next();
+							if (!param.isInKB()) {
+								reportWriter.write("\tOutput-Parameter\n\t"
+										+ param.getUri()
+										+ "\n\tnot in knowledgebase (KB).\n");
+								if (this._guiRef != null) {
+									this._guiRef
+											.appendLogMsg("\tOutput-Parameter\n\t"
+													+ param.getUri()
+													+ "\n\tnot in knowledgebase (KB).\n");
+								}
+							} else if (!param.isValidNCName()) {
+								reportWriter.write("\tOutput-Paramater\n\t"
+										+ param.getUri() + "has invalid NCName.\n");
+								if (this._guiRef != null) {
+									this._guiRef
+											.appendLogMsg("\tOutput-Paramater\n\t"
+													+ param.getUri()
+													+ "\n\thas invalid NCName.\n");
+								}
 							}
 						}
 					}
