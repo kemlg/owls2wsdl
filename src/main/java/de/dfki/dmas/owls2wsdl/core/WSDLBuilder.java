@@ -216,7 +216,7 @@ public class WSDLBuilder {
 		boolean retValue = true;
 		
 		while(it.hasNext()) {
-			retValue = retValue && validateServiceParameterTypes(it.next());
+			retValue = validateServiceParameterTypes(it.next()) && retValue;
 		}
 			
 		return retValue;
@@ -529,6 +529,39 @@ public class WSDLBuilder {
 		Service service = def.createService();
 		// service.setDocumentationElement()
 		service.setQName(new QName(targetNS, serviceName + "Service"));
+		SOAPBinding soapBinding = (SOAPBinding) extensionRegistry
+				.createExtension(Binding.class, new QName(
+						"http://schemas.xmlsoap.org/wsdl/soap/", "binding"));
+		soapBinding.setTransportURI("http://schemas.xmlsoap.org/soap/http");
+		soapBinding.setStyle("rpc");
+
+		SOAPBody body = (SOAPBody) extensionRegistry.createExtension(
+				BindingInput.class, new QName(
+						"http://schemas.xmlsoap.org/wsdl/soap/", "body"));
+		body.setUse("literal");
+		ArrayList<String> listOfStyles = new ArrayList<String>();
+		listOfStyles.add("http://schemas.xmlsoap.org/soap/encoding/");
+		body.setEncodingStyles(listOfStyles);
+		body.setNamespaceURI(targetNS);
+
+		Binding binding = def.createBinding();
+
+		// == add PortType and Binding to WSDL defintion
+
+		PortType portType = def.createPortType();
+		portType.setQName(new QName(targetNS, serviceName + "PortType"));
+
+		// == Binding section
+
+		binding.setQName(new QName(targetNS, serviceName + "Binding"));
+		binding.addExtensibilityElement(soapBinding);
+
+		BindingInput binding_input = def.createBindingInput();
+		// binding_input.setName("BINDING IN");
+		binding_input.addExtensibilityElement(body);
+		BindingOutput binding_out = def.createBindingOutput();
+		// binding_out.setName("BINDING OUT");
+		binding_out.addExtensibilityElement(body);
 		Iterator<Entry<String, Vector<AbstractServiceParameter>>> itOps = mapInputs.entrySet().iterator();
 		while(itOps.hasNext()) {
 			Entry<String, Vector<AbstractServiceParameter>> op = itOps.next();
@@ -605,47 +638,15 @@ public class WSDLBuilder {
 			// == build the wsdl operation + bindings for each owls output parameter
 
 			Operation operation = def.createOperation();
-			operation.setName(operationName);
+//			operation.setName(operationName);
+			operation.setName(ap.getOperationName());
 			operation.setInput(input);
 			operation.setOutput(output);
 			operation.setUndefined(false);
 
-			// == add PortType and Binding to WSDL defintion
-
-			PortType portType = def.createPortType();
-			portType.setQName(new QName(targetNS, operationName + "PortType"));
 			portType.addOperation(operation);
 			portType.setUndefined(false);
-			def.addPortType(portType);
-
-			// == Binding section
-
-			SOAPBinding soapBinding = (SOAPBinding) extensionRegistry
-					.createExtension(Binding.class, new QName(
-							"http://schemas.xmlsoap.org/wsdl/soap/", "binding"));
-			soapBinding.setTransportURI("http://schemas.xmlsoap.org/soap/http");
-			soapBinding.setStyle("rpc");
-
-			SOAPBody body = (SOAPBody) extensionRegistry.createExtension(
-					BindingInput.class, new QName(
-							"http://schemas.xmlsoap.org/wsdl/soap/", "body"));
-			body.setUse("literal");
-			ArrayList<String> listOfStyles = new ArrayList<String>();
-			listOfStyles.add("http://schemas.xmlsoap.org/soap/encoding/");
-			body.setEncodingStyles(listOfStyles);
-			body.setNamespaceURI(targetNS);
-
-			Binding binding = def.createBinding();
-			binding.setQName(new QName(targetNS, serviceName + "Binding"));
-			binding.addExtensibilityElement(soapBinding);
-
-			BindingInput binding_input = def.createBindingInput();
-			// binding_input.setName("BINDING IN");
-			binding_input.addExtensibilityElement(body);
-			BindingOutput binding_out = def.createBindingOutput();
-			// binding_out.setName("BINDING OUT");
-			binding_out.addExtensibilityElement(body);
-
+			
 			SOAPOperation soapOperation = (SOAPOperation) extensionRegistry
 					.createExtension(BindingOperation.class, new QName(
 							"http://schemas.xmlsoap.org/wsdl/soap/", "operation"));
@@ -653,7 +654,8 @@ public class WSDLBuilder {
 			// soapOperation.setStyle("document");
 
 			BindingOperation binding_op = def.createBindingOperation();
-			binding_op.setName(operationName);
+//			binding_op.setName(operationName);
+			binding_op.setName(ap.getOperationName());
 			binding_op.addExtensibilityElement(soapOperation);
 			binding_op.setOperation(operation);
 			binding_op.setBindingInput(binding_input);
@@ -664,23 +666,23 @@ public class WSDLBuilder {
 
 			binding.setUndefined(false);
 			def.addBinding(binding);
-
-			//
-			// SERVICE
-			//
-			SOAPAddress soapAddress = (SOAPAddress) extensionRegistry
-					.createExtension(Port.class, new QName(
-							"http://schemas.xmlsoap.org/wsdl/soap/", "address"));
-			soapAddress.setLocationURI(targetNS);
-
-			Port port = def.createPort();
-			port.setName(serviceName + "PortType");
-			port.setBinding(binding);
-			port.addExtensibilityElement(soapAddress);
-
-			service.addPort(port);
 		}
 
+		def.addPortType(portType);
+
+		//
+		// SERVICE
+		//
+		SOAPAddress soapAddress = (SOAPAddress) extensionRegistry
+				.createExtension(Port.class, new QName(
+						"http://schemas.xmlsoap.org/wsdl/soap/", "address"));
+		soapAddress.setLocationURI(targetNS);
+		Port port = def.createPort();
+		port.setName(serviceName + "Port");
+		port.setBinding(binding);
+		port.addExtensibilityElement(soapAddress);
+
+		service.addPort(port);
 		def.addService(service);
 
 		return def;

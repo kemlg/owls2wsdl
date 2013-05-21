@@ -21,6 +21,7 @@ encoding//src/main/java/de/dfki/dmas/owls2wsdl/gui/models/AbstractDatatypeTableM
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/gui/models/ProjectLoadedOntListModel.java=UTF-8
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/gui/models/ProjectServiceDependencyTypesTableColumnModel.java=UTF-8
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/gui/models/ProjectServiceMissingTypesModel_obsolete.java=UTF-8
+encoding//src/main/java/de/dfki/dmas/owls2wsdl/parser/DatatypeParser.java=UTF-8
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/parser/OntClassContainer.java=UTF-8
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/parser/OntClassKB.java=UTF-8
 encoding//src/main/java/de/dfki/dmas/owls2wsdl/utils/CastorCodeGen.java=UTF-8

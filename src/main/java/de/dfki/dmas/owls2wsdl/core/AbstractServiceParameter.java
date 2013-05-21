@@ -122,13 +122,16 @@ public class AbstractServiceParameter implements java.io.Serializable {
 
 	public boolean isValid() {
 		try {
+			System.out.println("Is " + this._id + " valid?");
 			if (this.isInKB()) {
+				System.out.println(this._id + " isInKB");
 				return this.isValidNCName();
 			}
 		} catch (Exception e) {
 			System.out.println("Param: " + this.getUri());
 			System.out.println("Exception testing for valid NCName");
 		}
+		System.out.println("false!");
 		return false;
 	}
 

@@ -190,11 +190,14 @@ public class AbstractService implements java.io.Serializable {
 	 * @return status if service is translatable
 	 */
 	public boolean istranslatable() {
+		System.out.println("is " + this._name + " translatable?");
 		boolean returnVal = true;
 		Iterator<AtomicProcess> it = this.processes.iterator();
 		while(it.hasNext()) {
-			returnVal = returnVal && it.next().istranslatable();
+			returnVal = it.next().istranslatable() && returnVal;
+			System.out.println("returning to loop");
 		}
+		System.out.println(returnVal);
 
 		return returnVal;
 	}
@@ -270,6 +273,7 @@ public class AbstractService implements java.io.Serializable {
 
 	public void addProcess(AtomicProcess ap) {
 		this.processes.add(ap);
+		System.out.println("Processes in " + this._name + ": " + processes);
 	}
 
 	public String getParameterType(String localName) {

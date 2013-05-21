@@ -75,6 +75,7 @@ public class StatusTable extends JTable implements java.util.Observer {
 			System.out.println("[u] Update StatusTable");
 			int[] c = RuntimeModel.getInstance().getProject()
 					.getAbstractServiceCollection().getTranslateableCount();
+			System.out.println(c.length);
 			int service10Count = RuntimeModel.getInstance().getProject()
 					.getAbstractServiceCollection().getCount10();
 			int service11Count = RuntimeModel.getInstance().getProject()
@@ -112,6 +113,8 @@ public class StatusTable extends JTable implements java.util.Observer {
 			this.getModel().setValueAt(new Integer(c[1]), 1, 2);
 			this.getModel().setValueAt(new Integer(c[2]), 2, 2);
 		}
+		
+		System.out.println("[e] Update StatusTable");
 	}
 
 }
