@@ -21,7 +21,7 @@ package de.dfki.dmas.owls2wsdl.core;
  * 
  * @author Oliver
  */
-public class AbstractServiceParameter implements java.io.Serializable {
+public class AbstractServiceParameter implements java.io.Serializable, Comparable<AbstractServiceParameter> {
 
 	/**
 	 * 
@@ -137,5 +137,23 @@ public class AbstractServiceParameter implements java.io.Serializable {
 
 	public String toString() {
 		return "(" + this._pos + ")" + this._id + "(" + this._uri + ")";
+	}
+
+	@Override
+	public int compareTo(AbstractServiceParameter o) {
+		return this._id.compareTo(o._id) + this._uri.compareTo(o._uri); 
+	}
+	
+	public boolean equals(Object o) {
+		boolean res;
+		
+		if(o instanceof AbstractServiceParameter) {
+			res = (this.compareTo((AbstractServiceParameter)o) == 0);
+		}
+		else {
+			res = false;
+		}
+			 
+		return res;
 	}
 }

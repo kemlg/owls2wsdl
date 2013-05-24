@@ -81,7 +81,9 @@ public class AtomicProcess {
 				paramType, this.inputCount);
 		// System.out.println("PARAM-I: "+param.toString());
 		// this.inputParameter.put(name, param);
-		this.inputParameter.add(param);
+		if(!inputParameter.contains(param)) { 
+			this.inputParameter.add(param);
+		}
 	}
 
 	public void addOutputParameter(String name, String paramType) {
@@ -90,7 +92,9 @@ public class AtomicProcess {
 				paramType, this.outputCount);
 		// System.out.println("PARAM-O: "+param.toString());
 		// this.outputParameter.put(name, param);
-		this.outputParameter.add(param);
+		if(!outputParameter.contains(param)) {
+			this.outputParameter.add(param);
+		}
 	}
 
 	public void addInputLabel(String name, String label) {

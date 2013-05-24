@@ -72,6 +72,7 @@ public class OWLS2WSDLSettings {
 		this.properties.setProperty("APPL_PATH", new File(this.homepath
 				+ "/owls2wsdl").getPath());
 		this.properties.setProperty("depth", "0");
+		this.properties.setProperty("default_element_depth", "5");
 		this.properties.setProperty("xsdgen", "short");
 		this.properties.setProperty("owlinfo", "no");
 		this.properties.setProperty("annotations", "no");
