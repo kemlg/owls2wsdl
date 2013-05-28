@@ -76,23 +76,25 @@ public class AtomicProcess {
 	}
 
 	public void addInputParameter(String name, String paramType) {
-		this.inputCount++;
 		AbstractServiceParameter param = new AbstractServiceParameter(name,
 				paramType, this.inputCount);
 		// System.out.println("PARAM-I: "+param.toString());
 		// this.inputParameter.put(name, param);
 		if(!inputParameter.contains(param)) { 
+			System.out.println("Successful addInputParameter(" + name + ", " + paramType + ")");
+			this.inputCount++;
 			this.inputParameter.add(param);
 		}
 	}
 
 	public void addOutputParameter(String name, String paramType) {
-		this.outputCount++;
 		AbstractServiceParameter param = new AbstractServiceParameter(name,
 				paramType, this.outputCount);
 		// System.out.println("PARAM-O: "+param.toString());
 		// this.outputParameter.put(name, param);
 		if(!outputParameter.contains(param)) {
+			System.out.println("Successful addOutputParameter(" + name + ", " + paramType + ")");
+			this.outputCount++;
 			this.outputParameter.add(param);
 		}
 	}

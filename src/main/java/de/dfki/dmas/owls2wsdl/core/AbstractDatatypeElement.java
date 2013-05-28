@@ -21,8 +21,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.exolab.castor.xml.schema.Particle;
-
 /**
  * 
  * @author Oliver

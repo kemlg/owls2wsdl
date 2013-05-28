@@ -531,6 +531,7 @@ public class ServiceParser {
 				docService.appendChild(importedNode);
 
 				nodesHasInput = docService.getElementsByTagName("process:hasInput");
+				System.out.println("AtomicProcess " + ap.getName() + " has " + nodesHasInput.getLength() + " inputs.");
 				for(int l=0;l<nodesHasInput.getLength();l++) {
 					Node nodeHasInput = nodesHasInput.item(l);
 					Node value = nodeHasInput.getAttributes().getNamedItem("rdf:resource");
@@ -540,11 +541,14 @@ public class ServiceParser {
 							// System.out.println("rdfID       : "+nodes.item(i).getAttributes().getNamedItem("rdf:ID").getNodeValue());
 							String id = nodesProcess.item(k).getAttributes()
 									.getNamedItem("rdf:ID").getNodeValue();
+							System.out.println("Resource ID = " + id);
 							boolean isLabel = mapIsLabel.get(id);
 							if(isLabel) {
 								ap.addInputLabel(id, mapInputs.get(id));
+								System.out.println("addInputLabel(" + id + ", " + mapInputs.get(id) + ")");
 							} else {
 								ap.addInputParameter(id, mapInputs.get(id));
+								System.out.println("addInputParameter(" + id + ", " + mapInputs.get(id) + ")");
 							}
 						}
 					} else {
@@ -559,7 +563,6 @@ public class ServiceParser {
 						System.out.println(ap.getInputParameter());
 					}
 				}
-
 
 				nodesHasOutput = docService.getElementsByTagName("process:hasOutput");
 				for(int l=0;l<nodesHasOutput.getLength();l++) {
