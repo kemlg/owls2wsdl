@@ -182,7 +182,7 @@ public class AbstractDatatypeElement implements java.io.Serializable {
 			return Integer.parseInt(this.getRestrictionElement("Cardinality")
 					.getRestrictionValue());
 		} else {
-			return Particle.UNBOUNDED;
+			return 5000; // TODO: Find why Particle.UNBOUNDED does not work!
 		}
 	}
 
