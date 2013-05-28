@@ -141,7 +141,7 @@ public class AbstractServiceParameter implements java.io.Serializable, Comparabl
 
 	@Override
 	public int compareTo(AbstractServiceParameter o) {
-		return this._id.compareTo(o._id) * this._uri.compareTo(o._uri); 
+		return 2 * this._id.compareTo(o._id) + this._uri.compareTo(o._uri); 
 	}
 	
 	public boolean equals(Object o) {
