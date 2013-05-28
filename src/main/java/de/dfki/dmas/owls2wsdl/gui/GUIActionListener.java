@@ -475,18 +475,25 @@ public class GUIActionListener implements ActionListener, WindowListener {
 			}
 			int option = fc.showSaveDialog(this.mainWindowRef);
 			if (option == JFileChooser.APPROVE_OPTION) {
-				File f = fc.getSelectedFile();
-				if (!f.getAbsolutePath().endsWith(".xml")) {
-					String filepath = f.getAbsolutePath();
-					f = new File(filepath + ".xml");
+				if(RuntimeModel.getInstance().project == null) {
+					JOptionPane.showMessageDialog(this.mainWindowRef,
+							"No project loaded.", "Show Project Details Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
-				System.out.println("Current Directory for XML File: "
-						+ f.getAbsolutePath());
-				try {
-					RuntimeModel.getInstance().getProject().save(f);
-				} catch (java.io.FileNotFoundException fnfException) {
-					System.out.println("FileNotFoundException: "
-							+ fnfException.toString());
+				else {
+					File f = fc.getSelectedFile();
+					if (!f.getAbsolutePath().endsWith(".xml")) {
+						String filepath = f.getAbsolutePath();
+						f = new File(filepath + ".xml");
+					}
+					System.out.println("Current Directory for XML File: "
+							+ f.getAbsolutePath());
+					try {
+						RuntimeModel.getInstance().getProject().save(f);
+					} catch (java.io.FileNotFoundException fnfException) {
+						System.out.println("FileNotFoundException: "
+								+ fnfException.toString());
+					}
 				}
 			}
 			OWLS2WSDLSettings.getInstance().setProperty("PROJECT_DIR",
@@ -594,25 +601,33 @@ public class GUIActionListener implements ActionListener, WindowListener {
 			// }
 			// });
 
-			OpenServiceUrlDialog dl = new OpenServiceUrlDialog(mainWindowRef,
-					"Enter URL of Semantic Web Service", true);
-			dl.setVisible(true);
-			String uri = dl.getReturnVal();
-			dl.dispose();
+			if(RuntimeModel.getInstance().project == null) {
+				JOptionPane.showMessageDialog(this.mainWindowRef,
+						"No project loaded.", "Show Project Details Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				OpenServiceUrlDialog dl = new OpenServiceUrlDialog(
+						mainWindowRef, "Enter URL of Semantic Web Service",
+						true);
+				dl.setVisible(true);
+				String uri = dl.getReturnVal();
+				dl.dispose();
 
-			if (uri != null) {
-				System.out.println("VAL: " + uri);
-				Project project = RuntimeModel.getInstance().getProject();
-				try {
-					project.importServices(uri);
-					RuntimeModel.getInstance().getProject()
-							.determineAllDependecyTypes();
-					((ServiceListModel) this.mainWindowRef.getMainPane().serviceList
-							.getModel()).syncWithProject(project);
-					RuntimeModel.getInstance().setRuntimeAndNotify(
-							RuntimeModel.SERVICE_MODEL_CHANGED, "URI: " + uri);
-				} catch (Exception exception) {
-					// exception.printStackTrace();
+				if (uri != null) {
+					System.out.println("VAL: " + uri);
+					Project project = RuntimeModel.getInstance().getProject();
+					try {
+						project.importServices(uri);
+						RuntimeModel.getInstance().getProject()
+								.determineAllDependecyTypes();
+						((ServiceListModel) this.mainWindowRef.getMainPane().serviceList
+								.getModel()).syncWithProject(project);
+						RuntimeModel.getInstance().setRuntimeAndNotify(
+								RuntimeModel.SERVICE_MODEL_CHANGED,
+								"URI: " + uri);
+					} catch (Exception exception) {
+						// exception.printStackTrace();
+					}
 				}
 			}
 		} else if (e.getActionCommand().equals(LOAD_OWLS_FILES)) {
@@ -638,17 +653,24 @@ public class GUIActionListener implements ActionListener, WindowListener {
 			}
 			int option = fc.showOpenDialog(this.mainWindowRef);
 			if (option == JFileChooser.APPROVE_OPTION) {
-				Project project = RuntimeModel.getInstance().getProject();
-				project.importServices(fc.getSelectedFiles());
-				RuntimeModel.getInstance().getProject()
-						.determineAllDependecyTypes();
+				if(RuntimeModel.getInstance().project == null) {
+					JOptionPane.showMessageDialog(this.mainWindowRef,
+							"No project loaded.", "Show Project Details Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					Project project = RuntimeModel.getInstance().getProject();
+					project.importServices(fc.getSelectedFiles());
+					RuntimeModel.getInstance().getProject()
+							.determineAllDependecyTypes();
 
-				((ServiceListModel) this.mainWindowRef.getMainPane().serviceList
-						.getModel()).syncWithProject(project);
-				RuntimeModel.getInstance().setRuntimeAndNotify(
-						RuntimeModel.SERVICE_MODEL_CHANGED,
-						"Service directory: "
-								+ fc.getCurrentDirectory().getName());
+					((ServiceListModel) this.mainWindowRef.getMainPane().serviceList
+							.getModel()).syncWithProject(project);
+					RuntimeModel.getInstance().setRuntimeAndNotify(
+							RuntimeModel.SERVICE_MODEL_CHANGED,
+							"Service directory: "
+									+ fc.getCurrentDirectory().getName());
+				}
 			}
 			System.out.println("Current Directory: "
 					+ fc.getCurrentDirectory().getAbsolutePath());
@@ -709,14 +731,21 @@ public class GUIActionListener implements ActionListener, WindowListener {
 				File f = fc.getSelectedFile();
 				System.out.println("LOADED /URI: " + f.toURI());
 
-				RuntimeModel.getInstance().project.importDatatypes(f);
-				RuntimeModel.getInstance().setStatusAndNotify("RUNTIME",
-						RuntimeModel.DATATYPE_MODEL_CHANGED,
-						f.getName() + " parsed.");
-				this.mainWindowRef.getMainPane().datatypeListModel
-						.updateModel();
-				this.mainWindowRef.getMainPane().datatypeList.updateUI();
-				this.mainWindowRef.validate();
+				if(RuntimeModel.getInstance().project == null) {
+					JOptionPane.showMessageDialog(this.mainWindowRef,
+							"No project loaded.", "Show Project Details Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					RuntimeModel.getInstance().project.importDatatypes(f);
+					RuntimeModel.getInstance().setStatusAndNotify("RUNTIME",
+							RuntimeModel.DATATYPE_MODEL_CHANGED,
+							f.getName() + " parsed.");
+					this.mainWindowRef.getMainPane().datatypeListModel
+							.updateModel();
+					this.mainWindowRef.getMainPane().datatypeList.updateUI();
+					this.mainWindowRef.validate();
+				}
 			}
 			System.out.println("Current Directory: "
 					+ fc.getCurrentDirectory().getAbsolutePath());
