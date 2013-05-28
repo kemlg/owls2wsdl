@@ -11,6 +11,7 @@ package de.dfki.dmas.owls2wsdl.utils;
 import java.util.Enumeration;
 import java.util.Stack;
 
+import org.exolab.castor.xml.schema.Annotated;
 import org.exolab.castor.xml.schema.AttributeDecl;
 import org.exolab.castor.xml.schema.ComplexType;
 import org.exolab.castor.xml.schema.ElementDecl;
@@ -118,8 +119,7 @@ public class XpathFromSchema {
 	 * follow method to work.
 	 */
 	public static void dumpGroup(String xpath, final Group group) {
-		@SuppressWarnings("unchecked")
-		Enumeration<Object> particles = group.enumerate();
+		Enumeration<Annotated> particles = group.enumerate();
 		while (particles.hasMoreElements()) {
 			Object o = particles.nextElement();
 			if (o instanceof Group) {

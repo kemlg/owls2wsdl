@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import org.exolab.castor.xml.schema.writer.SchemaWriter;
 import org.exolab.castor.xml.schema.*;
-import org.exolab.castor.util.LocalConfiguration;
 import java.util.Enumeration;
 
 /**
@@ -24,12 +23,8 @@ public class CastorAnnotationTest {
 	public static void printXSD(Schema schema, OutputStream out) {
 		try {
 			Writer writer = new OutputStreamWriter(out, "UTF-8");
-			LocalConfiguration.getInstance().getProperties()
-					.setProperty("org.exolab.castor.indent", "true");
 			SchemaWriter sw = new SchemaWriter(writer);
 			sw.write(schema);
-			LocalConfiguration.getInstance().getProperties()
-					.setProperty("org.exolab.castor.indent", "false");
 		} catch (java.io.UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (java.io.IOException e) {
@@ -51,7 +46,6 @@ public class CastorAnnotationTest {
 		schema.addAnnotation(currentSchemaAnnotation);
 		printXSD(schema, System.out);
 
-		@SuppressWarnings("unchecked")
 		Enumeration<Documentation> docEnumeration = currentSchemaAnnotation
 				.getDocumentation();
 		while (docEnumeration.hasMoreElements()) {

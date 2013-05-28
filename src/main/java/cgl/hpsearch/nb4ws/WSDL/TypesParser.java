@@ -50,10 +50,12 @@ package cgl.hpsearch.nb4ws.WSDL;
 import java.io.FileReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.exolab.castor.xml.schema.Annotated;
 import org.exolab.castor.xml.schema.ComplexType;
 import org.exolab.castor.xml.schema.ElementDecl;
 import org.exolab.castor.xml.schema.Group;
@@ -86,10 +88,10 @@ public class TypesParser {
 	boolean topLevel;
 
 	public void processSchema(Schema schema) {
-		for (@SuppressWarnings("unchecked")
-		Enumeration<ElementDecl> e = schema.getElementDecls(); e
-				.hasMoreElements();) {
-			ElementDecl element = e.nextElement();
+		for (
+		Iterator<ElementDecl> e = schema.getElementDecls().iterator(); e
+				.hasNext();) {
+			ElementDecl element = e.next();
 			// System.out.println(element.getName() + " = {");
 			topLevel = true;
 			processElement(element);
@@ -168,9 +170,9 @@ public class TypesParser {
 	}
 
 	public void processGroup(Group g) {
-		for (@SuppressWarnings("unchecked")
-		Enumeration<Particle> e = g.enumerate(); e.hasMoreElements();) {
-			Particle p = e.nextElement();
+		for(
+		Enumeration<Annotated> e = g.enumerate(); e.hasMoreElements();) {
+			Particle p = (Particle)e.nextElement();
 			processParticle(p);
 		}
 	}

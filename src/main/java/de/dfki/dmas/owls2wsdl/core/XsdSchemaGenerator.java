@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.exolab.castor.util.LocalConfiguration;
+import org.exolab.castor.xml.schema.Annotated;
 import org.exolab.castor.xml.schema.Annotation;
 import org.exolab.castor.xml.schema.ComplexType;
 import org.exolab.castor.xml.schema.Documentation;
@@ -103,8 +103,6 @@ public class XsdSchemaGenerator {
 		this.hack_02 = new HashSet<String>();
 		this.renamedTypes = new HashSet<AbstractDatatype>();
 		this.useHierarchyPattern = useHierarchyPattern;
-		// TODO: find a better way to enforce the use of hierarchy
-		this.useHierarchyPattern = true;
 		this.printOwlInformation = false;
 		this.printAnnotations = false;
 		this.depth = depth;
@@ -183,13 +181,9 @@ public class XsdSchemaGenerator {
 		Writer writer;
 		SchemaWriter sw;
 		try {
-			LocalConfiguration.getInstance().getProperties()
-					.setProperty("org.exolab.castor.indent", "true");
 			writer = new OutputStreamWriter(out, "UTF-8");
 			sw = new SchemaWriter(writer);
 			sw.write(this.schema);
-			LocalConfiguration.getInstance().getProperties()
-					.setProperty("org.exolab.castor.indent", "false");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -493,7 +487,7 @@ public class XsdSchemaGenerator {
 		ComplexType AllValuesFrom = this.schema
 				.createComplexType("AllValuesFrom");
 		Group allValuesFromGroup = new Group();
-		allValuesFromGroup.setOrder(Order.seq);
+		allValuesFromGroup.setOrder(Order.sequence);
 		AllValuesFrom.addGroup(allValuesFromGroup);
 		allValuesFromGroup.addElementDecl(dataRangeElement);
 		this.schema.addComplexType(AllValuesFrom);
@@ -501,7 +495,7 @@ public class XsdSchemaGenerator {
 		ComplexType SomeValuesFrom = this.schema
 				.createComplexType("SomeValuesFrom");
 		Group someValuesFromGroup = new Group();
-		someValuesFromGroup.setOrder(Order.seq);
+		someValuesFromGroup.setOrder(Order.sequence);
 		SomeValuesFrom.addGroup(someValuesFromGroup);
 		someValuesFromGroup.addElementDecl(dataRangeElement);
 		this.schema.addComplexType(SomeValuesFrom);
@@ -512,7 +506,7 @@ public class XsdSchemaGenerator {
 
 		ComplexType HasValue = this.schema.createComplexType("HasValue");
 		Group hasValueGroup = new Group();
-		hasValueGroup.setOrder(Order.seq);
+		hasValueGroup.setOrder(Order.sequence);
 		HasValue.addGroup(hasValueGroup);
 		hasValueGroup.addElementDecl(dataLiteralRangeElement);
 		this.schema.addComplexType(HasValue);
@@ -562,7 +556,7 @@ public class XsdSchemaGenerator {
 		ComplexType Restriction = new ComplexType(this.schema, "Restriction");
 		Restriction.setAbstract(true);
 		Group restrictionGroup = new Group();
-		restrictionGroup.setOrder(Order.seq);
+		restrictionGroup.setOrder(Order.sequence);
 		restrictionGroup.addElementDecl(onPropertyElement);
 		restrictionGroup.addElementDecl(restrictedByElement);
 		Restriction.addGroup(restrictionGroup);
@@ -574,11 +568,9 @@ public class XsdSchemaGenerator {
 
 		// collect documentation from previous used types (Bugfix, noch nicht in
 		// Castor 1.1!)
-		@SuppressWarnings("unchecked")
 		Enumeration<Annotation> annotations = this.schema.getAnnotations();
 		while (annotations.hasMoreElements()) {
 			Annotation annotation = annotations.nextElement();
-			@SuppressWarnings("unchecked")
 			Enumeration<Documentation> docs = annotation.getDocumentation();
 			while (docs.hasMoreElements()) {
 				Documentation doc = docs.nextElement();
@@ -678,10 +670,9 @@ public class XsdSchemaGenerator {
 	}
 
 	private void changeElementTypesOfObsoleteTypes() {
-		@SuppressWarnings("unchecked")
-		Enumeration<ComplexType> cts = this.schema.getComplexTypes();
-		while (cts.hasMoreElements()) {
-			ComplexType complexType = cts.nextElement();
+		Iterator<ComplexType> cts = this.schema.getComplexTypes().iterator();
+		while (cts.hasNext()) {
+			ComplexType complexType = cts.next();
 			System.out.println("[xsdgen] process CT " + complexType.getName());
 			@SuppressWarnings("unchecked")
 			Enumeration<Object> particles = complexType.enumerate();
@@ -689,8 +680,7 @@ public class XsdSchemaGenerator {
 				Object obj = particles.nextElement();
 				if (obj instanceof org.exolab.castor.xml.schema.Group) {
 					Group grp = (Group) obj;
-					@SuppressWarnings("unchecked")
-					Enumeration<Object> grpEnumeration = grp.enumerate();
+					Enumeration<Annotated> grpEnumeration = grp.enumerate();
 					while (grpEnumeration.hasMoreElements()) {
 						Object grpObj = grpEnumeration.nextElement();
 						if (grpObj instanceof org.exolab.castor.xml.schema.ElementDecl) {
@@ -763,7 +753,7 @@ public class XsdSchemaGenerator {
 				+ curtype.getUrl());
 
 		Group group = new Group();
-		group.setOrder(Order.seq);
+		group.setOrder(Order.sequence);
 
 		ComplexType complexType = this.schema.createComplexType(typeName);
 		// new ComplexType(this.schema, typeName);
@@ -1474,6 +1464,7 @@ public class XsdSchemaGenerator {
 
 			System.out.println("ELEM MIN OCCURS: " + elem.getMinOccurs());
 			System.out.println("ELEM MAX OCCURS: " + elem.getMaxOccurs());
+			System.out.println("Particle.UNBOUNDED = " + Particle.UNBOUNDED);
 			// subEl.setMinOccurs(elem.getMinOccurs());
 			// subEl.setMaxOccurs(elem.getMaxOccurs());
 			// subEl.setMinOccurs(0);
@@ -2033,19 +2024,17 @@ public class XsdSchemaGenerator {
 
 			if (DEBUGFLAG) {
 				System.out.println("[xsdgen] SCHEMA CONTENT =================");
-				@SuppressWarnings("unchecked")
-				Enumeration<ElementDecl> allElDecls = this.schema
-						.getElementDecls();
-				while (allElDecls.hasMoreElements()) {
+				Iterator<ElementDecl> allElDecls = this.schema
+						.getElementDecls().iterator();
+				while (allElDecls.hasNext()) {
 					System.out.println("[xsdgen] ELEM: "
-							+ ((ElementDecl) allElDecls.nextElement())
+							+ ((ElementDecl) allElDecls.next())
 									.getName());
 				}
 
-				@SuppressWarnings("unchecked")
-				Enumeration<ComplexType> cte = this.schema.getComplexTypes();
-				while (cte.hasMoreElements()) {
-					ComplexType temp = cte.nextElement();
+				Iterator<ComplexType> cte = this.schema.getComplexTypes().iterator();
+				while (cte.hasNext()) {
+					ComplexType temp = cte.next();
 					System.out.println("[xsdgen] CT " + temp.getName());
 				}
 			}

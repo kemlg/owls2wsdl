@@ -24,7 +24,6 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 
 import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.util.LocalConfiguration;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
@@ -84,18 +83,10 @@ public class AbstractDatatypeMapper {
 			// LocalConfiguration.getInstance().getProperties().setProperty("org.exolab.castor.xml.saveMapKeys",
 			// "false");
 
-			if (prettyprint) {
-				LocalConfiguration.getInstance().getProperties()
-						.setProperty("org.exolab.castor.indent", "true");
-			}
 			Marshaller marshaller = new Marshaller(new OutputStreamWriter(out,
 					"UTF8"));
 			marshaller.setMapping(mapping);
 			marshaller.marshal(kb_data);
-			if (prettyprint) {
-				LocalConfiguration.getInstance().getProperties()
-						.setProperty("org.exolab.castor.indent", "false");
-			}
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
