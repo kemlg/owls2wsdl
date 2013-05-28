@@ -103,6 +103,8 @@ public class XsdSchemaGenerator {
 		this.hack_02 = new HashSet<String>();
 		this.renamedTypes = new HashSet<AbstractDatatype>();
 		this.useHierarchyPattern = useHierarchyPattern;
+		// TODO: find a better way to enforce the use of hierarchy
+		this.useHierarchyPattern = true;
 		this.printOwlInformation = false;
 		this.printAnnotations = false;
 		this.depth = depth;
