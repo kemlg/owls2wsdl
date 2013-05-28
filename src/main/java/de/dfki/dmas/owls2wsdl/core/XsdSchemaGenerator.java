@@ -106,6 +106,9 @@ public class XsdSchemaGenerator {
 		this.printOwlInformation = false;
 		this.printAnnotations = false;
 		this.depth = depth;
+		if(this.depth == 0) {
+			this.depth = 10;
+		}
 		this.xsdInheritance = xsdInheritance;
 		this.DEFAULT_XSD = AbstractDatatype.DEFAULT_XSDTYPE;
 		this.obsoleteComplexTypes = new HashSet<ComplexType>();
