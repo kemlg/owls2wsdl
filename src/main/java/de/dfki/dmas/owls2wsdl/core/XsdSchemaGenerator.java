@@ -583,7 +583,7 @@ public class XsdSchemaGenerator {
 			while (docs.hasMoreElements()) {
 				Documentation doc = docs.nextElement();
 				System.out.println("Annotation /COLLECT DOC: "
-						+ doc.getSource());
+						+ doc.getContent());
 				currentSchemaAnnotation.addDocumentation(doc);
 			}
 			this.schema.removeAnnotation(annotation);
@@ -591,7 +591,7 @@ public class XsdSchemaGenerator {
 
 		// NEW
 		Documentation currentSchemaDocumentation = new Documentation();
-		currentSchemaDocumentation.setSource(text);
+		currentSchemaDocumentation.add(text);
 		System.out.println("Annotation /NEW DOC: "
 				+ currentSchemaDocumentation.getSource());
 		currentSchemaAnnotation.addDocumentation(currentSchemaDocumentation);
