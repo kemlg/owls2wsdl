@@ -202,6 +202,7 @@ public class WSDLBuilder {
 				"http://www.w3.org/2001/XMLSchema#integer",
 				"http://www.w3.org/2001/XMLSchema#float",
 				"http://www.w3.org/2001/XMLSchema#date",
+				"http://www.w3.org/2001/XMLSchema#dateTime",
 				"http://www.w3.org/2001/XMLSchema#time" };
 		for (int i = 0; i < primitiveTypes.length; i++) {
 			if (uri.equals(primitiveTypes[i].toString())) {
