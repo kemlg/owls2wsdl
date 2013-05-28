@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2007
  * German Research Center for Artificial Intelligence (DFKI GmbH) Saarbruecken
- * Hochschule f�r Technik und Wirtschaft (HTW) des Saarlandes
+ * Hochschule f���r Technik und Wirtschaft (HTW) des Saarlandes
  * Developed by Oliver Fourman, Ingo Zinnikus, Matthias Klusch
  *
  * The code is free for non-commercial use only.
@@ -197,7 +197,7 @@ public class OWLS2WSDLGui extends JFrame { // implements WindowListener {
 		// System.out.println("[i] Screen: "+screenDim.width+"x"+screenDim.height);
 		// System.out.println("[i] WinDim: "+winDim.width+"x"+winDim.height);
 
-		// wenn das Fenster gro�er als der Desktop ist, Fenster auf
+		// wenn das Fenster gro���er als der Desktop ist, Fenster auf
 		// Desktopgroesse verkleinern
 		if (screenDim.width < winDim.width) {
 			win.setSize(screenDim.width, winDim.height);
@@ -235,8 +235,9 @@ public class OWLS2WSDLGui extends JFrame { // implements WindowListener {
 
 		Runnable r1 = new Runnable() {
 			public void run() {
-				SplashScreen.splash(instance, null);
-				SplashScreen.disposeSplash();
+				// TODO: Put back SplashScreen when info edited
+//				SplashScreen.splash(instance, null);
+//				SplashScreen.disposeSplash();
 				try {
 					jconsole.setVisible(true);
 				} catch (java.lang.NullPointerException e) {

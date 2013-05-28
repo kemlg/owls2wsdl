@@ -223,11 +223,12 @@ public class SplashScreen extends JDialog { // JFrame {
 	 */
 	public static void splash(JFrame owner, String release) {
 		// URL imageURL = SplashScreen.class.getResource("splash.gif");
-		URL imageURL1 = SplashScreen.class
-				.getResource("/images/owls2wsdl-logo.jpg");
-		URL imageURL2 = SplashScreen.class
-				.getResource("/images/project-participants.jpg");
-		URL infoTextURL = SplashScreen.class.getResource("/info.txt");
+		URL imageURL1 = SplashScreen.class.getClassLoader()
+				.getResource("images/owls2wsdl-logo.jpg");
+		URL imageURL2 = SplashScreen.class.getClassLoader()
+				.getResource("images/project-participants.jpg");
+		URL infoTextURL = SplashScreen.class.getClassLoader().getResource("info.txt");
+		System.out.println("[i] Loaded resources: " + imageURL1 + ", " + imageURL2 + ", " + infoTextURL);
 
 		if (instance == null && imageURL1 != null && imageURL2 != null
 				&& infoTextURL != null) {

@@ -948,6 +948,7 @@ public class GUIActionListener implements ActionListener, WindowListener {
 		// "About",
 		// JOptionPane.INFORMATION_MESSAGE);
 
+		System.out.println("[i] showAbout");
 		SplashScreen.splash(mainWindowRef,
 				ResourceManager.getString("application.release"));
 		SplashScreen.hideSplash();
