@@ -180,7 +180,7 @@ public class AbstractService implements java.io.Serializable {
 	public String toString() {
 		// return
 		// this._id+" Name: "+this._name+" ("+this._version+") "+this._filename;
-		return this._name;
+		return this._id;
 	}
 
 	/**

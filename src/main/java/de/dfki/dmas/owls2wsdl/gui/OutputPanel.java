@@ -199,10 +199,7 @@ public class OutputPanel extends JPanel {
 			javax.wsdl.Definition wsdl = WSDLBuilder.getInstance()
 					.buildDefinition(service, xsdgen);
 			WSDLBuilder.getInstance().printSchema(wsdl, redirectedOutStream);
-			// this.tabbedPane.addTab(service.getID()+".wsdl",
-			// Factory.createStrippedScrollPane(outputTextPane));
-			int index = service.getLocalFilename().lastIndexOf(".");
-			String tabname = service.getLocalFilename().substring(0, index)
+			String tabname = service.getID()
 					+ ".wsdl";
 			this.tabbedPane.addTab(tabname,
 					Factory.createStrippedScrollPane(outputTextPane));
