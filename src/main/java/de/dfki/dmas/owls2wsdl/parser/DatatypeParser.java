@@ -28,11 +28,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import org.mindswap.pellet.jena.PelletReasonerFactory;
 
+import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.ontology.ConversionException;
+import com.hp.hpl.jena.ontology.DataRange;
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.FunctionalProperty;
 import com.hp.hpl.jena.ontology.Individual;
@@ -43,8 +47,10 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFList;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -477,7 +483,6 @@ public class DatatypeParser {
 			if (disjoint != null) {
 				System.out.println("[i] check for disjoints: " + cur.getURI()
 						+ ", DISJOINT: " + disjoint.getURI());
-				// XML Schema ausschlie���en
 				if (!cur.getNameSpace().equals(
 						"http://www.w3.org/2001/XMLSchema#")) {
 					this.ontclassKB
@@ -500,7 +505,6 @@ public class DatatypeParser {
 	// System.out.println("CLASS NOT IN MODEL: "+uri);
 	// }
 	//
-	// // alles rauswerfen au���er eigentlicher SuperClass Referenz
 	// ExtendedIterator<OntClass> eit =
 	// curoc.listSuperClasses(false).filterDrop(this.ontClassSpecialsFilter);
 	// while(eit.hasNext()) {
@@ -667,8 +671,6 @@ public class DatatypeParser {
 			// }
 			// }
 
-			// --> l���sst sich sp���ter noch ���ber die OntClass selbst
-			// abfragen!
 
 			Vector<Individual> individualList = this.collectIndividuals(
 					this.rdfsInfModel, declaringClass.getURI());
@@ -728,8 +730,6 @@ public class DatatypeParser {
 			String range = "http://www.w3.org/2001/XMLSchema#anyURI";
 
 			//
-			// Range, curSuperClassListOfRange ist Spezialfall f���r Ontologien
-			// mit Klassenangaben im rdfs:range tag (DatatypeProperty)
 			//
 			Vector<String> curSuperClassListOfRange = new Vector<String>();
 			if (curdtp.getRange() != null) {
@@ -737,18 +737,47 @@ public class DatatypeParser {
 				// eRangeIt.hasNext(); ) { } // not needed!
 				// range = ((OntResource)eRangeIt.next()).getURI();
 				range = curdtp.getRange().getURI();
-				if (this.rdfsInfModel.getOntClass(range) != null) {
-					curSuperClassListOfRange.add(range);
-					if (!range.split("#")[0].toString().equals(
-							"http://www.w3.org/2001/XMLSchema")) {
-						// curSuperClassListOfRange.addAll(this.buildSuperClassList(this.rdfsInfModel,
-						// range)); // disjoint specific
-					}
-				}
+		        System.out.println("Analysing range of: " + curdtp);
+		        if(range == null) { // Probably oneOf
+		        	if(curdtp.getRange().isDataRange()) {
+		        		DataRange dataRange = curdtp.getRange().asDataRange();
+		        		RDFList listEnum = dataRange.getOneOf();
+		        		RDFNode firstEnum = listEnum.iterator().next(); // We assume that all items have the same (primitive) type
+		        		RDFDatatype	dt;
+		        		if(firstEnum.isLiteral()) {
+		        			dt = firstEnum.asLiteral().getDatatype();
+		        		}
+		        		else {
+			        		throw new UnsupportedOperationException();
+		        		}
+		        		ExtendedIterator<RDFNode> itEnum = listEnum.iterator();
+		        		List<Literal> ll = new LinkedList<Literal>();
+		        		while(itEnum.hasNext()) {
+		        			ll.add(itEnum.next().asLiteral());
+		        		} // TODO: Complete this! At the moment falling back to just serving the datatype
+		        		
+		        		range = dt.getURI();
+		        		curSuperClassListOfRange.add(range);
+		        	}
+		        	else {
+		        		throw new UnsupportedOperationException();
+		        	}
+		        }
+		        else {
+		        	if (this.rdfsInfModel.getOntClass(range) != null) {
+		        		curSuperClassListOfRange.add(range);
+		        		if (!range.split("#")[0].toString().equals(
+		        				"http://www.w3.org/2001/XMLSchema")) {
+		        			// curSuperClassListOfRange.addAll(this.buildSuperClassList(this.rdfsInfModel,
+		        			// range)); // disjoint specific
+		        		}
+		        	}
+
+		        }
 			}
+
 			System.out.println("PROPERTY: " + curdtp.getURI() + "(RANGE: "
 					+ range + ")");
-
 			//
 			// Domain, declared classes
 			//
@@ -775,6 +804,7 @@ public class DatatypeParser {
 					}
 				} else if (anonymOntClass.isEnumeratedClass()) {
 					System.out.println("Domain is anonym ENUMERATION CLASS");
+					throw new UnsupportedOperationException("Domain is anonym ENUMERATION CLASS");
 				} else {
 					// listDeclaringClasses funktioniert nicht immer (zipcode
 					// bsp)
@@ -994,7 +1024,6 @@ public class DatatypeParser {
 				// OntClass anonymOntClass = cur_op.getDomain().asClass();
 
 				// Bemerkung: direct value false zieht alle super properties an!
-				// hier nicht gew���nscht, weil sp���ter verarbeitet
 				// manchmal werden nicht alle Domains angezogen, etwas
 				// verbessert mit getDomain, siehe unten
 				// Bsp.: listDeclaringClasses,
@@ -1083,10 +1112,7 @@ public class DatatypeParser {
 
 					// Noch nicht so ganz einig, wie SupProperties behandelt
 					// werden sollen
-					// Zum einen w���rde es passen: WineDesriptor<|-(hasSugar,
-					// hasFlavor, hasBody) f���r Wine
 					// Aber Beispiel wo es nicht pass:
-					// madFromFruit<|-madeFromGrape f���r ConsumableThing
 
 					// this.addFunctionalSubProperties(curOntClassContainer,
 					// cur_op);
@@ -1131,7 +1157,6 @@ public class DatatypeParser {
 						this.rdfsInfModel, cur_op, RDFS.domain);
 				for (Iterator<Statement> it = domains.iterator(); it.hasNext();) {
 					Statement stmt = it.next();
-					// System.out.println("SUBJEKT ("+stmt.getSubject().toString()+") PR���DIKAT ("+stmt.getPredicate().toString()+") OBJECT ("+stmt.getObject().toString()+")");
 					OntClassContainer container = this
 							.getOntClassContainer(this.rdfsInfModel
 									.getOntClass(stmt.getObject().toString()));
@@ -1210,7 +1235,6 @@ public class DatatypeParser {
 	// //
 	// SimpleSelector sel = new SimpleSelector(null, null, (RDFNode) null) {
 	// public boolean selects(Statement s) {
-	// //System.out.println("SELECTOR: SUBJEKT ("+s.getSubject().toString()+") PR���DIKAT ("+s.getPredicate().toString()+") OBJECT ("+s.getObject().toString()+")");
 	// boolean SELECT = false;
 	// if(s.getPredicate().toString().endsWith("type") &&
 	// s.getObject().toString().endsWith("Class") && s.getSubject().as(
@@ -1277,7 +1301,6 @@ public class DatatypeParser {
 			Statement s = eit.next();
 			// if(s.getPredicate().equals(RDFS.domain))
 			System.out.println(i + ") SUBJEKT (" + s.getSubject().toString()
-					+ ") PR���DIKAT (" + s.getPredicate().toString()
 					+ ") OBJECT (" + s.getObject().toString() + ")");
 			i++;
 		}
@@ -1313,7 +1336,6 @@ public class DatatypeParser {
 						return false;
 					}
 				}
-				// System.out.println("SELECTOR: SUBJEKT ("+s.getSubject().toString()+") PR���DIKAT ("+s.getPredicate().toString()+") OBJECT ("+s.getObject().toString()+")");
 				if (s.getPredicate().toString().endsWith("type")
 						&& s.getObject().toString().endsWith("Class")
 						&& s.getSubject().as(OntClass.class).getURI() != null) {
@@ -1324,10 +1346,9 @@ public class DatatypeParser {
 			}
 		};
 
-		ArrayList<String> ontClassList = new ArrayList<String>(); // f���r
+		ArrayList<String> ontClassList = new ArrayList<String>();
 																	// listClasses()
 		// listStatements: zeigt auch implicit definierte Klassen an
-		// aber: im moment noch ein Bug (?), weil f���r jede Klasse zwei
 		// Statements gefunden werden.
 
 		this.ontClassSpecialsFilter = new Filter<OntClass>() {
@@ -1424,9 +1445,6 @@ public class DatatypeParser {
 				}
 			}
 
-			// hier auskommentiert, weil nicht performant! Individuals werden
-			// nur dann ben���tigt,
-			// wenn der Wertebereich f���r ObjectsProperties interessant ist.
 			// System.out.println("=== INDIVIDUALS PART ===============================");
 			// Vector individualList = this.collectIndividuals(omodel,
 			// curOntClassContainer.getName());
@@ -1490,9 +1508,6 @@ public class DatatypeParser {
 					// System.out.println("[i] RDF-TYPE: "+superclass.getRDFType().getURI());
 					// // Restriction or Class
 
-					// m���gliche Fehlerquelle: Property (getOnProperty) bei
-					// restriction nicht bekannt.
-					// z.B. coordinates f���r geoCoordinateSystems.owl
 					if (superclass.isRestriction()) {
 						curOntClassContainer
 								.addSubClassPropertyRestriction(superclass
@@ -1540,7 +1555,6 @@ public class DatatypeParser {
 								// Bemerkung: Properties, die in der Domain mit
 								// unionOf mehrere Klassen refernzieren
 								// werden bei listDeclaredProperties nur durch
-								// einen Reasoner zur���ckgegeben.
 								// Der Reasoner scheitert bei komplizierteren
 								// Ontologien an der Stelle.
 								// for(ExtendedIterator
@@ -1552,9 +1566,7 @@ public class DatatypeParser {
 								// aus KB abfragen
 								// Achtung!!!: geht an der Stelle nicht, weil
 								// noch nicht alle Klassen in KB
-								// daher ���ber buildSuperClassList arbeiten.
 								// Todo: Parse-Reihenfolge anpassen
-								// um mit KB arbeiten zu k���nnen. zuerst
 								// Parents.
 
 								// for(Iterator

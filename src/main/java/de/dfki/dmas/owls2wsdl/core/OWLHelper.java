@@ -28,6 +28,9 @@ import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.ontology.SomeValuesFromRestriction;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFList;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
@@ -48,6 +51,15 @@ public class OWLHelper {
 		String range = "http://www.w3.org/2002/07/owl#Thing";
 		if (prop.getRange() != null) {
 			range = prop.getRange().getURI(); // prop.getRange().getNameSpace()+prop.getRange().getLocalName();
+			if(range == null) {
+				RDFList list = prop.getRange().asDataRange().getOneOf();
+				range = "!enumeration";
+				ExtendedIterator<RDFNode> it = list.iterator();
+				while(it.hasNext()) {
+					Literal l = it.next().asLiteral();
+					range = range + "!" + l.toString();
+				}
+			}
 		} else {
 			for (ExtendedIterator<? extends OntProperty> superPropIt = prop
 					.listSuperProperties(true); superPropIt.hasNext();) {

@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.exolab.castor.util.LocalConfiguration;
 import org.exolab.castor.xml.schema.Annotation;
@@ -869,6 +872,8 @@ public class XsdSchemaGenerator {
 							.getBuiltInType(this.schema
 									.getBuiltInTypeName(SimpleTypesFactory.ANYURI_TYPE));
 
+					subEl.setName(elem.getLocalName());
+
 					// Try to get baseType over Type definition in KB
 					if (AbstractDatatypeKB.getInstance()
 							.getAbstractDatatypeKBData()
@@ -888,9 +893,34 @@ public class XsdSchemaGenerator {
 									.extractLocalName(xsdtype));
 						}
 					}
+					else {
+						StringTokenizer st = new StringTokenizer(elem.getType(), "!");
+						String firstWord = st.nextToken();
+						if(firstWord.equals("enumeration")) {
+							System.out.println("This type is an enumeration, getting elements...");
+							List<Facet> values = new LinkedList<Facet>();
+							String internalType = null;
+							while(st.hasMoreTokens()) {
+								String literal = st.nextToken();
+								StringTokenizer literalParts = new StringTokenizer(literal, "^^");
+								values.add(new Facet("enumeration", literalParts.nextToken()));
+								if(internalType == null) {
+									internalType = literalParts.nextToken();
+								}
+							}
+							subEl.setName(elem.getLocalName());
+							baseType = this.schema.createSimpleType(elem.getLocalName() + "Type", stf.getBuiltInType(this.extractLocalName(internalType)));
+							Iterator<Facet> it = values.iterator();
+							while(it.hasNext()) {
+								baseType.addFacet(it.next());
+							}
+							this.schema.addSimpleType(baseType);
+							if (group.getElementDecl(subEl.getName()) == null) {
+								group.addElementDecl(subEl);
+							}				
+						}
+					}
 				}
-
-				subEl.setName(elem.getLocalName());
 
 				// FIXED
 				if (elem.getRestrictedRange().size() == 1) {

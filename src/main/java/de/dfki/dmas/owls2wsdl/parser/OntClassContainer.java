@@ -260,7 +260,9 @@ public class OntClassContainer {
 		try {
 			for (NodeIterator nit = this.getOntClass().listPropertyValues(p); nit
 					.hasNext();) {
-				this.constantMap.put(p.getURI(), nit.next().toString());
+				String value = nit.next().toString();
+				System.out.println("[i] constantMap.put(" + p.getURI() + ", " + value + ")");
+				this.constantMap.put(p.getURI(), value);
 			}
 		} catch (com.hp.hpl.jena.ontology.ConversionException ce) {
 			System.err.println("[e] addProperty, listPropertyValues: "
