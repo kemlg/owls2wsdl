@@ -1020,7 +1020,7 @@ public class DatatypeParser {
 			}
 
 			if (domainCount == 1) {
-				System.out.println("Proceccing domain(s) for ObjectProperty");
+				System.out.println("Processing domain(s) for ObjectProperty");
 				// OntClass anonymOntClass = cur_op.getDomain().asClass();
 
 				// Bemerkung: direct value false zieht alle super properties an!
@@ -1091,9 +1091,22 @@ public class DatatypeParser {
 							System.out.println("  --> " + oneOf.getURI());
 						}
 					} else if (tempoc.isHierarchyRoot()) {
-						if (tempoc.isRestriction())
+						if (tempoc.isRestriction()) {
 							System.out.println("[i] declaring class "
 									+ tempoc.getURI() + " is HierarchyRoot");
+						}
+						else {
+							// This was not here in previous versions, but it doesn't make sense
+							// Thus, making it happen...
+							// TODO: Tidy it up a little, there is repetition.
+							curOntClassContainer = this
+									.getOntClassContainer(tempoc);
+							System.out.println("[i] Add OBJECT-PROPERTY "
+									+ cur_op.getLocalName()
+									+ " to DECLARING CLASS ("
+									+ curOntClassContainer.getName() + ")");
+							curOntClassContainer.addProperty(cur_op);
+						}
 					} else {
 						if (tempoc.getURI() == null) {
 							this.ontclassKB.addError("[?] unknown",

@@ -21,6 +21,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.exolab.castor.xml.schema.Particle;
+
 /**
  * 
  * @author Oliver
@@ -167,7 +169,7 @@ public class AbstractDatatypeElement implements java.io.Serializable {
 			return Integer.parseInt(this.getRestrictionElement("Cardinality")
 					.getRestrictionValue());
 		} else {
-			return 1;
+			return 0;
 		}
 	}
 
@@ -180,7 +182,7 @@ public class AbstractDatatypeElement implements java.io.Serializable {
 			return Integer.parseInt(this.getRestrictionElement("Cardinality")
 					.getRestrictionValue());
 		} else {
-			return 1;
+			return Particle.UNBOUNDED;
 		}
 	}
 
@@ -259,7 +261,7 @@ public class AbstractDatatypeElement implements java.io.Serializable {
 
 	public void addRestrictionElement(
 			AbstractDatatypeRestrictionElement restrictionElement) {
-		System.out.println("[i] addRestrictionElement: "
+		System.out.println("[i] addRestrictionElement to " + this +  ": "
 				+ restrictionElement.toString());
 
 		if (restrictionElement.getRestrictionType().equals("MinCardinality")) {
