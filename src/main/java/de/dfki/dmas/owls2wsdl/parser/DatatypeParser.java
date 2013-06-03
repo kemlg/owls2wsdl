@@ -1041,11 +1041,10 @@ public class DatatypeParser {
 								.hasNext();) {
 							OntClass unionClass = unionIt.next();
 							System.out.println("  --> " + unionClass.getURI());
-							// curOntClassContainer =
-							// this.getOntClassContainer(unionClass);
-							// System.out.println("[i] Add OBJECT-PROPERTY "+cur_op.getLocalName()+
-							// " to DECLARING UNION CLASS ("+curOntClassContainer.getName()+")");
-							// curOntClassContainer.addProperty(cur_op);
+							curOntClassContainer = this.getOntClassContainer(unionClass);
+							System.out.println("[i] Add OBJECT-PROPERTY "+cur_op.getLocalName()+
+									" to DECLARING UNION CLASS ("+curOntClassContainer.getName()+")");
+							curOntClassContainer.addProperty(cur_op);
 						}
 					} else if (tempoc.isComplementClass()) {
 						if (tempoc.asComplementClass().getOperand()
